@@ -6,6 +6,7 @@ enum Environment{
 
 class AppEnvironment {
   static late Map<String, dynamic> _config;
+  static String get baseUrl =>  _config['API_URL'] ?? '';
 
   static void setAppEnvironment(Environment env) {
     switch (env) {
@@ -55,7 +56,7 @@ class _Config {
   static const GAME_API = 'GAME_API';
 
   static Map<String, dynamic> debugConstants = {
-    API_URL: 'http://34.142.197.247:8080/saas/api/v1',
+    API_URL: 'http://34.142.171.165:9000/v1',
     MESSAGE_URL: 'http://34.142.197.247:8888/saas/api',
     CLIENT_ID: 'saas-app',
     REDIRECT_URL: 'saas://success',

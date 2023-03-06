@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -33,7 +32,7 @@ class BaseResponse<T> {
   int? errorCode;
   String? message;
   String? error;
-  T? data;
+  late T data;
 
   bool get isSuccess => status == 'SUCCESS';
 
@@ -59,56 +58,10 @@ class BaseResponse<T> {
   }
 }
 
-void catchAnyError<T>(VoidCallback exceptionThrowableBlock, {String tag = 'ERROR'}) {
+void catchAnyError<T>(Function() exceptionThrowableBlock, {String tag = 'ERROR'}) {
   try {
-    exceptionThrowableBlock();
+    exceptionThrowableBlock.call();
   } catch (e) {
     Logger().e(e.toString());
   }
 }
-
-// class BaseListResponse<E> extends BaseResponse {
-//   List<E>? _data;
-//   List<E> get data => _data ?? [];
-//   late E Function(dynamic) elementHandler;
-//
-//   BaseListResponse();
-//
-//   @override
-//   fromJson(dynamic json) {
-//     super.fromJson(json);
-//     if (json['data'] == null) {
-//       _data = null;
-//       return;
-//     }
-//
-//     _data = [];
-//
-//     json['data'].forEach((e) {
-//       _data?.add(elementHandler(e));
-//     });
-//   }
-// }
-//
-// class EmptyResponse extends BaseResponse {}
-//
-// class ListResponse<T> extends BaseResponse {
-//   List<T> items = [];
-//   int? total = 0;
-//   late T Function(dynamic) elementHandler;
-//
-//   @override
-//   fromJson(dynamic json) {
-//     super.fromJson(json);
-//
-//     catchAnyError(() {
-//       if (json?['data'] == null) {
-//         return;
-//       }
-//
-//       final listData = json['data']['content'] as List<dynamic>;
-//       items = listData.map((e) => elementHandler.call(e)).toList();
-//       total = json['data']['totalElements'];
-//     });
-//   }
-// }
