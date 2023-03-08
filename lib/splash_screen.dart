@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
       TokenObj token = await UserService().getToken(AccountModel('test', '123456'));
       if(token.accessToken != null){
         AppStorage.accessToken = token.accessToken;
-        Get.offAndToNamed(AppRoutes.chat);
+        Get.offAndToNamed(AppRoutes.start);
       }
     });
   }
