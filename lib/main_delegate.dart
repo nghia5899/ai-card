@@ -30,6 +30,7 @@ class _MyAppState extends State<MyApp> {
       initialRoute: AppRoutes.initRouter,
       locale: LocalizationService.locale,
       translations: LocalizationService(),
+      builder: fToastBuilder
     );
   }
 }

@@ -1,6 +1,9 @@
 import 'package:ai_ecard/config/lang/en_us.dart';
-import 'package:ai_ecard/models/token/token.dart';
+import 'package:ai_ecard/models/account/account_model.dart';
+import 'package:ai_ecard/models/models/token/token.dart';
 import 'package:ai_ecard/routers.dart';
+import 'package:ai_ecard/service/app_storage.dart';
+import 'package:ai_ecard/service/user/user_service.dart';
 import 'package:ai_ecard/utils/secure_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,15 +20,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      // Future.delayed(const Duration(seconds: 2), () async {
-      //   TokenObj? tokenObj = await SecureStorageService.getTokenObj();
-      //   if (tokenObj != null && tokenObj.accessToken != null) {
-      //     Get.toNamed(AppRoutes.home);
-      //   } else {
-      //     Get.toNamed(AppRoutes.login);
-      //   }
-      // });
-      Get.toNamed(AppRoutes.home);
+      TokenObj token = await UserService().getToken(AccountModel('test', '123456'));
+      if(token.accessToken != null){
+        AppStorage.accessToken = token.accessToken;
+        Get.offAndToNamed(AppRoutes.chat);
+      }
     });
   }
 

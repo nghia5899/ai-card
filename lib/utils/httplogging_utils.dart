@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 
 class HttpLoggingUtils {
   static late DateTime _startTime;
   static late DateTime _endTime;
+  static Logger logger = Logger();
 
   static void requestLog(RequestOptions request) {
     _startTime = DateTime.now();
@@ -31,19 +33,7 @@ class HttpLoggingUtils {
     if (contentType != null) {
       message += '\nRequestContentType: $contentType';
     }
-
-    Logger().d(message);
-    // if (request.url.data != null) {
-    //
-    //   if (contentType != null && contentType.contains('application/jsons')) {
-    //     logDebug(
-    //         'RequestData:\n'
-    //             '${jsons.encode(request.url.data)}',
-    //         tag: _tag);
-    //   }else{
-    //     logDebug('RequestData: ${request.url.data}', tag: _tag);
-    //   }
-    // }
+    logger.log(Level.debug, message);
   }
 
   static void responseLog(Response response) {
@@ -55,7 +45,19 @@ class HttpLoggingUtils {
     if ((contentType.contains('application/json') || contentType.contains('multipart/form-data'))) {
       JsonEncoder encoder = const JsonEncoder.withIndent('  ');
       String prettyPrint = encoder.convert(response.data);
-      Logger().log(Level.debug, """
+
+      logger.log(Level.debug, """
+----------End: $duration miliseconds----------
+Response status code: ${response.statusCode}
+Response URL: ${response.requestOptions.path}
+↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ ResponseData ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓'
+$prettyPrint
+↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ ResponseData ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑""");
+    } else {
+      JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+      String prettyPrint = encoder.convert(response.data);
+
+      logger.log(Level.debug, """
 ----------End: $duration miliseconds----------
 Response status code: ${response.statusCode}
 Response URL: ${response.requestOptions.path}
@@ -67,6 +69,6 @@ $prettyPrint
 
   static void logDuration() {
     final int duration = _endTime.difference(_startTime).inMilliseconds;
-    Logger().log(Level.debug, '----------End: $duration miliseconds----------');
+    logger.log(Level.debug, '----------End: $duration miliseconds----------');
   }
 }
