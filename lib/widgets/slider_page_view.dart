@@ -26,6 +26,7 @@ class _SliderPageViewState extends State<SliderPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primaryBackGroundColor,
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           CarouselSlider.builder(
@@ -53,7 +54,7 @@ class _SliderPageViewState extends State<SliderPageView> {
                 margin: EdgeInsets.symmetric(vertical: 16.w, horizontal: 4.w),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: currentPos == index ? AppColors.indicatorSelect : AppColors.indicatorUnSelect,
+                  color: currentPos == index ? AppColors.indicatorSelectColor : AppColors.indicatorUnSelect,
                 ),
               );
             }).toList(),

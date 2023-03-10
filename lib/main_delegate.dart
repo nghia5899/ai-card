@@ -43,7 +43,10 @@ class _MyAppState extends State<MyApp> {
             initialRoute: AppRoutes.initRouter,
             locale: LocalizationService.locale,
             translations: LocalizationService(),
-            builder: botToastBuilder
+            builder: botToastBuilder,
+            theme: ThemeData(
+                fontFamily: 'SF Pro Display'
+            ),
         );
       },
     );

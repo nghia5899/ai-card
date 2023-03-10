@@ -10,10 +10,23 @@ class CustomTextButton extends StatefulWidget {
   final String? subtext;
   Color? textColor;
   Color? borderColor;
-  BorderRadius? borderRadius;
   Color? backgroundColor;
-
-  CustomTextButton({Key? key, required this.title, this.subtext, this.onPressed, this.borderColor, this.backgroundColor})
+  TextStyle? titleStyle;
+  double? width;
+  double? height;
+  double? borderRadius;
+  CustomTextButton(
+      {Key? key,
+      required this.title,
+      this.subtext,
+      this.onPressed,
+      this.borderColor,
+      this.backgroundColor,
+      this.titleStyle,
+      this.width,
+      this.height,
+        this.borderRadius
+      })
       : super(key: key);
 
   @override
@@ -24,18 +37,23 @@ class _CustomTextButtonState extends State<CustomTextButton> {
   @override
   Widget build(BuildContext context) {
     return CustomAppButton(
+      width: widget.width,
+      height: widget.height,
       onPressed: widget.onPressed,
       borderColor: widget.borderColor,
+      borderRadius: widget.borderRadius,
       backgroundColor: widget.backgroundColor ?? AppColors.textButtonColor,
       child: Center(
         child: Column(
           children: [
             const Spacer(),
-            Text(widget.title, style: AppStyles.textButtonTitle),
-            (widget.subtext != null )? Text(
-                widget.subtext!,
-              style: AppStyles.subTextButtonTitle,
-            ): const SizedBox(height: 0),
+            Text(widget.title, style: widget.titleStyle ?? AppStyles.textButtonTitle),
+            (widget.subtext != null)
+                ? Text(
+                    widget.subtext!,
+                    style: AppStyles.subTextButtonTitle,
+                  )
+                : const SizedBox(height: 0),
             const Spacer(),
           ],
         ),

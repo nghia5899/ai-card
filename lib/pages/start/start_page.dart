@@ -1,4 +1,6 @@
 import 'package:ai_ecard/pages/start/start_controller.dart';
+import 'package:ai_ecard/routers.dart';
+import 'package:ai_ecard/styles/app_color.dart';
 import 'package:ai_ecard/styles/app_icon.dart';
 import 'package:ai_ecard/styles/app_style.dart';
 import 'package:ai_ecard/widgets/app_scaffold.dart';
@@ -16,6 +18,7 @@ class StartPage extends GetView<StartController> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      backGroundColor: AppColors.primaryBackGroundColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -29,6 +32,9 @@ class StartPage extends GetView<StartController> {
                   CustomTextButton(
                     title: 'subscribe_premium'.tr,
                     subtext: 'premium_price'.tr,
+                    onPressed: (){
+                      Get.toNamed(AppRoutes.purchase);
+                    },
                   ),
                   SizedBox(height: 8.w),
                   CustomAppButton (
@@ -38,13 +44,12 @@ class StartPage extends GetView<StartController> {
                           const Spacer(),
                           SizedBox(height: 24.w, width: 24.w, child: Image.asset(AppIcons.iconSA, fit: BoxFit.fill)),
                           SizedBox(width: 8.w),
-                          Text('login_sa_account'.tr, style: AppStyles.primaryButtonTitle,),
+                          Text('login_sa_account'.tr, style: AppStyles.primaryButtonTitle),
                           const Spacer(),
                         ],
                       ),
                     ),
                     onPressed: () async {
-                      print('hello');
                       await controller.authenticate();
                     },
                   ),

@@ -6,7 +6,8 @@ class AppScaffold extends StatefulWidget {
   final Widget? body;
   final String? title;
   final PreferredSizeWidget? appBar;
-  const AppScaffold({Key? key, this.resizeToAvoidBottomInset, this.body, this.title, this.appBar}) : super(key: key);
+  final Color? backGroundColor;
+  const AppScaffold({Key? key, this.resizeToAvoidBottomInset, this.body, this.title, this.appBar, this.backGroundColor}) : super(key: key);
 
   @override
   State<AppScaffold> createState() => _AppScaffoldState();
@@ -18,6 +19,7 @@ class _AppScaffoldState extends State<AppScaffold> {
     return Scaffold(
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset ?? false,
       appBar: widget.appBar ?? CustomAppBar(),
+      backgroundColor: widget.backGroundColor ?? Colors.white,
       body: widget.body
     );
   }
