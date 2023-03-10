@@ -1,18 +1,17 @@
 import 'package:ai_ecard/models/text_info.dart';
 import 'package:ai_ecard/widgets/form_text_field.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'helper/helper.dart';
 import 'import.dart';
 
 ThemeMode currentTheme = ThemeMode.light;
 
-late FToast fToast;
+final botToastBuilder = BotToastInit();
 
-final fToastBuilder = FToastBuilder();
+const String apiKey = """eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE2ZWFmN2M0LWEyZTktNDZlMC1hNGVlLTk2YTA2MmJiZDhmZCIsImV4cCI6MTY3OTM4NDM2Nn0.WfOi6HN5_RRNgLBwxaXItPC_xOsRrbz0B3rBwqULUj0""";
 
-
-showMessage(String msg,{String? type,int timeSlow = 3, Color? backgroundColor, Color? textColor, ToastGravity gravity = ToastGravity.TOP, double? fontSize}){
+showMessage(String msg,{String? type,int timeSlow = 3, Color? textColor}){
   String _type = !empty(type)?type!.toUpperCase():'';
   Color color;
   switch(_type){
@@ -32,12 +31,18 @@ showMessage(String msg,{String? type,int timeSlow = 3, Color? backgroundColor, C
       color = Colors.blue;
   }
 
-  Fluttertoast.showToast(
-      timeInSecForIosWeb: timeSlow,
-      fontSize: fontSize,
-      backgroundColor: color,
-      gravity: gravity,
-      msg: msg
+  BotToast.showNotification(
+    backgroundColor: color,
+    duration: Duration(seconds: timeSlow),
+    title: (cancelFunc) {
+      return Text(
+          msg,
+        maxLines: 5,
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(color: textColor??Colors.white),
+      );
+    },
   );
 
 }
@@ -86,3 +91,79 @@ void tapHandler(BuildContext context,{String? text,TextStyle? textStyle,TextAlig
     },
   );
 }
+
+InputDecoration inputDecoration({
+  bool filled = true,
+  String? labelText,
+  String? hintText,
+  String? errorText,
+  TextStyle? textStyle,
+  Color? fillColor,
+  BoxConstraints? boxConstraints,
+  EdgeInsets? contentPadding,
+  Widget? suffixIcon,
+  Widget? prefixIcon,
+  bool enabled = true,
+  bool borderNone = false
+}){
+  return InputDecoration(
+    errorMaxLines: 2,
+    filled: filled,
+    labelText: labelText,
+    hintText: hintText,
+    fillColor: fillColor,
+    contentPadding: contentPadding,
+    prefixIcon: prefixIcon,
+    suffixIcon: suffixIcon,
+    enabled: enabled,
+    prefixIconConstraints: boxConstraints,
+    labelStyle: TextStyle(
+      color: Theme.of(Get.context!).textTheme.bodyLarge!.color
+    ),
+    border: borderNone? InputBorder.none: OutlineInputBorder(
+      borderRadius: borderRadius,
+        borderSide: borderSide
+    ),
+    errorBorder: borderNone? InputBorder.none: OutlineInputBorder(
+        borderRadius: borderRadius,
+    ),
+    enabledBorder:borderNone? InputBorder.none: OutlineInputBorder(
+        borderRadius: borderRadius,
+        borderSide: borderSide
+    ),
+    focusedBorder:borderNone? InputBorder.none: OutlineInputBorder(
+        borderRadius: borderRadius
+    ),
+    focusedErrorBorder:borderNone? InputBorder.none: OutlineInputBorder(
+        borderRadius: borderRadius,
+      borderSide: borderSide
+    ),
+
+  );
+}
+
+BorderRadius get borderRadius => const BorderRadius.all(Radius.circular(16));
+
+BorderSide get borderSide => const BorderSide(width: 1);
+
+Function showLoading = (){
+  cusTomLoading();
+  // BotToast.showLoading(
+  //
+  // );
+};
+
+Function disableLoading = (){
+  BotToast.closeAllLoading();
+};
+
+
+Function cusTomLoading = (){
+   BotToast.showCustomLoading(
+       toastBuilder: (void Function() cancelFunc) {
+         return const Text('Loading...',style: TextStyle(color: Colors.black),);
+       },
+       crossPage: true
+   );
+};
+
