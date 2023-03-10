@@ -1,6 +1,7 @@
 import 'package:ai_ecard/pages/chat/chat_controller.dart';
 import 'package:ai_ecard/widgets/chat_view.dart';
 import 'package:ai_ecard/widgets/custom_app_button.dart';
+import 'package:ai_ecard/widgets/custom_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -39,7 +40,7 @@ class ChatPage extends GetView<ChatController> {
                       controller.updateText(value);
                     },
                   ),
-                  CustomAppButton(
+                  CustomTextButton(
                     title: 'Test',
                     onPressed: () async {
                       controller.sendChat();

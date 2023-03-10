@@ -1,13 +1,19 @@
+import 'package:ai_ecard/import.dart';
 import 'package:ai_ecard/styles/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomAppButton extends StatefulWidget {
   final Function()? onPressed;
-  final String title;
+  final Widget child;
   Color? textColor;
   Color? borderColor;
-  BorderRadius? borderRadius;
-  CustomAppButton({Key? key, required this.title, this.onPressed, this.borderColor}) : super(key: key);
+  double? borderRadius;
+  Color? backgroundColor;
+  double? height;
+  double? width;
+  CustomAppButton({Key? key, required this.child, this.onPressed, this.borderColor, this.backgroundColor, this.height, this.width})
+      : super(key: key);
 
   @override
   State<CustomAppButton> createState() => _CustomAppButtonState();
@@ -16,24 +22,37 @@ class CustomAppButton extends StatefulWidget {
 class _CustomAppButtonState extends State<CustomAppButton> {
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: widget.onPressed,
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: widget.borderRadius ?? BorderRadius.circular(50),
-                    side: const BorderSide(color: Colors.red, width: 2)
-                )
-            ),
-          minimumSize: MaterialStateProperty.all<Size>(
-            const Size(double.infinity, 50)
-          )
-        ),
+    return Container(
+      height: widget.height ?? 56.w,
+      decoration: BoxDecoration(
+        color: widget.backgroundColor ?? AppColors.primaryColor,
+        borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? 8.w))
+      ),
+      child: MaterialButton(
+        minWidth: widget.width ?? double.infinity,
+        onPressed: (){
+          widget.onPressed?.call();
+        },
         child: Center(
-          child: Text(
-              widget.title
-          ),
+          child: widget.child,
         ),
+      ),
     );
+    // return ElevatedButton(
+    //   onPressed: widget.onPressed,
+    //   style: ButtonStyle(
+    //     shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+    //         borderRadius: widget.borderRadius ?? BorderRadius.circular(8.w),
+    //         side: BorderSide(color: widget.borderColor ?? Colors.transparent, width: 2))),
+    //     backgroundColor: MaterialStateProperty.all<Color>(widget.backgroundColor ?? AppColors.primaryColor),
+    //     minimumSize: MaterialStateProperty.all<Size>(
+    //       Size(double.infinity, 56.w),
+    //     ),
+    //       surfaceTintColor: MaterialStateProperty.all<Color>(Colors.black)
+    //   ),
+    //   child: Center(
+    //       child: widget.child
+    //   ),
+    // );
   }
 }

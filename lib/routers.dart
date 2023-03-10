@@ -5,6 +5,8 @@ import 'package:ai_ecard/pages/home/home_page.dart';
 import 'package:ai_ecard/pages/image_editor/page.dart';
 import 'package:ai_ecard/pages/login/login_controller.dart';
 import 'package:ai_ecard/pages/login/login_page.dart';
+import 'package:ai_ecard/pages/start/start_controller.dart';
+import 'package:ai_ecard/pages/start/start_page.dart';
 import 'package:ai_ecard/service/chat/chat_service.dart';
 import 'package:ai_ecard/splash_screen.dart';
 import 'package:get/get.dart';
@@ -12,6 +14,7 @@ import 'package:get/get.dart';
 class AppRoutes{
   AppRoutes._();
   static String initRouter = '/';
+  static String start = '/start';
   static String login = '/login';
   static String home = '/home';
   static String chat = '/chat';
@@ -24,6 +27,12 @@ class AppRoutes{
         page: () => const SplashScreen()
     ),
     GetPage(
+        name: start,
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => StartController());
+        }),
+        page: () => const StartPage()),
+    GetPage(
         name: login,
         binding: BindingsBuilder(() {
           Get.lazyPut(() => LoginController());
@@ -33,6 +42,7 @@ class AppRoutes{
     GetPage(
         name: home,
         binding: BindingsBuilder(() {
+          Get.lazyPut(() => HomeController());
         }),
         page: () => const HomePage()
     ),
