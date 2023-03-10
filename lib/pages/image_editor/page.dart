@@ -2,8 +2,8 @@ import 'package:ai_ecard/helper/helper.dart';
 import 'package:ai_ecard/import.dart';
 import 'package:ai_ecard/models/text_info.dart';
 import 'package:flutter/material.dart';
-
 import 'controller.dart';
+
 
 class ImageEditorPage extends StatefulWidget {
   const ImageEditorPage({Key? key}) : super(key: key);
@@ -38,22 +38,48 @@ class _ImageEditorState extends State<ImageEditorPage> {
   List<TextInfo> texts = [];
   @override
   Widget build(BuildContext context) {
+
+    List<dynamic>? images = Get.arguments?.images;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: GetBuilder<ImageEditorController>(
-        init: ImageEditorController(),
+        autoRemove: true,
+        tag: 'images-render',
+        init: ImageEditorController(images: images ?? []),
         builder: (controller) {
           texts = controller.texts;
+
           return SafeArea(
             // top: false,
             child: Center(
               child: Stack(
+                alignment: Alignment.center,
+                fit: StackFit.passthrough,
                 children: [
                   // Image.asset('assets/story.png'),
+                  if(!empty(controller.image))
+                    Image.network(
+                      controller.image[0],
+                      fit: BoxFit.fill,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
+                    )
+                  else
                   Container(
                     width: Get.width,
-                    height: 500,
-                    color: Colors.green,
+                    height: Get.height,
+                    color: Colors.transparent,
                   ),
                   if(!empty(controller.texts))
                     for (int i = 0; i < texts.length; i++)
@@ -78,7 +104,7 @@ class _ImageEditorState extends State<ImageEditorPage> {
                           },
                           child: Draggable(
                             feedback: ImageText(textInfo: texts[i]),
-                            child: ImageText(textInfo: texts[i]),
+                            childWhenDragging: const SizedBox(),
                             onDragEnd: (drag) {
                               final renderBox =
                               context.findRenderObject() as RenderBox;
@@ -88,11 +114,13 @@ class _ImageEditorState extends State<ImageEditorPage> {
                                 texts[i].positionLeft = off.dx;
                               });
                             },
+                            child: ImageText(textInfo: texts[i]),
+
                           ),
                         ),
                       ),
                   Align(
-                    alignment: Alignment.centerLeft,
+                    alignment: Alignment.centerRight,
                     child: IconButton(
                       onPressed: (){
                         tapHandler(context,onChange: (obj){

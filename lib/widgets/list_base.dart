@@ -6,11 +6,25 @@ import 'package:flutter/material.dart';
 class ListBase extends StatelessWidget {
   final List? items;
   final Function(Map item)? detailBuilder;
+  final Function(Map item)? detailBuilderLast;
   final bool shrinkWrap;
   final Map<DeviceSize, int> ? response;
+  final EdgeInsets? padding;
+  final Widget? separatorWidget;
+  final bool isWrap;
+  final ScrollPhysics? physics;
+  final Widget Function(List<Widget>)? builderRowLast;
   const ListBase(
-      {Key? key, this.items, this.detailBuilder, this.shrinkWrap = true,
-        this.response
+      {Key? key, this.items,
+        this.detailBuilder,
+        this.detailBuilderLast,
+        this.shrinkWrap = true,
+        this.response,
+        this.padding,
+        this.separatorWidget,
+        this.physics,
+        this.builderRowLast,
+        this.isWrap = false
       }
       ) : super(key: key);
 
@@ -42,19 +56,21 @@ class ListBase extends StatelessWidget {
     List? items = this.items;
     int row = _checkRow(response);
     Widget list =  ListView.separated(
+      padding: padding,
       shrinkWrap: shrinkWrap,
+      physics: physics?? const ScrollPhysics(),
       itemCount: length,
       itemBuilder: (context, index) {
-        return _detailBuilder(context,items!,index,row);
+        return _detailBuilder(context,items!,index,row,col: length);
       },
       separatorBuilder: (context, index) {
-        return const SizedBox();
+        return separatorWidget??const SizedBox();
       },
     );
     return list;
   }
 
-  Widget _detailBuilder(BuildContext context, List items, int index, int row){
+  Widget _detailBuilder(BuildContext context, List items, int index, int row, {int ? col}){
 
     List<Widget> list = [];
     int length = items.length;
@@ -67,13 +83,44 @@ class ListBase extends StatelessWidget {
     for(int y=0;y<row;y++){
       iElement = i * row +y;
       if(iElement <= length - 1){
-        list.add(Expanded(child: detailBuilder!(items.elementAt(iElement))));
+        if(isWrap){
+          list.add(detailBuilder!(items.elementAt(iElement)));
+        }else if((items.length % 2 != 0) && detailBuilderLast != null && (col == i +1) ){
+          list.add(detailBuilderLast!(items.elementAt(iElement)));
+        }else{
+          list.add(Expanded(child: detailBuilder!(items.elementAt(iElement))));
+        }
       }
+
       if(y<row-1){
-        list.add(const SizedBox());
+        list.add(separatorWidget??const SizedBox());
       }
     }
 
+    if(isWrap){
+      return Theme(
+        data: ThemeData(),
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: list,
+        ),
+
+      );
+    }
+
+    if(items.length % 2 != 0 && detailBuilderLast != null && (col == i +1)){
+      if(builderRowLast != null){
+        return builderRowLast!(list);
+      }
+      return Theme(
+        data: ThemeData(),
+        child: Row(
+          children: list,
+        ),
+
+      );
+    }
     return Theme(
       data: ThemeData(),
       child: Row(

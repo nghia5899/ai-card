@@ -15,8 +15,9 @@ class FormTextField extends StatefulWidget {
   final ValueChanged<TextInfo>? onPress;
   final TextStyle? textStyle;
   final TextAlign? textAlign;
+  final InputDecoration? inputDecoration;
 
-  const FormTextField({Key? key, this.value, this.onTap, this.onChange, this.maxLines = 1, this.decoration, this.padding = 12, this.hintText, this.showTextForm = false, this.onPress, this.textStyle, this.textAlign}) : super(key: key);
+  const FormTextField({Key? key, this.value, this.onTap, this.onChange, this.maxLines = 1, this.decoration, this.padding = 12, this.hintText, this.showTextForm = false, this.onPress, this.textStyle, this.textAlign, this.inputDecoration}) : super(key: key);
 
   @override
   State<FormTextField> createState() => _FormTextFieldState();
@@ -52,7 +53,11 @@ class _FormTextFieldState extends State<FormTextField> {
         padding: EdgeInsets.all(widget.padding),
         child: TextFormField(
           controller: _controller,
-          onTap: widget.onTap,
+          onTap: (){
+            if( widget.onTap != null){
+              widget.onTap!();
+            }
+          },
           onChanged: (val){
             value = val;
             _textInfo = TextInfo(text: val);
@@ -63,7 +68,7 @@ class _FormTextFieldState extends State<FormTextField> {
               widget.onChange!(val);
             }
           },
-          decoration: InputDecoration(
+          decoration: widget.inputDecoration??InputDecoration(
             border: InputBorder.none,
             hintText: widget.hintText??'',
             filled: true,

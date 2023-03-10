@@ -12,6 +12,7 @@ class AppTheme{
   );
 
   static final ThemeData lightTheme = ThemeData(
+    primaryColor: const Color(0xff1B514A),
 
   );
 }

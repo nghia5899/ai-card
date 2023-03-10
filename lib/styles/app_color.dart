@@ -12,4 +12,6 @@ class AppColors{
   static const Color primaryColor = Color(0xFF1B514A);
   static const Color primaryTextColor = Color(0xFFFFFFFF);
   static const Color textButtonColor = Color(0xFFE0E3DE);
+  static const Color border = Color(0xffE2E8F0);
+  static const Color primary = Color(0xff1B514A);
 }
