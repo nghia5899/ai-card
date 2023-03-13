@@ -158,7 +158,12 @@ class ImageText extends StatelessWidget {
       child: Text(
         textInfo.text??'',
         textAlign: textInfo.textAlign,
-        style: textInfo.textStyle,
+        style: textInfo.textStyle ?? TextStyle(
+          color: textInfo.color,
+          fontSize: textInfo.fontSize,
+          fontWeight: textInfo.fontWeight,
+          fontFamily: textInfo.fontFamily
+        ),
         // style: TextStyle(
         //   fontSize: textInfo.fontSize,
         //   fontWeight: textInfo.fontWeight,

@@ -12,6 +12,7 @@ class English {
     'suggest_purchase_not_login': 'to get 1 more year subscription, price no change.',
     'generate': 'Generate',
     'crop': 'Crop',
-    'save': 'SAVE'
+    'save': 'SAVE',
+    'front': 'Front'
   };
 }

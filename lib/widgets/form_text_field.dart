@@ -119,7 +119,12 @@ class _FormTextFieldState extends State<FormTextField> {
       textAlingment: widget.textAlign,
       minFontSize: 8,
       maxFontSize: 40,
-
+      backgroundColor: Colors.transparent,
+      decoration: EditorDecoration(
+            alignment: AlignmentDecoration(
+              center: SizedBox()
+            )
+      ),
       onEditCompleted: (style, align, text) {
         value = text;
         _textInfo = TextInfo(text: text,textStyle: style,textAlign: align,positionLeft: Get.width/2.5,positionTop: 150);

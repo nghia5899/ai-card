@@ -28,11 +28,12 @@ class StartController extends GetxController{
   }
 
   void showAd(){
-    AdMobService.createInterstitialAd(onLoaded: (ad) async {
-      interstitialAd = ad;
-      await interstitialAd.show();
-      Get.toNamed(AppRoutes.homeDefault);
-    });
+    // AdMobService.createInterstitialAd(onLoaded: (ad) async {
+    //   interstitialAd = ad;
+    //   await interstitialAd.show();
+    //   Get.toNamed(AppRoutes.homeDefault);
+    // });
+    Get.toNamed(AppRoutes.homeDefault);
   }
 
   Future<void> authenticate() async {
