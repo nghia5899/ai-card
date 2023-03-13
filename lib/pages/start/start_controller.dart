@@ -1,4 +1,5 @@
 import 'package:ai_ecard/import.dart';
+import 'package:ai_ecard/routers.dart';
 import 'package:ai_ecard/service/ad_mob_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
@@ -27,9 +28,10 @@ class StartController extends GetxController{
   }
 
   void showAd(){
-    AdMobService.createInterstitialAd(onLoaded: (ad){
+    AdMobService.createInterstitialAd(onLoaded: (ad) async {
       interstitialAd = ad;
-      interstitialAd.show();
+      await interstitialAd.show();
+      Get.toNamed(AppRoutes.homeDefault);
     });
   }
 

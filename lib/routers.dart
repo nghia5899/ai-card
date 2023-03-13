@@ -1,5 +1,7 @@
 import 'package:ai_ecard/pages/chat/chat_controller.dart';
 import 'package:ai_ecard/pages/chat/chat_page.dart';
+import 'package:ai_ecard/pages/export/export_controller.dart';
+import 'package:ai_ecard/pages/export/export_page.dart';
 import 'package:ai_ecard/pages/home/detail/page.dart';
 import 'package:ai_ecard/pages/home/home_controller.dart';
 import 'package:ai_ecard/pages/home/home_page.dart';
@@ -8,8 +10,11 @@ import 'package:ai_ecard/pages/image_editor/page.dart';
 import 'package:ai_ecard/pages/login/login_controller.dart';
 import 'package:ai_ecard/pages/login/login_page.dart';
 import 'package:ai_ecard/pages/start/page.dart';
+import 'package:ai_ecard/pages/purchase/purchase_controller.dart';
+import 'package:ai_ecard/pages/purchase/purchase_page.dart';
 import 'package:ai_ecard/pages/start/start_controller.dart';
 import 'package:ai_ecard/pages/start/start_page.dart';
+import 'package:ai_ecard/pages/test/test.dart';
 import 'package:ai_ecard/service/chat/chat_service.dart';
 import 'package:ai_ecard/splash_screen.dart';
 import 'package:get/get.dart';
@@ -31,6 +36,8 @@ class AppRoutes{
   static String generateImage = '/generate_image';
   static String homeDetail = '/home_detail';
   static String homeDefault = '/home_default';
+  static String purchase = '/purchase';
+  static String export = '/export';
   static List<GetPage> createRoutes = [
     GetPage(
         name: initRouter,
@@ -77,7 +84,7 @@ class AppRoutes{
     GetPage(
       name: start,
       binding: BindingsBuilder(() {
-        Get.lazyPut(() => LoginController());
+        Get.lazyPut(() => StartController());
       }),
       page: () => StartPage(),
     ),
@@ -94,5 +101,23 @@ class AppRoutes{
         }),
         page: () => const ScaffoldDefault(),
     ),
+    GetPage(
+        name: purchase,
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => PurchaseController());
+        }),
+        page: () => const PurchasePage()
+    ),
+    GetPage(
+      name: export,
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => ExportController());
+      }),
+      page: () => const ExportPage()
+    ),
+    // GetPage(
+    //   name: '/test',
+    //   page: () => TestPage()
+    // )
   ];
 }

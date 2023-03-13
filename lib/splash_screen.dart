@@ -1,11 +1,12 @@
-import 'package:ai_ecard/config/lang/en_us.dart';
+import 'package:ai_ecard/helper/file_helper.dart';
+import 'package:ai_ecard/import.dart';
 import 'package:ai_ecard/models/account/account_model.dart';
 import 'package:ai_ecard/models/models/token/token.dart';
 import 'package:ai_ecard/routers.dart';
 import 'package:ai_ecard/service/app_storage.dart';
 import 'package:ai_ecard/service/user/user_service.dart';
-import 'package:ai_ecard/utils/secure_storage_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -23,6 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
       TokenObj token = await UserService().getToken(AccountModel('test', '123456'));
       if(token.accessToken != null){
         AppStorage.accessToken = token.accessToken;
+        // Uint8List image = await FileHelper.createImage(Container(width: 327.w, height: 500.w, color: Colors.blueAccent));
         Get.offAndToNamed(AppRoutes.start);
       }
     });

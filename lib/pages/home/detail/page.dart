@@ -1,7 +1,9 @@
 import 'dart:math';
+import 'package:ai_ecard/helper/file_helper.dart';
 import 'package:ai_ecard/helper/helper.dart';
 import 'package:ai_ecard/import.dart';
 import 'package:ai_ecard/pages/home/detail/controller.dart';
+import 'package:ai_ecard/routers.dart';
 import 'package:ai_ecard/widgets/form_text_field.dart';
 import 'package:ai_ecard/widgets/svg_viewer.dart';
 import 'package:flutter/material.dart';
@@ -101,23 +103,29 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                   crossAxisSpacing: 15.0,
                   children: controller.items.map<Widget>((item) {
                     final int randomNumber = Random().nextInt(3);
-                    return IntrinsicWidth(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        // crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          if(!empty(item['image'])) Image.asset(item['image'][randomNumber],fit: BoxFit.cover),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 12
+                    return GestureDetector(
+                      onTap: () async{
+                        Uint8List image = await FileHelper.createImage(Image.asset(item['image'][randomNumber]));
+                        Get.toNamed(AppRoutes.export, arguments: image);
+                      },
+                      child: IntrinsicWidth(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          // crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            if(!empty(item['image'])) Image.asset(item['image'][randomNumber],fit: BoxFit.cover),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 12
+                              ),
+                              child: Text('${item['title']}',style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500
+                              ),),
                             ),
-                            child: Text('${item['title']}',style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500
-                            ),),
-                          ),
 
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   }).toList(), // add some space

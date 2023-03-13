@@ -12,7 +12,7 @@ class CustomAppButton extends StatefulWidget {
   Color? backgroundColor;
   double? height;
   double? width;
-  CustomAppButton({Key? key, required this.child, this.onPressed, this.borderColor, this.backgroundColor, this.height, this.width})
+  CustomAppButton({Key? key, required this.child, this.onPressed, this.borderColor, this.borderRadius, this.backgroundColor, this.height, this.width})
       : super(key: key);
 
   @override
@@ -33,6 +33,9 @@ class _CustomAppButtonState extends State<CustomAppButton> {
         onPressed: (){
           widget.onPressed?.call();
         },
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? 8.w))
+        ),
         child: Center(
           child: widget.child,
         ),
