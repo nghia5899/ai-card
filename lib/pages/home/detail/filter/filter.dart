@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'controller.dart';
 
 class HomeDetailFilter extends StatelessWidget {
-  const HomeDetailFilter({Key? key}) : super(key: key);
+  final ValueChanged? onChange;
+  const HomeDetailFilter({Key? key, this.onChange}) : super(key: key);
 
 
   @override
@@ -59,6 +60,7 @@ class HomeDetailFilter extends StatelessWidget {
                               height: 1,
                               color: Colors.black,
                             ),
+                            const SizedBox(height: 15,),
                             Flexible(
                               child: SingleChildScrollView(
                                 child: Padding(

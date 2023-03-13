@@ -6,6 +6,7 @@ import 'package:text_editor/text_editor.dart';
 class FormTextField extends StatefulWidget {
   final String? value;
   final Function()? onTap;
+  final Function()? onEditingComplete;
   final ValueChanged? onChange;
   final int maxLines;
   final Decoration?decoration;
@@ -17,7 +18,7 @@ class FormTextField extends StatefulWidget {
   final TextAlign? textAlign;
   final InputDecoration? inputDecoration;
 
-  const FormTextField({Key? key, this.value, this.onTap, this.onChange, this.maxLines = 1, this.decoration, this.padding = 12, this.hintText, this.showTextForm = false, this.onPress, this.textStyle, this.textAlign, this.inputDecoration}) : super(key: key);
+  const FormTextField({Key? key, this.value, this.onTap, this.onChange, this.maxLines = 1, this.onEditingComplete, this.decoration, this.padding = 12, this.hintText, this.showTextForm = false, this.onPress, this.textStyle, this.textAlign, this.inputDecoration}) : super(key: key);
 
   @override
   State<FormTextField> createState() => _FormTextFieldState();
@@ -66,6 +67,11 @@ class _FormTextFieldState extends State<FormTextField> {
             }
             if(widget.onChange != null){
               widget.onChange!(val);
+            }
+          },
+          onEditingComplete: () {
+            if( widget.onEditingComplete != null){
+              widget.onEditingComplete!();
             }
           },
           decoration: widget.inputDecoration??InputDecoration(

@@ -2,6 +2,7 @@ import 'package:ai_ecard/import.dart';
 import 'package:flutter/material.dart';
 
 class HomeDetailFilterController extends GetxController{
+
   List<Map> orientations = [
     {
       'title': 'Vertical',
@@ -14,6 +15,8 @@ class HomeDetailFilterController extends GetxController{
       'image': '',
     },
   ];
+
+  Map<String,dynamic> filters = {};
 
   List<Color> colors = [
     Color(int.parse('0xffEA2027')),
@@ -37,4 +40,10 @@ class HomeDetailFilterController extends GetxController{
     Colors.black,
     Colors.white,
   ];
+
+  void operator []=(key, value) {
+    filters[key] = value;
+  }
+
+
 }

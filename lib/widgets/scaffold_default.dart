@@ -1,4 +1,7 @@
+import 'package:ai_ecard/pages/archive/page.dart';
 import 'package:ai_ecard/pages/home/home_page.dart';
+import 'package:ai_ecard/pages/menu/page.dart';
+import 'package:ai_ecard/styles/app_color.dart';
 import 'package:ai_ecard/widgets/svg_viewer.dart';
 import 'package:flutter/material.dart';
 
@@ -17,17 +20,20 @@ class _ScaffoldDefaultState extends State<ScaffoldDefault> {
     {
       'title': 'Home',
       'icon': 'assets/icons/ic_home.svg',
+      'iconOutlined': 'assets/icons/ic_home_outlined.svg',
       'child': const HomePage()
     },
     {
       'title': 'Archive',
       'icon': 'assets/icons/ic_bookmark.svg',
-      'child': Text('2')
+      'iconOutlined': 'assets/icons/ic_bookmark_outlined.svg',
+      'child': const ArchivePage()
     },
     {
       'title': 'More',
       'icon': 'assets/icons/ic_more.svg',
-      'child': Text('1')
+      'iconOutlined': 'assets/icons/ic_more_outlined.svg',
+      'child': const MenuPage()
     },
   ];
 
@@ -39,8 +45,12 @@ class _ScaffoldDefaultState extends State<ScaffoldDefault> {
         items: _itemsBottom,
         onTap: _onItemTappedTabBottom,
         currentIndex: _index,
+        selectedIconTheme: const IconThemeData(
+          color: AppColors.primaryColor,
+        ),
+        selectedItemColor: AppColors.primaryColor,
         selectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.bold
+          fontWeight: FontWeight.bold,
         ),
       )
     );
@@ -54,7 +64,7 @@ class _ScaffoldDefaultState extends State<ScaffoldDefault> {
 
   List<BottomNavigationBarItem> get _itemsBottom{
     return List.generate(_contents.length, (i) => BottomNavigationBarItem(
-        icon: SvgViewer(url: _contents[i]['icon'],),
+        icon: SvgViewer(url: (i == _index)?_contents[i]['iconOutlined']:_contents[i]['icon'],color: i == _index? AppColors.primaryColor: null),
         label: _contents[i]['title'],
 
     )).toList();

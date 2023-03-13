@@ -7,6 +7,7 @@ import 'package:ai_ecard/pages/home/home_controller.dart';
 import 'package:ai_ecard/pages/home/home_page.dart';
 import 'package:ai_ecard/pages/image_editor/controller.dart';
 import 'package:ai_ecard/pages/image_editor/page.dart';
+import 'package:ai_ecard/pages/image_views/page.dart';
 import 'package:ai_ecard/pages/login/login_controller.dart';
 import 'package:ai_ecard/pages/login/login_page.dart';
 import 'package:ai_ecard/pages/start/page.dart';
@@ -14,7 +15,6 @@ import 'package:ai_ecard/pages/purchase/purchase_controller.dart';
 import 'package:ai_ecard/pages/purchase/purchase_page.dart';
 import 'package:ai_ecard/pages/start/start_controller.dart';
 import 'package:ai_ecard/pages/start/start_page.dart';
-import 'package:ai_ecard/pages/test/test.dart';
 import 'package:ai_ecard/service/chat/chat_service.dart';
 import 'package:ai_ecard/splash_screen.dart';
 import 'package:get/get.dart';
@@ -38,6 +38,7 @@ class AppRoutes{
   static String homeDefault = '/home_default';
   static String purchase = '/purchase';
   static String export = '/export';
+  static String imageViews = '/image_views';
   static List<GetPage> createRoutes = [
     GetPage(
         name: initRouter,
@@ -114,6 +115,13 @@ class AppRoutes{
         Get.lazyPut(() => ExportController());
       }),
       page: () => const ExportPage()
+    ),
+    GetPage(
+      name: imageViews,
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => ExportController());
+      }),
+      page: () => const ImageViewsPage()
     ),
     // GetPage(
     //   name: '/test',

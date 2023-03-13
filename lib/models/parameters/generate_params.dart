@@ -5,8 +5,9 @@ class GenerateParameter extends BaseParameter {
   String prompt;
   int width;
   int height;
+  String category;
 
-  GenerateParameter(this.prompt, this.width, this.height);
+  GenerateParameter(this.prompt, this.width, this.height, this.category);
 
 
   factory GenerateParameter.fromJson(Map<String, dynamic> json){
@@ -14,6 +15,7 @@ class GenerateParameter extends BaseParameter {
         json['prompt'],
         json['width'],
         json['height'],
+        json['category'],
     );
   }
 
@@ -22,8 +24,9 @@ class GenerateParameter extends BaseParameter {
   Map<String, dynamic> build() {
     params['prompt'] = prompt;
 
-    params['image_width'] = width;
-    params['image_height'] = height;
+    params['img_width'] = width;
+    params['img_height'] = height;
+    params['category'] = category;
     return super.build();
   }
 }
