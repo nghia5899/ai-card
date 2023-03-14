@@ -1,4 +1,6 @@
+import 'package:ai_ecard/helper/helper.dart';
 import 'package:ai_ecard/import.dart';
+import 'package:ai_ecard/styles/app_color.dart';
 import 'package:ai_ecard/widgets/button_base.dart';
 import 'package:ai_ecard/widgets/select_dropdown.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +60,7 @@ class HomeDetailFilter extends StatelessWidget {
                             ),
                             const Divider(
                               height: 1,
-                              color: Colors.black,
+                              color: Color(0xffE2E8F0),
                             ),
                             const SizedBox(height: 15,),
                             Flexible(
@@ -67,15 +69,18 @@ class HomeDetailFilter extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(horizontal: 24),
                                   child: Column(
                                     children: [
-                                      const _GroupItem(label: 'Sort by',
+                                      _GroupItem(label: 'Sort by',
                                         child: FormSelectDropDown(
                                           hintText: 'Recently Listed',
-                                          value: '1',
-                                          items: {
-                                            '1': 'Recently Listed',
-                                            '2': 'Recently Listed',
+                                          value: (!empty(controller['orderBy']))?controller['orderBy']:'',
+                                          items: const {
+                                            '1': 'Sort by name a-z',
+                                            '2': 'sort in order',
+                                            '3': 'sort by creation date',
                                           },
-
+                                          onChanged: (val){
+                                            controller['orderBy'] = val;
+                                          },
                                         ),
                                       ),
                                       _GroupItem(label: 'License',
@@ -83,36 +88,46 @@ class HomeDetailFilter extends StatelessWidget {
                                           child: Row(
                                             children: [
                                               Expanded(
-                                                child: Container(
-                                                padding: const EdgeInsets.all(15),
-                                                decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(16),
-                                                    border: Border.all(width: 1,color: const Color(0xffE2E8F0))
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: const [
-                                                    SizedBox(width: 5,),
-                                                    Text('Free',style: TextStyle(color: Color(0xff64748B)),)
-                                                  ],
-                                                ),
-                                            ),
-                                              ),
-                                              const SizedBox(width: 24,),
-                                              Expanded(
-                                                child: Container(
+                                                child: InkWell(
+                                                  onTap: (){
+                                                    controller['accountType'] = 'free';
+                                                  },
+                                                  child: Container(
                                                   padding: const EdgeInsets.all(15),
                                                   decoration: BoxDecoration(
                                                       borderRadius: BorderRadius.circular(16),
-                                                      border: Border.all(width: 1,color: const Color(0xffE2E8F0))
+                                                      border: Border.all(width: 2,color: (!empty(controller['accountType']) && controller['accountType'] == 'free')?AppColors.primary:const Color(0xffE2E8F0) )
                                                   ),
                                                   child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.center,
                                                     children: const [
-                                                      Icon(Icons.star,color: Colors.amberAccent,size: 18),
                                                       SizedBox(width: 5,),
-                                                      Text('premium',style: TextStyle(color: Color(0xff64748B)),)
+                                                      Text('Free',style: TextStyle(color: Color(0xff64748B)),)
                                                     ],
+                                                  ),
+                                            ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 24,),
+                                              Expanded(
+                                                child: InkWell(
+                                                  onTap: (){
+                                                    controller['accountType'] = 'premium';
+                                                  },
+                                                  child: Container(
+                                                    padding: const EdgeInsets.all(15),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(16),
+                                                        border: Border.all(width: 2,color: (!empty(controller['accountType']) && controller['accountType'] == 'premium')?AppColors.primary:const Color(0xffE2E8F0) )
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: const [
+                                                        Icon(Icons.star,color: Colors.amberAccent,size: 18),
+                                                        SizedBox(width: 5,),
+                                                        Text('premium',style: TextStyle(color: Color(0xff64748B)),)
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               )],
@@ -122,37 +137,54 @@ class HomeDetailFilter extends StatelessWidget {
                                       _GroupItem(label: 'Color',
                                           child: Wrap(
                                             alignment: WrapAlignment.start,
-                                              children: controller.colors.map((e) => Container(
-                                                width: 24,
-                                                height: 24,
-                                                padding: const EdgeInsets.all(12),
-                                                margin: const EdgeInsets.only(bottom: 19,right: 16),
-                                                decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(50),
-                                                    color: e
+                                              children: controller.colors.entries.map<Widget>((e) => InkWell(
+                                                onTap: (){
+                                                  controller['color'] = e.key;
+                                                },
+                                                child: Container(
+                                                  height: 25,
+                                                  width: 25,
+                                                  padding: const EdgeInsets.all(2),
+                                                  margin: const EdgeInsets.only(bottom: 19,right: 10),
+                                                  decoration: BoxDecoration(
+                                                      border: (!empty(controller['color']) && controller['color'] == e.key)?Border.all(color: e.value,width: 2):null,
+                                                      borderRadius: BorderRadius.circular(50),
+                                                  ),
+                                                  child: Container(
+                                                    padding: const EdgeInsets.all(12),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(50),
+                                                        color: e.value,
+                                                    ),
+                                                  ),
                                                 ),
-                                              )).toList()
+                                              )).toList(),
                                           ),
                                       ),
                                       _GroupItem(label: 'Orientation',
                                         child: Wrap(
-                                            children: controller.orientations.map((e) => FractionallySizedBox(
-                                              widthFactor: 1/2,
-                                              child: Container(
-                                                    padding: const EdgeInsets.all(15),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(16),
-                                                      border: Border.all(width: 1,color: const Color(0xffE2E8F0))
-                                                    ),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        const Icon(Icons.screen_lock_landscape,color: Color(0xff64748B)),
-                                                        const SizedBox(width: 5,),
-                                                        Text('${e['title']}',style: const TextStyle(color: Color(0xff64748B)),)
-                                                      ],
-                                                    ),
-                                                  ).paddingOnly(right: 24,bottom: 24)
+                                            children: controller.orientations.map((e) => InkWell(
+                                              onTap: (){
+                                                controller['orientation'] = e['code'];
+                                              },
+                                              child: FractionallySizedBox(
+                                                widthFactor: 1/2,
+                                                child: Container(
+                                                      padding: const EdgeInsets.all(15),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(16),
+                                                        border: Border.all(width: 2,color: (!empty(controller['orientation']) && controller['orientation'] == e['code'])?AppColors.primary:const Color(0xffE2E8F0))
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          const Icon(Icons.screen_lock_landscape,color: Color(0xff64748B)),
+                                                          const SizedBox(width: 5,),
+                                                          Text('${e['title']}',style: const TextStyle(color: Color(0xff64748B)),)
+                                                        ],
+                                                      ),
+                                                    ).paddingOnly(right: 24,bottom: 24)
+                                              ),
                                             )).toList()
                                         ),
                                       ),
@@ -167,7 +199,7 @@ class HomeDetailFilter extends StatelessWidget {
                               padding: const EdgeInsets.all(24),
                               child: ButtonBase(
                                   onPressed: (){
-
+                                    Get.back();
                                   },
                                   onHover: (val){
 

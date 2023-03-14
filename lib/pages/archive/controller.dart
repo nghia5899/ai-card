@@ -20,7 +20,6 @@ class ArchiveController extends GetxController{
   List<Map<String, dynamic>>? _items;
   
   List<Map<String, dynamic>>? get items => _items;
-
   
   getBookMark() async {
     List<Map<String, dynamic>> temp = [];

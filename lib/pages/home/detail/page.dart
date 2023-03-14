@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:ai_ecard/helper/file_helper.dart';
 import 'package:ai_ecard/helper/helper.dart';
 import 'package:ai_ecard/import.dart';
+import 'package:ai_ecard/models/text_info.dart';
 import 'package:ai_ecard/pages/home/detail/controller.dart';
 import 'package:ai_ecard/pages/image_editor/page.dart';
 import 'package:ai_ecard/routers.dart';
@@ -40,10 +41,10 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeDetailController>(
+      // tag: 'home-detail-${!empty(widget.filters) &&  !empty(widget.filters!['filter'])?widget.filters!['filter']:''}',
       init: HomeDetailController(),
       builder: (controller) {
         return Scaffold(
-          extendBodyBehindAppBar: true,
           appBar: AppBar(
             backgroundColor: Theme.of(context).cardColor,
             elevation: 0.1,
@@ -77,7 +78,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
           body: Column(
             children: [
               const SizedBox(
-                height: 100,
+                height: 15,
               ),
               if(empty(widget.filters))
               Container(
@@ -117,7 +118,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 15,
               ),
               if(!empty(controller.listSelectAll))
               Expanded(
@@ -134,7 +135,10 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                     return GestureDetector(
                       onTap: () async{
                         Uint8List image = await FileHelper.createImage(Image.asset(item['image']));
-                        Get.toNamed(AppRoutes.export, arguments: image);
+                        Get.toNamed(AppRoutes.export, arguments: EditObject(
+                            image,
+                            controller.listText,
+                        ));
                       },
                       child: IntrinsicWidth(
                         child: Stack(
@@ -201,4 +205,10 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
       },
     );
   }
+}
+
+class EditObject{
+  Uint8List image;
+  List<TextInfo> textInfo;
+  EditObject(this.image, this.textInfo);
 }

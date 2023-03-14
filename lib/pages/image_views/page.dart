@@ -27,7 +27,6 @@ class _ImageViewsPageState extends State<ImageViewsPage> {
     final List images = Get.arguments ?? [];
 
     return Scaffold(
-      // extendBodyBehindAppBar: true,
       backgroundColor: const Color(0xff1E293B),
       appBar: AppBar(
         backgroundColor:const Color(0xff1E293B),
