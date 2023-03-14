@@ -2,6 +2,7 @@ import 'package:ai_ecard/models/text_info.dart';
 import 'package:ai_ecard/widgets/form_text_field.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'helper/helper.dart';
 import 'import.dart';
 
@@ -9,7 +10,8 @@ ThemeMode currentTheme = ThemeMode.light;
 
 final botToastBuilder = BotToastInit();
 
-const String apiKey = """eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE2ZWFmN2M0LWEyZTktNDZlMC1hNGVlLTk2YTA2MmJiZDhmZCIsImV4cCI6MTY3OTM4NDM2Nn0.WfOi6HN5_RRNgLBwxaXItPC_xOsRrbz0B3rBwqULUj0""";
+// const String apiKey = """eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE2ZWFmN2M0LWEyZTktNDZlMC1hNGVlLTk2YTA2MmJiZDhmZCIsImV4cCI6MTY3OTM4NDM2Nn0.WfOi6HN5_RRNgLBwxaXItPC_xOsRrbz0B3rBwqULUj0""";
+const String apiKey = """eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU2MTZhZjg3LTdlODQtNDI4NS05MWViLTg0YWFjZjJlOGEwZCIsImV4cCI6MTY3OTg4NTc1NX0.1Mp2ihzRu028njq_cFotOfBYj1BRBhNShX5pZqoJX74""";
 
 showMessage(String msg,{String? type,int timeSlow = 3, Color? textColor}){
   String _type = !empty(type)?type!.toUpperCase():'';
@@ -33,6 +35,7 @@ showMessage(String msg,{String? type,int timeSlow = 3, Color? textColor}){
 
   BotToast.showNotification(
     backgroundColor: color,
+    align: const Alignment(0, -0.99),
     duration: Duration(seconds: timeSlow),
     title: (cancelFunc) {
       return Text(
@@ -161,7 +164,10 @@ Function disableLoading = (){
 Function cusTomLoading = (){
    BotToast.showCustomLoading(
        toastBuilder: (void Function() cancelFunc) {
-         return const Text('Loading...',style: TextStyle(color: Colors.black),);
+         return LoadingAnimationWidget.threeRotatingDots(
+             color:const Color(0xff94A3B8),
+             size: 35
+         );
        },
        crossPage: true
    );

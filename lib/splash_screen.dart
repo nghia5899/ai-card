@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if(token.accessToken != null){
         AppStorage.accessToken = token.accessToken;
         // Uint8List image = await FileHelper.createImage(Container(width: 327.w, height: 500.w, color: Colors.blueAccent));
-        Get.offAndToNamed(AppRoutes.start);
+        Get.offAndToNamed(AppRoutes.homeDefault);
       }
     });
   }

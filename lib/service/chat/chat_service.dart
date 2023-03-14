@@ -9,6 +9,8 @@ import 'package:dio/dio.dart';
 class ChatService extends ApiService {
   Future<ChatModel> chat(ChatParameter parameter) async {
     Response response = await post(path: '/api/account/chat', params: parameter.build());
+    print('=====================');
+    print(response);
     BaseResponse<ChatModel> baseResponse =
         convertResponse(response: response, dataHandler: (json) => ChatModel.fromJson(json));
     return baseResponse.data;
