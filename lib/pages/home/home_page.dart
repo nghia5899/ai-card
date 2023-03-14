@@ -134,7 +134,6 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                           onEditingComplete: (){
-                            showMessage('Thành coong');
                             Get.toNamed(AppRoutes.homeDetail,arguments: {
                               'title': controller.text,
                               'filter': controller.text,

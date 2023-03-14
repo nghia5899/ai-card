@@ -73,19 +73,19 @@ class TemplateService{
       "title": "Monogram Terracota",
       "type": "baby",
       "image": "assets/images/template/img_t12.png",
-      "category": "birthday"
+      "category": "new_baby"
     },{
       "code": "13",
       "title": "Monogram Terracota",
       "type": "baby",
       "image": "assets/images/template/img_t13.png",
-      "category": "birthday"
+      "category": "new_baby"
     },{
       "code": "14",
       "title": "Monogram Terracota",
       "type": "Anime",
       "image": "assets/images/template/img_t14.png",
-      "category": "birthday"
+      "category": "new_baby"
     },{
       "code": "15",
       "title": "Monogram Terracota",
@@ -110,14 +110,14 @@ class TemplateService{
       "title": "Monogram Terracota",
       "type": "Kids",
       "image": "assets/images/template/img_t16.png",
-      "category": "birthday",
+      "category": "thank_you",
       "premium": '1'
     },{
       "code": "19",
       "title": "Monogram Terracota",
       "type": "Kids",
       "image": "assets/images/template/img_t16.png",
-      "category": "birthday",
+      "category": "thank_you",
       "premium": '1'
     },
   ];

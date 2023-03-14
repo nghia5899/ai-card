@@ -24,15 +24,15 @@ class HomeController extends GetxController{
 
   List<Map> items = [
     {
-      'title': 'birthday',
+      'title': 'Birthday',
       'image': 'assets/images/img_birthday.png',
       'category': 'birthday',
       'color': const Color.fromRGBO(158, 51, 51, 0.5),
     },{
-      'title': 'wedding',
+      'title': 'Wedding',
       'category': 'wedding',
-      'image': 'assets/images/img_wedding.png',
-      'color': const Color.fromRGBO(158, 128, 51, 0.5),
+      'image': 'assets/images/img_birthday.png',
+      'color': const Color.fromRGBO(158, 51, 51, 0.5),
     },{
       'title': 'Thank you',
       'category': 'thank_you',
