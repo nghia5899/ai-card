@@ -1,63 +1,75 @@
+import 'dart:math';
+
 import 'package:ai_ecard/import.dart';
 import 'package:ai_ecard/models/parameters/generate_params.dart';
 import 'package:ai_ecard/routers.dart';
 import 'package:ai_ecard/service/generate/generate_service.dart';
+import 'package:get/get.dart';
+
 
 class GenerateImageController extends GetxController {
   Rx<String> generateImageContent = ''.obs;
   late TextEditingController textController;
 
-  List<String> keywordSuggest = [
-    'Concept art',
-    'Illustration',
-    'Illustration',
-    'Ultra-realistic',
-    'Digital art',
-    'Portrait',
-    'Full HD',
-    'HD',
-    '8K',
-    '4K',
-    'High resolution',
-  ];
+  RxList<String> keywordSuggest = <String>[].obs;
+  Rx<int> selectedIndex = (-1).obs;
+  String size  = '1024x1024';
 
   @override
-  void onInit(){
+  void onInit() {
     super.onInit();
     textController = TextEditingController();
+    keywordSuggest.value = greetings.sublist(0, min(10, greetings.length));
+    size = Get.arguments as String;
   }
 
   @override
-  void dispose(){
+  void dispose() {
     textController.dispose();
     super.dispose();
-
-
   }
 
-  RxList<bool> selectItem = [false, false, false, false, false, false, false, false, false, false, false].obs;
-
   void getPrompt() async {
-    showLoading();
-    GenerateService service = GenerateService();
-    final data = await service.passer(GenerateParameter(generateImageContent.value, 1024, 1024, 'Painting'));
-    disableLoading();
-    var images = data['images'];
-    Get.toNamed(AppRoutes.imageViews, arguments: images);
+    try {
+      showLoading();
+      GenerateService service = GenerateService();
+      final data = await service.passer(GenerateParameter(generateText(), 3, size));
+      disableLoading();
+      var images = data['data'];
+      Get.toNamed(AppRoutes.imageViews, arguments: images);
+    } catch (e) {
+      disableLoading();
+      showMessage('Generate image failed', type: 'FAIL');
+    }
   }
 
   void updateContent(String? value) {
     generateImageContent.value = value ?? '';
+    keywordSuggest.value = greetings.where((element) => element.toLowerCase().contains(generateImageContent.value.toLowerCase())).toList();
+    selectedIndex.value = -1;
   }
 
   void updateSelectedItem(int index) {
-    selectItem[index] = !selectItem[index];
-    selectItem.refresh();
+    if(selectedIndex.value == index) {
+      selectedIndex.value = -1;
+    }
+    else {
+      selectedIndex.value = index;
+    }
+    selectedIndex.refresh();
   }
 
-  void clearText(){
+  void clearText() {
     textController.text = '';
     updateContent('');
+  }
+
+  String generateText() {
+    if (selectedIndex.value >= 0) {
+      return keywordSuggest[selectedIndex.value];
+    } else {
+      return '';
+    }
   }
 
 }

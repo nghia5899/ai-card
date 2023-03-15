@@ -27,12 +27,16 @@ class StartController extends GetxController{
     bannerAd.load();
   }
 
-  void showAd(){
-    // AdMobService.createInterstitialAd(onLoaded: (ad) async {
-    //   interstitialAd = ad;
-    //   await interstitialAd.show();
-    //   Get.toNamed(AppRoutes.homeDefault);
-    // });
+  // void showAd(){
+  //   // AdMobService.createInterstitialAd(onLoaded: (ad) async {
+  //   //   interstitialAd = ad;
+  //   //   await interstitialAd.show();
+  //   //   Get.toNamed(AppRoutes.homeDefault);
+  //   // });
+  //   Get.toNamed(AppRoutes.homeDefault);
+  // }
+
+  void toHome(){
     Get.toNamed(AppRoutes.homeDefault);
   }
 

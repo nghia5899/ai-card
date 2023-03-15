@@ -4,7 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SliderPageView extends StatefulWidget {
-  const SliderPageView({super.key});
+  List<Widget> children = [];
+  bool autoPlay;
+  double? height;
+  double? viewportFraction;
+  bool isEnabledCell;
+  int currentPos;
+
+  Function(int)? onChanged;
+
+  SliderPageView(
+      {super.key,
+      required this.children,
+      this.viewportFraction,
+      this.autoPlay = true,
+      this.height,
+      this.onChanged,
+      this.isEnabledCell = true,
+      this.currentPos = 0});
 
   @override
   State<StatefulWidget> createState() {
@@ -13,15 +30,15 @@ class SliderPageView extends StatefulWidget {
 }
 
 class _SliderPageViewState extends State<SliderPageView> {
-  int currentPos = 0;
-  List<String> listPaths = [
-    "https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80",
-    "https://burst.shopifycdn.com/photos/cn-tower-sunset.jpg?width=925&exif=1&iptc=1",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWo4W6cuv62ScH_vJv5Zg_me06XGje56TJZ3JVYkyLw1wznWdjkFJI-rRkW9Oe17iVNsE&usqp=CAU",
-    "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aHVtYW58ZW58MHx8MHx8&w=1000&q=80",
-    "https://images.unsplash.com/photo-1588733103629-b77afe0425ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE0fHx8ZW58MHx8fHw%3D&w=1000&q=80",
-    "https://c8.alamy.com/comp/KHRTMN/cn-tower-of-toronto-canada-lake-ontario-north-america-KHRTMN.jpg",
-  ];
+  late int _currentPos;
+  List<Widget> _children = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _children = widget.children;
+    _currentPos = widget.currentPos;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,61 +47,64 @@ class _SliderPageViewState extends State<SliderPageView> {
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           CarouselSlider.builder(
-            itemCount: listPaths.length,
+            itemCount: _children.length,
             options: CarouselOptions(
-                autoPlay: true,
+                autoPlay: widget.autoPlay,
+                viewportFraction: widget.viewportFraction ?? 0.8,
+                initialPage: _currentPos,
                 onPageChanged: (index, reason) {
                   setState(() {
-                    currentPos = index;
+                    _currentPos = index;
+                    widget.onChanged?.call(_currentPos);
                   });
                 },
-                height: 480.h,
+                height: widget.height ?? 480.h,
                 enableInfiniteScroll: false),
             itemBuilder: (BuildContext context, int index, int realIndex) {
-              return SliderImageView(imgPath: listPaths[index]);
+              return _children[index];
             },
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: listPaths.map((url) {
-              int index = listPaths.indexOf(url);
-              return Container(
-                width: 12.w,
-                height: 12.w,
-                margin: EdgeInsets.symmetric(vertical: 16.w, horizontal: 4.w),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: currentPos == index ? AppColors.indicatorSelectColor : AppColors.indicatorUnSelect,
-                ),
-              );
-            }).toList(),
-          ),
+          // (widget.isEnabledCell) ? Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: _children.map((url) {
+          //     int index = _children.indexOf(url);
+          //     return Container(
+          //       width: 12.w,
+          //       height: 12.w,
+          //       margin: EdgeInsets.only(top: 8.w, left: 4.w, right: 4.w),
+          //       decoration: BoxDecoration(
+          //         shape: BoxShape.circle,
+          //         color: _currentPos == index ? AppColors.indicatorSelectColor : AppColors.indicatorUnSelect,
+          //       ),
+          //     );
+          //   }).toList(),
+          // ) : const SizedBox( height: 0, width: 0,),
         ]),
       ),
     );
   }
 }
 
-class SliderImageView extends StatelessWidget {
-  String imgPath;
-
-  SliderImageView({super.key, required this.imgPath});
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Container(
-        clipBehavior: Clip.hardEdge,
-        margin: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24.w),
-          color: Colors.blue,
-        ),
-        width: 375.w,
-        height: 480.w,
-        child: FittedBox(
-          fit: BoxFit.fill,
-          child: Image.network(imgPath),
-        ));
-  }
-}
+// class SliderImageView extends StatelessWidget {
+//   String imgPath;
+//
+//   SliderImageView({super.key, required this.imgPath});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     // TODO: implement build
+//     return Container(
+//         clipBehavior: Clip.hardEdge,
+//         margin: const EdgeInsets.symmetric(horizontal: 8),
+//         decoration: BoxDecoration(
+//           borderRadius: BorderRadius.circular(24.w),
+//           color: Colors.blue,
+//         ),
+//         width: 375.w,
+//         height: 480.w,
+//         child: FittedBox(
+//           fit: BoxFit.fill,
+//           child: Image.network(imgPath),
+//         ));
+//   }
+// }

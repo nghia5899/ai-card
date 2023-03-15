@@ -41,15 +41,6 @@ class TemplateService {
       "color": HashColor.c1
     },
     {
-      "code": "5",
-      "title": "Monogram Terracota",
-      "type": "kids",
-      "image": "assets/images/template/img_t5.png",
-      "category": "wedding",
-      "orientation": OrientationTemp.vertical,
-      "color": HashColor.c1
-    },
-    {
       "code": "6",
       "title": "Monogram Terracota",
       "type": "Kids",

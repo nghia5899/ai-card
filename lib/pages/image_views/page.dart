@@ -1,5 +1,8 @@
+import 'package:ai_ecard/helper/file_helper.dart';
 import 'package:ai_ecard/import.dart';
+import 'package:ai_ecard/pages/edit/edit_controller.dart';
 import 'package:ai_ecard/pages/export/export_controller.dart';
+import 'package:ai_ecard/routers.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -77,7 +80,7 @@ class _ImageViewsPageState extends State<ImageViewsPage> {
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(4),
                     child: Image.network(
-                      e['image_url'],
+                      e['url'],
                       fit: BoxFit.fitWidth,
                       width: 500,
                       height: 500,
@@ -103,10 +106,18 @@ class _ImageViewsPageState extends State<ImageViewsPage> {
               color: Colors.white,
             ),
             child: TextButton(
-              onPressed: (){
-                if(Get.isRegistered<ExportController>()) {
-                  ExportController exportController = Get.find();
-                  exportController.image.value = images[index]['image_url'];
+              onPressed: () async {
+                showLoading();
+                try {
+                  if (Get.isRegistered<EditController>()) {
+                    EditController exportController = Get.find();
+                    Uint8List imageValue =  await FileHelper.createImage(Image.network(images[index]['url']));
+                    exportController.updateImage(imageValue);
+                    disableLoading();
+                    Get.until((route) => route.settings.name == AppRoutes.edit);
+                  }
+                } catch(e) {
+                  disableLoading();
                 }
               },
               child: const Text('Apply to card'),
@@ -115,6 +126,7 @@ class _ImageViewsPageState extends State<ImageViewsPage> {
           const SizedBox(height: 30),
         ],
       ),
+
     );
   }
 }
