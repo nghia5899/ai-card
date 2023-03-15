@@ -47,24 +47,23 @@ class AppRoutes{
   static String generateContent = '/generate_content';
   static List<GetPage> createRoutes = [
     GetPage(
-        name: initRouter,
-        binding: BindingsBuilder(() {
-        }),
-        page: () => const SplashScreen()
+      name: initRouter,
+      binding: BindingsBuilder(() {}),
+      page: () => const SplashScreen(),
     ),
     GetPage(
-        name: login,
-        binding: BindingsBuilder(() {
-          Get.lazyPut(() => LoginController());
-        }),
-        page: () => const LoginPage(),
+      name: login,
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => LoginController());
+      }),
+      page: () => const LoginPage(),
     ),
     GetPage(
-        name: home,
-        binding: BindingsBuilder(() {
-          Get.lazyPut(() => HomeController());
-        }),
-        page: () => const HomePage()
+      name: home,
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => HomeController());
+      }),
+      page: () => const HomePage(),
     ),
     // GetPage(
     //     name: chat,
@@ -97,31 +96,30 @@ class AppRoutes{
       page: () => StartPage(),
     ),
     GetPage(
-        name: homeDetail,
-        binding: BindingsBuilder(() {
-          Get.lazyPut(() => HomeDetailController());
-        }),
-        page: () => const HomeDetailPage(),
+      name: homeDetail,
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => HomeDetailController());
+      }),
+      page: () => const HomeDetailPage(),
     ),
     GetPage(
-        name: homeDefault,
-        binding: BindingsBuilder(() {
-        }),
-        page: () => const ScaffoldDefault(),
+      name: homeDefault,
+      binding: BindingsBuilder(() {}),
+      page: () => const ScaffoldDefault(),
     ),
     GetPage(
-        name: purchase,
-        binding: BindingsBuilder(() {
-          Get.lazyPut(() => PurchaseController());
-        }),
-        page: () => const PurchasePage()
+      name: purchase,
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => PurchaseController());
+      }),
+      page: () => const PurchasePage(),
     ),
     GetPage(
       name: edit,
       binding: BindingsBuilder(() {
         Get.lazyPut(() => ExportController());
       }),
-      page: () => const ExportPage()
+      page: () => const ExportPage(),
     ),
     GetPage(
       name: imageViews,

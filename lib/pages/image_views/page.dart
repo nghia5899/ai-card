@@ -41,14 +41,14 @@ class _ImageViewsPageState extends State<ImageViewsPage> {
         centerTitle: true,
         title: Wrap(
           children: List.generate(images.length, (i) => Container(
-              width: 12,
-              height: 12,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: (index == i)?Colors.white: const Color.fromRGBO(84, 113, 173, 0.4)
-              ),
-              padding: const EdgeInsets.all(5),
-              margin: const EdgeInsets.only(right: 8)
+            width: 12,
+            height: 12,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              color: (index == i)?Colors.white: const Color.fromRGBO(84, 113, 173, 0.4),
+            ),
+            padding: const EdgeInsets.all(5),
+            margin: const EdgeInsets.only(right: 8),
           )),
         ),
         // actions: [
@@ -63,47 +63,44 @@ class _ImageViewsPageState extends State<ImageViewsPage> {
       body: Column(
         children: [
           Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2),
-                ),
-                margin: const EdgeInsets.all(24.0),
-                child: PageView(
-                  controller: pageController,
-                  onPageChanged: (value) {
-                    setState(() {
-                      index = value;
-                    });
-                  },
-                  children: images.map<Widget>((e) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: Image.network(
-                        e['image_url'],
-                        fit: BoxFit.fitWidth,
-                        width: 500,
-                        height: 500,
-                        loadingBuilder: (BuildContext context, Widget child,
-                            ImageChunkEvent? loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return LoadingAnimationWidget.threeRotatingDots(
-                              color: const Color(0xff94A3B8),
-                              size: 35
-                          );
-                        },
-                      ),
-                    );
-                  }).toList(),
-                ),
-              )
+            child: Container(
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(2)),
+              margin: const EdgeInsets.all(24.0),
+              child: PageView(
+                controller: pageController,
+                onPageChanged: (value) {
+                  setState(() {
+                    index = value;
+                  });
+                },
+                children: images.map<Widget>((e) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: Image.network(
+                      e['image_url'],
+                      fit: BoxFit.fitWidth,
+                      width: 500,
+                      height: 500,
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return LoadingAnimationWidget.threeRotatingDots(
+                          color: const Color(0xff94A3B8),
+                          size: 35,
+                        );
+                      },
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
           ),
           const SizedBox(height: 20,),
           Container(
             margin: const EdgeInsets.all(24.0),
             width: Get.width,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Colors.white
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
             ),
             child: TextButton(
               onPressed: (){
@@ -115,10 +112,9 @@ class _ImageViewsPageState extends State<ImageViewsPage> {
               child: const Text('Apply to card'),
             ),
           ),
-          const SizedBox(height: 30,),
+          const SizedBox(height: 30),
         ],
       ),
-
     );
   }
 }

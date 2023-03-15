@@ -49,7 +49,6 @@ class _ImageEditorState extends State<ImageEditorPage> {
         init: ImageEditorController(images: images ?? []),
         builder: (controller) {
           texts = controller.texts;
-
           return SafeArea(
             // top: false,
             child: Center(
@@ -62,45 +61,47 @@ class _ImageEditorState extends State<ImageEditorPage> {
                     Image.network(
                       controller.image[0],
                       fit: BoxFit.fill,
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent? loadingProgress) {
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                         if (loadingProgress == null) return child;
                         return Center(
                           child: CircularProgressIndicator(
                             value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                                : null,
+                              ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                              : null,
                           ),
                         );
                       },
                     )
                   else
-                  Container(
-                    width: Get.width,
-                    height: Get.height,
-                    color: Colors.transparent,
-                  ),
+                    Container(
+                      width: Get.width,
+                      height: Get.height,
+                      color: Colors.transparent,
+                    ),
                   if(!empty(controller.texts))
                     for (int i = 0; i < texts.length; i++)
                       Positioned(
                         left: texts[i].positionLeft,
                         top: texts[i].positionTop,
                         child: GestureDetector(
-                          onLongPress: () {
-                          },
-                          onTap: () async{
+                          onLongPress: () {},
+                          onTap: () async {
                             tapHandler(
-                                context,text: texts[i].text,textStyle: texts[i].textStyle,onChange: (obj){
-                                  if(empty(obj.text)){
-                                    controller.texts.removeAt(i);
-                                  }else{
-                                    texts[i].text = obj.text;texts[i].textStyle = obj.textStyle; texts[i].textStyle = obj.textStyle;
-                                  }
-
-                              controller.update();
-                            });
-
+                              context,
+                              text: texts[i].text,
+                              textStyle: texts[i].textStyle,
+                              onChange: (obj) {
+                                if (empty(obj.text)) {
+                                  controller.texts.removeAt(i);
+                                } else {
+                                  texts[i].text = obj.text;
+                                  texts[i].textStyle = obj.textStyle;
+                                  texts[i].textStyle = obj.textStyle;
+                                }
+                                controller.update();
+                              },
+                            );
                           },
                           child: Draggable(
                             feedback: ImageText(textInfo: texts[i]),
@@ -122,23 +123,26 @@ class _ImageEditorState extends State<ImageEditorPage> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: IconButton(
-                      onPressed: (){
-                        tapHandler(context,onChange: (obj){
-                          if(!empty(obj.text)){
-                            controller.texts.add(obj);
-                          }
-                          controller.update();
-                          print('${controller.texts}');
-                        });
+                      onPressed: () {
+                        tapHandler(
+                          context,
+                          onChange: (obj) {
+                            if (!empty(obj.text)) {
+                              controller.texts.add(obj);
+                            }
+                            controller.update();
+                            print('${controller.texts}');
+                          },
+                        );
                       },
                       icon: const Icon(Icons.text_fields),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
           );
-        }
+        },
       ),
     );
   }

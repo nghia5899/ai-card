@@ -29,20 +29,17 @@ class HomePage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(
-                        height: 224,
-                      ),
+                      const SizedBox(height: 224),
                       const Text(
                         'Browse by category',
                         style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20,
-                            color: Color(0xff1B514A)),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
+                          color: Color(0xff1B514A),
+                        ),
                         textAlign: TextAlign.start,
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
+                      const SizedBox(height: 15),
                       Expanded(
                         child: ListBase(
                           shrinkWrap: true,
@@ -50,14 +47,11 @@ class HomePage extends StatelessWidget {
                           response: const {DeviceType.phone: 2},
                           items: controller.items,
                           // isWrap: true,
-                          separatorWidget: const SizedBox(
-                            width: 20,
-                            height: 30,
-                          ),
+                          separatorWidget: const SizedBox(width: 20, height: 30),
                           detailBuilder: (item) {
                             return InkWell(
-                              onTap: (){
-                                Get.toNamed(AppRoutes.homeDetail,arguments: item);
+                              onTap: () {
+                                Get.toNamed(AppRoutes.homeDetail, arguments: item);
                               },
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 10),
@@ -72,29 +66,36 @@ class HomePage extends StatelessWidget {
                                           borderRadius: borderRadius,
                                           color: item['color'],
                                         ),
-
                                         height: 170.0,
                                         width: 133.0,
                                       ),
                                     ),
                                     Container(
-                                      decoration:  BoxDecoration(
+                                      decoration: BoxDecoration(
                                         borderRadius: borderRadius,
                                         gradient: const LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: [
-                                              Color.fromRGBO(0, 0, 0, 0),
-                                              Color.fromRGBO(0, 0, 0, 0.3),
-                                            ]),
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Color.fromRGBO(0, 0, 0, 0),
+                                            Color.fromRGBO(0, 0, 0, 0.3),
+                                          ],
+                                        ),
                                       ),
                                       child: Image.asset('${item['image']}'),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(item['title'],style: TextStyle(color: Theme.of(context).cardColor,fontWeight: FontWeight.w600,fontSize: 14),textAlign: TextAlign.center),
+                                      child: Text(
+                                        item['title'],
+                                        style: TextStyle(
+                                          color: Theme.of(context).cardColor,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
-
                                   ],
                                 ),
                               ),
@@ -107,19 +108,19 @@ class HomePage extends StatelessWidget {
                 ),
                 Container(
                   decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(16)),
-                      color: Color(0xff1B514A)),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(16),
+                    ),
+                    color: Color(0xff1B514A),
+                  ),
                   padding: const EdgeInsets.all(24),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const SizedBox(height: 10,),
+                      const SizedBox(height: 10),
                       Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
                         child: FormTextField(
                           hintText: 'Search greeting card...',
                           onChange: (val) {
@@ -130,7 +131,7 @@ class HomePage extends StatelessWidget {
                             hintText: 'Search greeting card...',
                             prefixIcon: const Padding(
                               padding: EdgeInsets.all(15),
-                              child: SvgViewer(url: 'assets/icons/ic_search.svg',fit: BoxFit.cover),
+                              child: SvgViewer(url: 'assets/icons/ic_search.svg', fit: BoxFit.cover),
                             ),
                           ),
                           onEditingComplete: (){
@@ -151,37 +152,44 @@ class HomePage extends StatelessWidget {
                           isWrap: true,
                           detailBuilder: (item) {
                             return InkWell(
-                              onTap: (){
-                                Get.toNamed(AppRoutes.homeDetail,arguments: item);
+                              onTap: () {
+                                Get.toNamed(AppRoutes.homeDetail, arguments: item);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(4),
-                                  color: const Color.fromRGBO(255, 255, 255, 0.2),),
-                                padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
+                                  color: const Color.fromRGBO(255, 255, 255, 0.2),
+                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                                 child: Wrap(
                                   alignment: WrapAlignment.center,
                                   crossAxisAlignment: WrapCrossAlignment.center,
                                   children: [
-                                    const SizedBox(width: 12,height: 12,child: SvgViewer(url: 'assets/icons/ic_search.svg',fit: BoxFit.cover,color: Colors.white,)),
-                                    const SizedBox(width: 3,),
-                                    Text(item['title'], style: TextStyle(
-                                        color: Theme.of(context).cardColor
-                                    ),),
+                                    const SizedBox(
+                                      width: 12,
+                                      height: 12,
+                                      child: SvgViewer(
+                                        url: 'assets/icons/ic_search.svg',
+                                        fit: BoxFit.cover,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 3),
+                                    Text(
+                                      item['title'],
+                                      style: TextStyle(color: Theme.of(context).cardColor),
+                                    ),
                                   ],
                                 ),
                               ),
                             );
                           },
-                          separatorWidget: const SizedBox(
-                            height: 12,
-                            width: 12,
-                          ),
+                          separatorWidget: const SizedBox(height: 12, width: 12),
                         ),
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
