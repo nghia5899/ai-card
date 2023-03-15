@@ -194,24 +194,23 @@ class ExportPage extends GetView<ExportController> {
             width: double.infinity,
             child: Column(
               children: [
-                Obx(
-                  () => SizedBox(
-                    height: 76.w,
-                    child: controller.editTextType.value == EditTextType.font
-                        ? ListFont(
-                            fonts: controller.fonts,
-                            onTapFont: controller.fontSelectedIndex,
-                            selectedIndex: 0,
-                            onSizeChange: controller.changeFontSize,
-                            fontSize: 20,
-                          )
-                        : controller.editTextType.value == EditTextType.color
-                            ? ListColor(
-                                colors: controller.colors,
-                                onTapColor: controller.colorSelectedIndex,
-                                selectedIndex: 0,
-                              )
-                            : const SizedBox(),
+                Obx(() => SizedBox(
+                  height: 76.w,
+                  child: controller.editTextType.value == EditTextType.font
+                    ? ListFont(
+                        fonts: controller.fonts,
+                        onTapFont: controller.fontSelectedIndex,
+                        selectedIndex: 0,
+                        onSizeChange: controller.changeFontSize,
+                        fontSize: 20,
+                      )
+                    : controller.editTextType.value == EditTextType.color
+                      ? ListColor(
+                          colors: controller.colors,
+                          onTapColor: controller.colorSelectedIndex,
+                          selectedIndex: 0,
+                        )
+                      : const SizedBox(),
                   ),
                 ),
                 SizedBox(height: 16.w),
@@ -219,7 +218,9 @@ class ExportPage extends GetView<ExportController> {
                   width: double.infinity,
                   height: 66.w,
                   decoration: BoxDecoration(
-                      color: AppColors.primaryTextColor, borderRadius: BorderRadius.all(Radius.circular(16.w))),
+                    color: AppColors.primaryTextColor,
+                    borderRadius: BorderRadius.all(Radius.circular(16.w)),
+                  ),
                   child: Stack(
                     children: [
                       Container(
@@ -239,17 +240,16 @@ class ExportPage extends GetView<ExportController> {
                         children: [
                           SizedBox(width: 22.w),
                           Obx(() => EditIcon(
-                                icon: SvgPicture.asset(
-                                  'assets/icons/ic_generate.svg',
-                                  width: 24.w,
-                                  height: 24.w,
-                                ),
-                                isSelected: controller.editIconSelected.value == EditIconEnum.generateText,
-                                title: 'generate'.tr,
-                                onTap: controller.onTapGenerateImage,
-                                selectTitleStyle:
-                                    AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
-                              )),
+                            icon: SvgPicture.asset(
+                              'assets/icons/ic_generate.svg',
+                              width: 24.w,
+                              height: 24.w,
+                            ),
+                            isSelected: controller.editIconSelected.value == EditIconEnum.generateText,
+                            title: 'generate'.tr,
+                            onTap: controller.onTapGenerateImage,
+                            selectTitleStyle: AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
+                          )),
                           SizedBox(width: 22.w),
                           Obx(
                             () => EditIcon(
@@ -270,38 +270,34 @@ class ExportPage extends GetView<ExportController> {
                             ),
                           ),
                           SizedBox(width: 22.w),
-                          Obx(
-                            () => EditIcon(
-                              icon: SvgPicture.asset(
-                                'assets/icons/ic_color.svg',
-                                width: 24.w,
-                                height: 24.w,
-                              ),
-                              selectedIcon: SvgPicture.asset(
-                                'assets/icons/ic_dot.svg',
-                                width: 4.w,
-                                height: 4.w,
-                              ),
-                              isSelected: controller.editIconSelected.value == EditIconEnum.color,
-                              title: 'Color',
-                              onTap: controller.onTapChangeColor,
-                              selectTitleStyle: AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
+                          Obx(() => EditIcon(
+                            icon: SvgPicture.asset(
+                              'assets/icons/ic_color.svg',
+                              width: 24.w,
+                              height: 24.w,
                             ),
-                          ),
+                            selectedIcon: SvgPicture.asset(
+                              'assets/icons/ic_dot.svg',
+                              width: 4.w,
+                              height: 4.w,
+                            ),
+                            isSelected: controller.editIconSelected.value == EditIconEnum.color,
+                            title: 'Color',
+                            onTap: controller.onTapChangeColor,
+                            selectTitleStyle: AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
+                          )),
                           SizedBox(width: 22.w),
-                          Obx(
-                            () => EditIcon(
-                              icon: SvgPicture.asset(
-                                'assets/icons/ic_text_align_center.svg',
-                                width: 24.w,
-                                height: 24.w,
-                              ),
-                              isSelected: controller.editIconSelected.value == EditIconEnum.align,
-                              title: 'Center',
-                              onTap: controller.onTapChangeAlign,
-                              selectTitleStyle: AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
+                          Obx(() => EditIcon(
+                            icon: SvgPicture.asset(
+                              'assets/icons/ic_text_align_center.svg',
+                              width: 24.w,
+                              height: 24.w,
                             ),
-                          ),
+                            isSelected: controller.editIconSelected.value == EditIconEnum.align,
+                            title: 'Center',
+                            onTap: controller.onTapChangeAlign,
+                            selectTitleStyle: AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
+                          )),
                         ],
                       ),
                     ],
@@ -321,7 +317,9 @@ class ExportPage extends GetView<ExportController> {
             width: double.infinity,
             child: Container(
               decoration: BoxDecoration(
-                  color: AppColors.primaryTextColor, borderRadius: BorderRadius.all(Radius.circular(16.w))),
+                color: AppColors.primaryTextColor,
+                borderRadius: BorderRadius.all(Radius.circular(16.w)),
+              ),
               child: Stack(
                 children: [
                   Container(
@@ -340,24 +338,24 @@ class ExportPage extends GetView<ExportController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Obx(() => EditIcon(
-                            icon: SvgPicture.asset(
-                              'assets/icons/ic_generate.svg',
-                              width: 24.w,
-                              height: 24.w,
-                            ),
-                            isSelected: controller.editIconSelected.value == EditIconEnum.generateImage,
-                            title: 'generate'.tr,
-                            onTap: controller.onTapGenerateImage,
-                            selectTitleStyle: AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
-                          )),
+                        icon: SvgPicture.asset(
+                          'assets/icons/ic_generate.svg',
+                          width: 24.w,
+                          height: 24.w,
+                        ),
+                        isSelected: controller.editIconSelected.value == EditIconEnum.generateImage,
+                        title: 'generate'.tr,
+                        onTap: controller.onTapGenerateImage,
+                        selectTitleStyle: AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
+                      )),
                       SizedBox(width: 32.w),
                       Obx(() => EditIcon(
-                            icon: SvgPicture.asset('assets/icons/ic_crop.svg', width: 24.w, height: 24.w),
-                            isSelected: controller.editIconSelected.value == EditIconEnum.crop,
-                            title: 'Crop',
-                            onTap: controller.onTapCropImage,
-                            selectTitleStyle: AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
-                          )),
+                        icon: SvgPicture.asset('assets/icons/ic_crop.svg', width: 24.w, height: 24.w),
+                        isSelected: controller.editIconSelected.value == EditIconEnum.crop,
+                        title: 'Crop',
+                        onTap: controller.onTapCropImage,
+                        selectTitleStyle: AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
+                      )),
                     ],
                   ),
                 ],
@@ -375,64 +373,66 @@ class ExportPage extends GetView<ExportController> {
           height: 66.w,
           width: double.infinity,
           child: Container(
-            decoration:
-                BoxDecoration(color: AppColors.primaryTextColor, borderRadius: BorderRadius.all(Radius.circular(16.w))),
+            decoration: BoxDecoration(
+              color: AppColors.primaryTextColor,
+              borderRadius: BorderRadius.all(Radius.circular(16.w)),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Obx(() => EditIcon(
-                      icon: SvgPicture.asset(
-                        'assets/icons/ic_front.svg',
-                        width: 24.w,
-                        height: 24.w,
-                        color: Color(0xFF64748B),
-                      ),
-                      selectedIcon: SvgPicture.asset(
-                        'assets/icons/ic_dot.svg',
-                        width: 4.w,
-                        height: 4.w,
-                      ),
-                      isSelected: controller.pageEnum.value == PageEnum.front,
-                      title: 'Front',
-                      onTap: controller.onTapFront,
-                      selectTitleStyle: AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
-                    )),
+                  icon: SvgPicture.asset(
+                    'assets/icons/ic_front.svg',
+                    width: 24.w,
+                    height: 24.w,
+                    color: Color(0xFF64748B),
+                  ),
+                  selectedIcon: SvgPicture.asset(
+                    'assets/icons/ic_dot.svg',
+                    width: 4.w,
+                    height: 4.w,
+                  ),
+                  isSelected: controller.pageEnum.value == PageEnum.front,
+                  title: 'Front',
+                  onTap: controller.onTapFront,
+                  selectTitleStyle: AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
+                )),
                 SizedBox(width: 32.w),
                 Obx(() => EditIcon(
-                      icon: SvgPicture.asset(
-                        'assets/icons/ic_inside.svg',
-                        width: 24.w,
-                        height: 24.w,
-                        color: const Color(0xFF64748B),
-                      ),
-                      selectedIcon: SvgPicture.asset(
-                        'assets/icons/ic_dot.svg',
-                        width: 4.w,
-                        height: 4.w,
-                      ),
-                      isSelected: controller.pageEnum.value == PageEnum.inside,
-                      title: 'Inside',
-                      onTap: controller.onTapInside,
-                      selectTitleStyle: AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
-                    )),
+                  icon: SvgPicture.asset(
+                    'assets/icons/ic_inside.svg',
+                    width: 24.w,
+                    height: 24.w,
+                    color: const Color(0xFF64748B),
+                  ),
+                  selectedIcon: SvgPicture.asset(
+                    'assets/icons/ic_dot.svg',
+                    width: 4.w,
+                    height: 4.w,
+                  ),
+                  isSelected: controller.pageEnum.value == PageEnum.inside,
+                  title: 'Inside',
+                  onTap: controller.onTapInside,
+                  selectTitleStyle: AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
+                )),
                 SizedBox(width: 32.w),
                 Obx(() => EditIcon(
-                      icon: SvgPicture.asset(
-                        'assets/icons/ic_back.svg',
-                        width: 24.w,
-                        height: 24.w,
-                        color: const Color(0xFF64748B),
-                      ),
-                      selectedIcon: SvgPicture.asset(
-                        'assets/icons/ic_dot.svg',
-                        width: 4.w,
-                        height: 4.w,
-                      ),
-                      isSelected: controller.pageEnum.value == PageEnum.back,
-                      title: 'Crop',
-                      onTap: controller.onTapBack,
-                      selectTitleStyle: AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
-                    )),
+                  icon: SvgPicture.asset(
+                    'assets/icons/ic_back.svg',
+                    width: 24.w,
+                    height: 24.w,
+                    color: const Color(0xFF64748B),
+                  ),
+                  selectedIcon: SvgPicture.asset(
+                    'assets/icons/ic_dot.svg',
+                    width: 4.w,
+                    height: 4.w,
+                  ),
+                  isSelected: controller.pageEnum.value == PageEnum.back,
+                  title: 'Crop',
+                  onTap: controller.onTapBack,
+                  selectTitleStyle: AppStyles.descriptionIconText.copyWith(color: const Color(0xFF1B514A)),
+                )),
               ],
             ),
           ),
@@ -458,8 +458,11 @@ class ExportPage extends GetView<ExportController> {
           left: textInfo[i].positionLeft,
           child: Text(
             textInfo[i].text ?? '',
-            style:
-                TextStyle(color: textInfo[i].color, fontSize: textInfo[i].fontSize, fontFamily: textInfo[i].fontFamily),
+            style: TextStyle(
+              color: textInfo[i].color,
+              fontSize: textInfo[i].fontSize,
+              fontFamily: textInfo[i].fontFamily,
+            ),
           ),
         ),
     ]);

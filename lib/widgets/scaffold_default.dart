@@ -52,7 +52,7 @@ class _ScaffoldDefaultState extends State<ScaffoldDefault> {
         selectedLabelStyle: const TextStyle(
           fontWeight: FontWeight.bold,
         ),
-      )
+      ),
     );
   }
 
@@ -62,12 +62,17 @@ class _ScaffoldDefaultState extends State<ScaffoldDefault> {
     });
   }
 
-  List<BottomNavigationBarItem> get _itemsBottom{
-    return List.generate(_contents.length, (i) => BottomNavigationBarItem(
-        icon: SvgViewer(url: (i == _index)?_contents[i]['iconOutlined']:_contents[i]['icon'],color: i == _index? AppColors.primaryColor: null),
+  List<BottomNavigationBarItem> get _itemsBottom {
+    return List.generate(
+      _contents.length,
+      (i) => BottomNavigationBarItem(
+        icon: SvgViewer(
+          url: (i == _index) ? _contents[i]['iconOutlined'] : _contents[i]['icon'],
+          color: i == _index ? AppColors.primaryColor : null,
+        ),
         label: _contents[i]['title'],
-
-    )).toList();
+      ),
+    ).toList();
   }
 
 
