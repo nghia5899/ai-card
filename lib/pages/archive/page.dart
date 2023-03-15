@@ -56,8 +56,8 @@ class _HomeDetailPageState extends State<ArchivePage> {
                             // final int randomNumber = Random().nextInt(3);
                             return GestureDetector(
                                 onTap: () async{
-                                  Uint8List image = await FileHelper.createImage(Image.asset(item['image']));
-                                  Get.toNamed(AppRoutes.export, arguments: image);
+                                  // Uint8List image = await FileHelper.createImage(Image.asset(item['image']));
+                                  // Get.toNamed(AppRoutes.edit, arguments: image);
                                 },
                                 child: IntrinsicWidth(
                                   child: Stack(

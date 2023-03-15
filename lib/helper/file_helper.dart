@@ -14,7 +14,8 @@ class FileHelper {
     List<XFile> xFiles = [];
     String directory;
     if(Platform.isAndroid){
-      directory = await const MethodChannel('game.onechain.ai_ecard.module/utility').invokeMethod('downloadDirectory');
+      directory = (await getApplicationDocumentsDirectory()).path;
+    // const MethodChannel('game.onechain.ai_ecard.module/utility').invokeMethod('downloadDirectory');
     } else {
       directory =  (await getApplicationDocumentsDirectory()).path;
     }
@@ -27,7 +28,8 @@ class FileHelper {
   static Future<void> saveFileToStorage(String fileName, Uint8List file) async {
     String directory;
     if(Platform.isAndroid){
-      directory = await const MethodChannel('game.onechain.ai_ecard.module/utility').invokeMethod('downloadDirectory');
+      directory = (await getApplicationDocumentsDirectory()).path;
+      //await const MethodChannel('game.onechain.ai_ecard.module/utility').invokeMethod('downloadDirectory');
     } else {
       directory =  (await getApplicationDocumentsDirectory()).path;
     }
@@ -40,7 +42,8 @@ class FileHelper {
     await saveFileToStorage(fileName, file);
     String directory;
     if(Platform.isAndroid){
-      directory = await const MethodChannel('game.onechain.ai_ecard.module/utility').invokeMethod('downloadDirectory');
+      directory = (await getApplicationDocumentsDirectory()).path;
+      //await const MethodChannel('game.onechain.ai_ecard.module/utility').invokeMethod('downloadDirectory');
     } else {
       directory =  (await getApplicationDocumentsDirectory()).path;
     }

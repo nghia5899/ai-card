@@ -17,12 +17,11 @@ class ChatController extends GetxController {
   }
 
   void sendChat() async {
-    ChatModel send = ChatModel(text, true);
+    ChatModel send = ChatModel(text);
     chatModels.add(send);
     chatModels.refresh();
     int index = chatModels.length;
     ChatModel receive = await _chatService.chat(ChatParameter(text));
-    receive.updateMessageType(false);
     if (chatModels.value.length > index) {
       chatModels.value.removeAt(index);
     }

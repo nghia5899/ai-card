@@ -150,10 +150,9 @@ BorderRadius get borderRadius => const BorderRadius.all(Radius.circular(16));
 BorderSide get borderSide => const BorderSide(width: 1);
 
 Function showLoading = (){
-  cusTomLoading();
-  // BotToast.showLoading(
-  //
-  // );
+  // cusTomLoading();
+  BotToast.showLoading(
+  );
 };
 
 Function disableLoading = (){

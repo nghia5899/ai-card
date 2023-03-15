@@ -1,4 +1,5 @@
 import 'package:ai_ecard/import.dart';
+import 'package:ai_ecard/pages/export/export_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -105,7 +106,12 @@ class _ImageViewsPageState extends State<ImageViewsPage> {
                 color: Colors.white
             ),
             child: TextButton(
-              onPressed: (){},
+              onPressed: (){
+                if(Get.isRegistered<ExportController>()) {
+                  ExportController exportController = Get.find();
+                  exportController.image.value = images[index]['image_url'];
+                }
+              },
               child: const Text('Apply to card'),
             ),
           ),

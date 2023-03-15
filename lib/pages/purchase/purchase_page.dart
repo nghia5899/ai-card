@@ -114,7 +114,7 @@ class PurchasePage extends GetView<PurchaseController> {
                           height: 237.w,
                           child: Image.asset(AppIcons.iconGroup),
                         ));
-                        Get.toNamed(AppRoutes.export, arguments: image);
+                        // Get.toNamed(AppRoutes.edit, arguments: image);
                       },
                     ),
                     SizedBox(height: 4.w),

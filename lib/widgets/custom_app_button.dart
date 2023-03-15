@@ -12,7 +12,18 @@ class CustomAppButton extends StatefulWidget {
   Color? backgroundColor;
   double? height;
   double? width;
-  CustomAppButton({Key? key, required this.child, this.onPressed, this.borderColor, this.borderRadius, this.backgroundColor, this.height, this.width})
+  bool enabled;
+
+  CustomAppButton(
+      {Key? key,
+      required this.child,
+      this.onPressed,
+      this.borderColor,
+      this.borderRadius,
+      this.backgroundColor,
+      this.height,
+      this.width,
+      this.enabled = true})
       : super(key: key);
 
   @override
@@ -25,17 +36,20 @@ class _CustomAppButtonState extends State<CustomAppButton> {
     return Container(
       height: widget.height ?? 56.w,
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? AppColors.primaryColor,
-        borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? 8.w))
-      ),
+          color: widget.backgroundColor ?? AppColors.primaryColor,
+          borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? 8.w))),
       child: MaterialButton(
         minWidth: widget.width ?? double.infinity,
-        onPressed: (){
-          widget.onPressed?.call();
+        onPressed: () {
+          if(widget.enabled) {
+            widget.onPressed?.call();
+          }
         },
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? 8.w))
-        ),
+          side: BorderSide(
+            color: widget.borderColor ?? Colors.transparent
+          ),
+            borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? 8.w))),
         child: Center(
           child: widget.child,
         ),
