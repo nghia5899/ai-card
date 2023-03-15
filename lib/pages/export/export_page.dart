@@ -64,26 +64,30 @@ class ExportPage extends GetView<ExportController> {
           actions: [
             Center(
               child: CustomTextButton(
-                  title: 'save'.tr,
-                  titleStyle: AppStyles.textButtonTitle.copyWith(fontSize: AppStyles.smallSize),
-                  backgroundColor: AppColors.smallButtonColor,
-                  height: 24.w,
-                  width: 48.w,
-                  borderRadius: 6.w,
-                  onPressed: () {
-                    controller.saveImage(
-                        imagePainter(width: 327.w, image: controller.image.value, textInfo: controller.texts));
-                  }),
+                title: 'save'.tr,
+                titleStyle: AppStyles.textButtonTitle.copyWith(fontSize: AppStyles.smallSize),
+                backgroundColor: AppColors.smallButtonColor,
+                height: 24.w,
+                width: 48.w,
+                borderRadius: 6.w,
+                onPressed: () {
+                  controller.saveImage(
+                      imagePainter(width: 327.w, image: controller.image.value, textInfo: controller.texts));
+                },
+              ),
             ),
             SizedBox(width: 24.w),
             GestureDetector(
               onTap: () {
-                controller
-                    .shareImage(imagePainter(width: 327.w, image: controller.image.value, textInfo: controller.texts));
+                controller.shareImage(imagePainter(
+                  width: 327.w,
+                  image: controller.image.value,
+                  textInfo: controller.texts,
+                ));
               },
               child: SvgPicture.asset(AppIcons.iconUpload, width: 24.w, height: 24.w),
             ),
-            SizedBox(width: 24.w)
+            SizedBox(width: 24.w),
           ],
         ),
         body: Padding(
@@ -107,20 +111,24 @@ class ExportPage extends GetView<ExportController> {
                                 return Container(
                                   alignment: Alignment.topCenter,
                                   constraints: BoxConstraints(minWidth: 327.w, minHeight: 0, maxHeight: 500.w),
-                                  child: ExtendedImage.memory((controller.image.value),
-                                      width: 327.w,
-                                      matchTextDirection: true,
-                                      fit: BoxFit.contain,
-                                      mode: ExtendedImageMode.editor,
-                                      extendedImageEditorKey: controller.editorKey,
-                                      cacheRawData: true, initEditorConfigHandler: (state) {
-                                    return EditorConfig(
+                                  child: ExtendedImage.memory(
+                                    controller.image.value,
+                                    width: 327.w,
+                                    matchTextDirection: true,
+                                    fit: BoxFit.contain,
+                                    mode: ExtendedImageMode.editor,
+                                    extendedImageEditorKey: controller.editorKey,
+                                    cacheRawData: true,
+                                    initEditorConfigHandler: (state) {
+                                      return EditorConfig(
                                         maxScale: 20.0,
                                         cornerSize: const Size(0, 0),
                                         lineColor: Colors.blueAccent,
                                         lineHeight: 1,
-                                        hitTestSize: 20);
-                                  }),
+                                        hitTestSize: 20,
+                                      );
+                                    },
+                                  ),
                                 );
                               } else {
                                 return Container(
@@ -141,9 +149,7 @@ class ExportPage extends GetView<ExportController> {
                                   controller.isEditText.value &&
                                   controller.isMoveText.value &&
                                   controller.textSelectedEdit == i) {
-                                return Obx(() => DraggableText(
-                                      textInfo: controller.texts.value[i],
-                                    ));
+                                return Obx(() => DraggableText(textInfo: controller.texts.value[i]));
                               } else {
                                 return Positioned(
                                   top: controller.texts.value[i].positionTop,
@@ -158,9 +164,10 @@ class ExportPage extends GetView<ExportController> {
                                     child: Text(
                                       controller.texts.value[i].text ?? '',
                                       style: TextStyle(
-                                          color: controller.texts.value[i].color,
-                                          fontSize: controller.texts.value[i].fontSize,
-                                          fontFamily: controller.texts.value[i].fontFamily),
+                                        color: controller.texts.value[i].color,
+                                        fontSize: controller.texts.value[i].fontSize,
+                                        fontFamily: controller.texts.value[i].fontFamily,
+                                      ),
                                     ),
                                   ),
                                 );
