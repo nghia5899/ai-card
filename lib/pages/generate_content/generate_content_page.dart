@@ -81,7 +81,7 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                     children: [
                       const Spacer(),
                       Obx(() => Text(
-                            '${controller.words}/15 words',
+                            '${controller.words}/3 words',
                             style:
                                 TextStyle(color: const Color(0xFF64748B), fontSize: 10.w, fontWeight: FontWeight.w500),
                           ))
@@ -90,7 +90,7 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                   SizedBox(height: 8.w),
                   Text(
                     'Keyword suggestion',
-                    style: TextStyle(color: Color(0xFF64748B), fontSize: 14.w, fontWeight: FontWeight.w500),
+                    style: TextStyle(color: const Color(0xFF64748B), fontSize: 14.w, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: 8.w),
                   SingleChildScrollView(
@@ -98,7 +98,7 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
                         maxHeight: MediaQuery.of(context).size.height * 0.25,
-                        maxWidth: MediaQuery.of(context).size.width * 3.0,
+                        maxWidth: MediaQuery.of(context).size.width * 2.0,
                       ),
                       child: Wrap(
                         direction: Axis.horizontal,
@@ -109,7 +109,6 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                         children: List.generate(
                           controller.keywordSuggest.value.length,
                               (index) {
-                            final String name = controller.keywordSuggest.value[index];
                             return Padding(
                               padding: EdgeInsets.only(right: 8.w, top: 8.w),
                               child: GestureDetector(
@@ -243,7 +242,7 @@ Widget suggestButton(String text, bool isSelected) {
     padding: EdgeInsets.symmetric(vertical: 6.w, horizontal: 8.w),
     decoration: BoxDecoration(
         color: const Color(0xFFE0E3DE),
-        border: isSelected ? Border.all(color: Color(0xFF1B514A)) : Border.all(color: Colors.transparent),
+        border: isSelected ? Border.all(color: const Color(0xFF1B514A)) : Border.all(color: Colors.transparent),
         borderRadius: BorderRadius.circular(8.w)),
     child: Text(
       text,

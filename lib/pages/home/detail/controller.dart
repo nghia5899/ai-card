@@ -35,15 +35,16 @@ class HomeDetailController extends GetxController{
       positionTop: 333,
       positionLeft: 109,
       textStyle: const TextStyle(color:Color(0xffFCA940),fontSize: 12,fontFamily: 'OpenSans',),
-      fontSize: 24
-
+      fontSize: 24,
+      textAlign: TextAlign.center
     ),
     TextInfo(
       text: 'Birthday\nparty',
       positionTop: 374,
       positionLeft: 99,
       textStyle: const TextStyle(color: Color(0xffFCA940),fontSize: 16,fontFamily: 'Oswald',height: 0.5),
-      fontSize: 44
+      fontSize: 44,
+      textAlign: TextAlign.center
     ),
   ];
 
@@ -72,10 +73,10 @@ class HomeDetailController extends GetxController{
 
   _selectAll({String? type}) {
      Map params = (Get.arguments is Map)?Get.arguments:{};
+     List<TemplateModel> temp = [...TemplateService.templates];
      if(!empty(params['category'])){
        String category = params['category'].toString();
        _prepareSelect.clear();
-       List<TemplateModel> temp = [...TemplateService.templates];
          temp = temp.where((TemplateModel obj) => obj.category == category).toList();
          if(!empty(type)){
            if(type == 'For her'){
@@ -89,12 +90,10 @@ class HomeDetailController extends GetxController{
      }else{
        if(!empty(params['filter'])){
          String filter = params['filter'].toString();
-         List<TemplateModel> temp = [...TemplateService.templates];
          temp = temp.where((TemplateModel obj) => obj.category == filter).toList();
          prepareList(temp);
 
        }else{
-         List<TemplateModel> temp = [...TemplateService.templates];
          prepareList(temp);
        }
      }
