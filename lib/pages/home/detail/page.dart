@@ -110,7 +110,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                             )
                           )
                         )
-                      ).marginOnly(right: 20,),
+                      ).marginOnly(right: 20),
                     )).toList(),
                   ),
                 ),
@@ -121,8 +121,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                     crossAxisCount: 4,
                     // I only need two card horizontally
                     padding: const EdgeInsets.all(20).copyWith(top: 0),
-                    staggeredTiles:
-                        controller.listSelectAll.map<StaggeredTile>((_) => const StaggeredTile.fit(2)).toList(),
+                    staggeredTiles: controller.listSelectAll.map<StaggeredTile>((_) => const StaggeredTile.fit(2)).toList(),
                     mainAxisSpacing: 15.0,
                     crossAxisSpacing: 15.0,
                     children: controller.listSelectAll.map<Widget>((item) {
@@ -134,7 +133,13 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                           List<TextInfo> clone = [];
                           for (int i = 0; i < controller.listText.length; i++) {
                             TextInfo item = controller.listText[i];
-                            clone.add(controller.listText[i].copyWith(textStyle: null, color: item.color, fontSize: item.fontSize, fontFamily: item.fontFamily, fontWeight: item.fontWeight));
+                            clone.add(controller.listText[i].copyWith(
+                              textStyle: null,
+                              color: item.color,
+                              fontSize: item.fontSize,
+                              fontFamily: item.fontFamily,
+                              fontWeight: item.fontWeight),
+                            );
                           }
                           disableLoading();
                           Get.toNamed(

@@ -11,11 +11,11 @@ import 'package:flutter/services.dart';
 import 'import.dart';
 
 void mainDelegate(Environment evn) async {
-AppEnvironment.setAppEnvironment(evn);
-WidgetsFlutterBinding.ensureInitialized();
-HttpOverrides.global = MyHttpOverrides();
-MobileAds.instance.initialize();
-runApp(const MyApp());
+  AppEnvironment.setAppEnvironment(evn);
+  WidgetsFlutterBinding.ensureInitialized();
+  HttpOverrides.global = MyHttpOverrides();
+  MobileAds.instance.initialize();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -29,24 +29,25 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarBrightness: Brightness.light,
-        ));
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.light,
+      ),
+    );
     return ScreenUtilInit(
       designSize: const Size(375, 821),
       builder: (BuildContext context, Widget? child) {
         return GetMaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'app_title'.tr,
-            getPages: AppRoutes.createRoutes,
-            initialRoute: AppRoutes.initRouter,
-            locale: LocalizationService.locale,
-            translations: LocalizationService(),
-            builder: botToastBuilder,
-            theme: ThemeData(
-                fontFamily: 'SF Pro Display'
-            ),
+          debugShowCheckedModeBanner: false,
+          title: 'app_title'.tr,
+          getPages: AppRoutes.createRoutes,
+          initialRoute: AppRoutes.initRouter,
+          locale: LocalizationService.locale,
+          translations: LocalizationService(),
+          builder: botToastBuilder,
+          theme: ThemeData(
+            fontFamily: 'SF Pro Display'
+          ),
         );
       },
     );
