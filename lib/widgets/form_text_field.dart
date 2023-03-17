@@ -10,6 +10,7 @@ class FormTextField extends StatefulWidget {
   final ValueChanged? onChange;
   final int maxLines;
   final Decoration?decoration;
+  final EdgeInsets? contentPadding;
   final double padding;
   final String? hintText;
   final bool showTextForm;
@@ -18,7 +19,7 @@ class FormTextField extends StatefulWidget {
   final TextAlign? textAlign;
   final InputDecoration? inputDecoration;
 
-  const FormTextField({Key? key, this.value, this.onTap, this.onChange, this.maxLines = 1, this.onEditingComplete, this.decoration, this.padding = 12, this.hintText, this.showTextForm = false, this.onPress, this.textStyle, this.textAlign, this.inputDecoration}) : super(key: key);
+  const FormTextField({Key? key, this.value, this.onTap, this.onChange, this.contentPadding, this.maxLines = 1, this.onEditingComplete, this.decoration, this.padding = 12, this.hintText, this.showTextForm = false, this.onPress, this.textStyle, this.textAlign, this.inputDecoration}) : super(key: key);
 
   @override
   State<FormTextField> createState() => _FormTextFieldState();
@@ -79,7 +80,7 @@ class _FormTextFieldState extends State<FormTextField> {
             hintText: widget.hintText??'',
             filled: true,
             fillColor: Colors.white,
-            contentPadding: const EdgeInsets.only(
+            contentPadding: widget.contentPadding??const EdgeInsets.only(
                 left: 14.0, bottom: 6.0, top: 8.0),
             // focusedBorder: OutlineInputBorder(
             //   borderSide: const BorderSide(color: Colors.red),

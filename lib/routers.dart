@@ -122,41 +122,41 @@ class AppRoutes{
       page: () => const ExportPage(),
     ),
     GetPage(
-      name: imageViews,
-      binding: BindingsBuilder(() {
-        Get.lazyPut(() => ExportController());
-      }),
-      page: () => const ImageViewsPage()
+        name: imageViews,
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => ExportController());
+        }),
+        page: () => const ImageViewsPage()
     ),
     GetPage(
-      name: generateImage,
-      binding: BindingsBuilder(() {
-        Get.lazyPut(() => GenerateImageController());
-      }),
-      page: () => const GenerateImagePage()
+        name: generateImage,
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => GenerateImageController());
+        }),
+        page: () => const GenerateImagePage()
     ),
     GetPage(
-      name: generateContent,
-      binding: BindingsBuilder(() {
-        Get.lazyPut(() => ChatService());
-        Get.lazyPut(() => GenerateContentController(Get.find()));
-      }),
-      page: () => const GenerateContentPage()
+        name: generateContent,
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => ChatService());
+          Get.lazyPut(() => GenerateContentController(Get.find()));
+        }),
+        page: () => const GenerateContentPage()
     ),
     GetPage(
-      name: generateImage,
-      binding: BindingsBuilder(() {
-        Get.lazyPut(() => GenerateImageController());
-      }),
-      page: () => const GenerateImagePage()
+        name: generateImage,
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => GenerateImageController());
+        }),
+        page: () => const GenerateImagePage()
     ),
     GetPage(
-      name: generateContent,
-      binding: BindingsBuilder(() {
-        Get.lazyPut(() => ChatService());
-        Get.lazyPut(() => GenerateContentController(Get.find()));
-      }),
-      page: () => const GenerateContentPage()
+        name: generateContent,
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => ChatService());
+          Get.lazyPut(() => GenerateContentController(Get.find()));
+        }),
+        page: () => const GenerateContentPage()
     )
   ];
 }

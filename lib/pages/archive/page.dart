@@ -2,7 +2,10 @@ import 'dart:math';
 import 'package:ai_ecard/helper/file_helper.dart';
 import 'package:ai_ecard/helper/helper.dart';
 import 'package:ai_ecard/import.dart';
+import 'package:ai_ecard/models/models/template/template_model.dart';
 import 'package:ai_ecard/routers.dart';
+import 'package:ai_ecard/styles/app_color.dart';
+import 'package:ai_ecard/styles/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -34,79 +37,93 @@ class _HomeDetailPageState extends State<ArchivePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 100),
+              const SizedBox(
+                height: 100,
+              ),
               Builder(
-                builder: (_) {
-                  if(controller.items == null){
-                    return const CircularProgressIndicator();
-                  }
-                  if(!empty(controller.items)){
-                    return Expanded(
-                      child: StaggeredGridView.count(
-                        crossAxisCount: 4, // I only need two card horizontally
-                        padding: const EdgeInsets.all(20).copyWith(top: 0),
-                        staggeredTiles: controller.items!
-                          .map<StaggeredTile>((_) => const StaggeredTile.fit(2))
-                          .toList(),
-                        mainAxisSpacing: 15.0,
-                        crossAxisSpacing: 15.0,
-                        children: controller.items!.map<Widget>((item) {
-                          // final int randomNumber = Random().nextInt(3);
-                          return GestureDetector(
-                            onTap: () async{
-                              // Uint8List image = await FileHelper.createImage(Image.asset(item['image']));
-                              // Get.toNamed(AppRoutes.edit, arguments: image);
-                            },
-                            child: IntrinsicWidth(
-                              child: Stack(
-                                alignment: Alignment.topRight,
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 16,horizontal: 12),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: const Color(0xffA2D1EB),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                                      // crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        if (!empty(item['image']))
-                                          Image.asset(item['image'], fit: BoxFit.cover),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 12),
-                                          child: Text(
-                                            '${item['title']}',
-                                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                          ),
+                  builder: (_) {
+                    if(controller.items == null){
+                      return const CircularProgressIndicator();
+                    }
+                    if(!empty(controller.items)){
+                      return Expanded(
+                        child: StaggeredGridView.count(
+                          crossAxisCount: 4, // I only need two card horizontally
+                          padding: const EdgeInsets.all(20).copyWith(top: 0),
+                          staggeredTiles: controller.items!
+                              .map<StaggeredTile>((_) => const StaggeredTile.fit(2))
+                              .toList(),
+                          mainAxisSpacing: 15.0,
+                          crossAxisSpacing: 15.0,
+                          children: controller.items!.map<Widget>((item) {
+                            // final int randomNumber = Random().nextInt(3);
+                            return GestureDetector(
+                                onTap: () async{
+                                  // Uint8List image = await FileHelper.createImage(Image.asset(item['image']));
+                                  // Get.toNamed(AppRoutes.edit, arguments: image);
+                                },
+                                child: IntrinsicWidth(
+                                  child: Stack(
+                                    alignment: Alignment.topRight,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(vertical: 16,horizontal: 12),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8),
+                                          color: colors[item.color]??const Color(0xffA2D1EB),
                                         ),
-                                      ],
-                                    ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                                          // crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            if (!empty(item.image))
+                                              Image.asset(item.image??'',
+                                                  fit: BoxFit.cover),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 12),
+                                              child: Text(
+                                                '${item.title}',
+                                                style: const TextStyle(
+                                                    fontSize: 14, fontWeight: FontWeight.w500),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () async{
+                                          await controller.bookMark(item.code??'',reLoad: true);
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(6),
+                                            color:  Colors.red,
+                                          ),
+                                          padding: const EdgeInsets.all(5),
+                                          margin: const EdgeInsets.all(6),
+                                          child: const Icon(Icons.delete_outline,color: Colors.white),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                InkWell(
-                                  onTap: () async{
-                                    await controller.bookMark(item['code'],reLoad: true);
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                      color: Colors.red,
-                                    ),
-                                    padding: const EdgeInsets.all(5),
-                                    margin: const EdgeInsets.all(6),
-                                    child: const Icon(Icons.delete_outline,color: Colors.white),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }).toList(), // add some space
-                    ),
-                  );
-                }
-                return const Expanded(child: Center(child: Text('No data !!!'),));
-              }),
+                                )
+                            );
+                          }).toList(), // add some space
+                        ),
+                      );
+                    }
+                    return Expanded(child: Center(child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.not_interested, size: 30,color: AppColors.descriptionIconColor,),
+                        const SizedBox(height: 10,),
+                        Text('You don\'t have any templates saved !!!',style: AppStyles.descriptionIconText),
+                      ],
+                    ),));
+                  },
+              ),
+
             ],
           ),
         );

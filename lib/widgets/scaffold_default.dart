@@ -29,6 +29,9 @@ class _ScaffoldDefaultState extends State<ScaffoldDefault> {
       'iconOutlined': 'assets/icons/ic_bookmark_outlined.svg',
       'child': const ArchivePage()
     },
+
+     /// Tính năng account phát triển sau
+     if(false)
     {
       'title': 'More',
       'icon': 'assets/icons/ic_more.svg',

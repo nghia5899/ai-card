@@ -1,5 +1,6 @@
 import 'package:ai_ecard/helper/helper.dart';
 import 'package:ai_ecard/import.dart';
+import 'package:ai_ecard/models/models/template/template_model.dart';
 import 'package:ai_ecard/service/template/template_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,18 +18,18 @@ class ArchiveController extends GetxController{
   }
 
 
-  List<Map<String, dynamic>>? _items;
+  List<TemplateModel>? _items;
   
-  List<Map<String, dynamic>>? get items => _items;
+  List<TemplateModel>? get items => _items;
   
   getBookMark() async {
-    List<Map<String, dynamic>> temp = [];
+    List<TemplateModel> temp = [];
     var prefs = await SharedPreferences.getInstance();
     List<String> bookmarks = prefs.getStringList('bookmark') ?? [];
     if(!empty(bookmarks)){
       for (String element in bookmarks) {
         TemplateService.templates.forEach((e) {
-          if(e['code'] == element){
+          if(e.code == element){
             temp.add(e);
           }
         });

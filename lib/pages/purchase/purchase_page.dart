@@ -114,7 +114,7 @@ class PurchasePage extends GetView<PurchaseController> {
                           height: 237.w,
                           child: Image.asset(AppIcons.iconGroup),
                         ));
-                        // Get.toNamed(AppRoutes.edit, arguments: image);
+                        Get.toNamed(AppRoutes.homeDefault);
                       },
                     ),
                     SizedBox(height: 4.w),
@@ -141,15 +141,15 @@ class PurchasePage extends GetView<PurchaseController> {
     return isSALogin
         ? Text('suggest_purchase_is_login'.tr, style: AppStyles.suggestText, textAlign: TextAlign.center)
         : Padding(
-            padding: EdgeInsets.only(left: 20.w, right: 20.w),
-            child: RichText(
-              text: TextSpan(children: [
-                TextSpan(text: 'login_sa_account'.tr, style: AppStyles.descriptionText),
-                TextSpan(text: " ${'suggest_purchase_not_login'.tr}", style: AppStyles.suggestText)
-              ]),
-              textAlign: TextAlign.center,
-            ),
-          );
+      padding: EdgeInsets.only(left: 20.w, right: 20.w),
+      child: RichText(
+        text: TextSpan(children: [
+          TextSpan(text: 'login_sa_account'.tr, style: AppStyles.descriptionText),
+          TextSpan(text: " ${'suggest_purchase_not_login'.tr}", style: AppStyles.suggestText)
+        ]),
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 
 // Widget _primaryPrice(bool isSALogin){

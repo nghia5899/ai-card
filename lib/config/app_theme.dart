@@ -15,4 +15,9 @@ class AppTheme{
     primaryColor: const Color(0xff1B514A),
 
   );
+
+  static get getTheme{
+
+  }
+
 }

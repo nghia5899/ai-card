@@ -33,7 +33,12 @@ class _ABCState extends State<DraggableText> {
 
         },
         child: Draggable(
-          feedback: ImageText(textInfo: widget.textInfo),
+          feedback: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.blue)
+            ),
+              child: ImageText(textInfo: widget.textInfo),
+          ),
           childWhenDragging: const SizedBox(),
           onDragEnd: (drag) {
             final renderBox = context.findRenderObject() as RenderBox;
@@ -43,7 +48,12 @@ class _ABCState extends State<DraggableText> {
               widget.textInfo.positionTop = (widget.textInfo.positionTop ?? 0) + off.dy;
             });
           },
-          child: ImageText(textInfo: widget.textInfo),
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.blue)
+            ),
+            child: ImageText(textInfo: widget.textInfo),
+          ),
         ),
       ),
     );

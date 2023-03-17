@@ -13,7 +13,9 @@ final botToastBuilder = BotToastInit();
 // const String apiKey = """eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE2ZWFmN2M0LWEyZTktNDZlMC1hNGVlLTk2YTA2MmJiZDhmZCIsImV4cCI6MTY3OTM4NDM2Nn0.WfOi6HN5_RRNgLBwxaXItPC_xOsRrbz0B3rBwqULUj0""";
 const String apiKey = """eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU2MTZhZjg3LTdlODQtNDI4NS05MWViLTg0YWFjZjJlOGEwZCIsImV4cCI6MTY3OTg4NTc1NX0.1Mp2ihzRu028njq_cFotOfBYj1BRBhNShX5pZqoJX74""";
 
-showMessage(String msg,{String? type,int timeSlow = 3, Color? textColor}){
+List<String> greetings = [];
+
+showMessage(String msg,{String? type,int timeSlow = 1, Color? textColor,Alignment align = const Alignment(0, -0.999)}){
   String _type = !empty(type)?type!.toUpperCase():'';
   Color color;
   switch(_type){
@@ -35,7 +37,7 @@ showMessage(String msg,{String? type,int timeSlow = 3, Color? textColor}){
 
   BotToast.showNotification(
     backgroundColor: color,
-    align: const Alignment(0, -0.99),
+    align: align,
     duration: Duration(seconds: timeSlow),
     title: (cancelFunc) {
       return Text(

@@ -1,18 +1,17 @@
-import 'dart:math';
 import 'package:ai_ecard/helper/file_helper.dart';
 import 'package:ai_ecard/helper/helper.dart';
 import 'package:ai_ecard/import.dart';
+import 'package:ai_ecard/models/edit/edit_state.dart';
+import 'package:ai_ecard/models/models/template/template_model.dart';
 import 'package:ai_ecard/models/text_info.dart';
 import 'package:ai_ecard/pages/home/detail/controller.dart';
 import 'package:ai_ecard/pages/image_editor/page.dart';
 import 'package:ai_ecard/routers.dart';
 import 'package:ai_ecard/styles/app_color.dart';
-import 'package:ai_ecard/widgets/button_base.dart';
-import 'package:ai_ecard/widgets/form_text_field.dart';
+import 'package:ai_ecard/styles/app_style.dart';
 import 'package:ai_ecard/widgets/svg_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-
 import 'filter/filter.dart';
 
 class HomeDetailPage extends StatefulWidget {
@@ -56,7 +55,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                 color: Colors.black,
               ),
             ),
-            title: Text('${params!['title'] ?? ''}', style: const TextStyle(color: Colors.black)),
+            title: Text('${!empty(params!['title'])? params!['title'] : 'All'}', style: const TextStyle(color: Colors.black)),
             centerTitle: true,
             actions: [
               IconButton(
@@ -67,7 +66,13 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                     ignoreSafeArea: false,
                     isDismissible: true,
                     isScrollControlled: true,
-                    const HomeDetailFilter(),
+                    HomeDetailFilter(
+                      params: controller.filters,
+                      onChange: (val) async {
+                        controller.filters = val;
+                        await controller.prefilter(filters: val);
+                    },
+                    ),
                   );
                 },
                 icon: const SvgViewer(url: 'assets/icons/ic_filter.svg'),
@@ -88,130 +93,136 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     physics: const BouncingScrollPhysics(),
-                    children: controller.texts.map((e) => InkWell(
-                      onTap: () async {
-                        await controller.selectAll(type: e);
-                        Get.to(HomeDetailPage(
-                          filters: {'title': e, 'code': e},
-                        ));
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          // border: Border.all(width: 1),
-                          color: const Color(0xffE0E3DE),
-                        ),
-                        child: Center(
-                          child: Text(e,
-                            style: const TextStyle(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w500,
-                            )
-                          )
-                        )
-                      ).marginOnly(right: 20),
-                    )).toList(),
+                    children: controller.texts
+                        .map((e) => InkWell(
+                              onTap: () async {
+                                controller.currentTab = e;
+                                await controller.selectAll(type: e);
+                                // Get.to(HomeDetailPage(
+                                //   filters: {'title': e, 'code': e},
+                                // ));
+                              },
+                              child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 20),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    // border: Border.all(width: 1),
+                                    color: controller.checkTabCurrent(e)?AppColors.primary:const Color(0xffE0E3DE),
+                                  ),
+                                  child: Center(
+                                      child: Text(e,
+                                          style: TextStyle(
+                                            color: controller.checkTabCurrent(e)? Colors.white:AppColors.primary,
+                                            fontWeight: FontWeight.w500,
+                                          )))).marginOnly(
+                                right: 20,
+                              ),
+                            ))
+                        .toList(),
                   ),
                 ),
-              const SizedBox(height: 15),
+              const SizedBox(
+                height: 15,
+              ),
               if (!empty(controller.listSelectAll))
                 Expanded(
                   child: StaggeredGridView.count(
                     crossAxisCount: 4,
-                    // I only need two card horizontally
+                    physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.all(20).copyWith(top: 0),
                     staggeredTiles: controller.listSelectAll.map<StaggeredTile>((_) => const StaggeredTile.fit(2)).toList(),
                     mainAxisSpacing: 15.0,
                     crossAxisSpacing: 15.0,
                     children: controller.listSelectAll.map<Widget>((item) {
-                      // final int randomNumber = Random().nextInt(3);
                       return GestureDetector(
-                        onTap: () async {
-                          showLoading();
-                          Uint8List image = await FileHelper.createImage(Image.asset(item['image']));
-                          List<TextInfo> clone = [];
-                          for (int i = 0; i < controller.listText.length; i++) {
-                            TextInfo item = controller.listText[i];
-                            clone.add(controller.listText[i].copyWith(
-                              textStyle: null,
-                              color: item.color,
-                              fontSize: item.fontSize,
-                              fontFamily: item.fontFamily,
-                              fontWeight: item.fontWeight),
+                          onTap: () async {
+                            showLoading();
+                            Uint8List image = await FileHelper.createImage(Image.asset(item.image??''));
+                            List<TextInfo> clone = [];
+                            for (int i = 0; i < controller.listText.length; i++) {
+                              TextInfo item = controller.listText[i];
+                              clone.add(controller.listText[i].copyWith(textStyle: null, color: item.color, fontSize: item.fontSize, fontFamily: item.fontFamily, fontWeight: item.fontWeight));
+                            }
+                            disableLoading();
+                            Get.toNamed(
+                              AppRoutes.edit,
+                              arguments: EditState(
+                                image,
+                                clone,
+                              ),
                             );
-                          }
-                          disableLoading();
-                          Get.toNamed(
-                            AppRoutes.edit,
-                            arguments: EditObject(image, clone),
-                          );
-                        },
-                        child: IntrinsicWidth(
-                          child: Stack(
-                            alignment: Alignment.topLeft,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: const Color(0xffA2D1EB),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  // crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    if (!empty(item['image'])) Image.asset(item['image'], fit: BoxFit.cover),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 12),
-                                      child: Text(
-                                        '${item['title']}',
-                                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () async {
-                                  await controller.bookMark(item['code'], reLoad: true);
-                                },
-                                child: Container(
+                          },
+                          child: IntrinsicWidth(
+                            child: Stack(
+                              alignment: Alignment.topLeft,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(6),
-                                    color: const Color.fromRGBO(0, 0, 0, 0.6),
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: colors[item.color] ??const Color(0xffA2D1EB),
                                   ),
-                                  padding: const EdgeInsets.all(5),
-                                  margin: const EdgeInsets.all(6),
-                                  child: SvgViewer(
-                                    url: 'assets/icons/ic_star.svg',
-                                    color: controller.checkBookMark(item['code']) ? null : Colors.white,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    // crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      if (!empty(item.image)) Image.asset(item.image??'', fit: BoxFit.cover),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        child: Text(
+                                          '${item.title}',
+                                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                              Positioned(
-                                bottom: 100,
-                                left: 25,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: controller.listText
-                                    .map<Widget>(
-                                      (e) => ImageText(textInfo: e),
-                                    )
-                                    .toList(),
+                                InkWell(
+                                  onTap: () async {
+                                    await controller.bookMark(item.code??'', reLoad: true);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      color: const Color.fromRGBO(0, 0, 0, 0.6),
+                                    ),
+                                    padding: const EdgeInsets.all(5),
+                                    margin: const EdgeInsets.all(6),
+                                    child: SvgViewer(
+                                      url: 'assets/icons/ic_star.svg',
+                                      color: controller.checkBookMark(item.code??'') ? null : Colors.white,
+                                    ),
+                                  ),
                                 ),
-                              )
-                            ],
-                          ),
-                        ));
+                                Positioned(
+                                  bottom: 100,
+                                  left: 25,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: controller.listText
+                                        .map<Widget>(
+                                          (e) => ImageText(textInfo: e),
+                                        )
+                                        .toList(),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ));
                     }).toList(), // add some space
                   ),
                 )
               else
-                const Expanded(
-                    child: Center(
-                  child: Text('No Data !!!'),
-                ))
+                 Expanded(
+                    child: Center(child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.not_interested, size: 30,color: AppColors.descriptionIconColor,),
+                        const SizedBox(height: 10,),
+                        Text('No data !!!',style: AppStyles.descriptionIconText),
+                      ],
+                    ),))
             ],
           ),
         );

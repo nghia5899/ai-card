@@ -204,21 +204,21 @@ class ExportPage extends GetView<ExportController> {
                 Obx(() => SizedBox(
                   height: 76.w,
                   child: controller.editTextType.value == EditTextType.font
-                    ? ListFont(
-                        fonts: controller.fonts,
-                        onTapFont: controller.fontSelectedIndex,
-                        selectedIndex: 0,
-                        onSizeChange: controller.changeFontSize,
-                        fontSize: 20,
-                      )
-                    : controller.editTextType.value == EditTextType.color
+                      ? ListFont(
+                    fonts: controller.fonts,
+                    onTapFont: controller.fontSelectedIndex,
+                    selectedIndex: 0,
+                    onSizeChange: controller.changeFontSize,
+                    fontSize: 20,
+                  )
+                      : controller.editTextType.value == EditTextType.color
                       ? ListColor(
-                          colors: controller.colors,
-                          onTapColor: controller.colorSelectedIndex,
-                          selectedIndex: 0,
-                        )
+                    colors: controller.colors,
+                    onTapColor: controller.colorSelectedIndex,
+                    selectedIndex: 0,
+                  )
                       : const SizedBox(),
-                  ),
+                ),
                 ),
                 SizedBox(height: 16.w),
                 Container(
@@ -259,7 +259,7 @@ class ExportPage extends GetView<ExportController> {
                           )),
                           SizedBox(width: 22.w),
                           Obx(
-                            () => EditIcon(
+                                () => EditIcon(
                               icon: SvgPicture.asset(
                                 'assets/icons/ic_font.svg',
                                 width: 24.w,

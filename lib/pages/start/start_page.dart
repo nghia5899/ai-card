@@ -20,48 +20,54 @@ class StartPage extends GetView<StartController> {
     return AppScaffold(
       backGroundColor: AppColors.primaryBackGroundColor,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Stack(
           children: [
-            const Spacer(),
-            SizedBox(height: 524.w, child: const SliderPageView()),
             Padding(
-              padding: EdgeInsets.all(24.w),
-              child: Column(
-                children: [
-                  CustomTextButton(
-                    title: 'subscribe_premium'.tr,
-                    subtext: 'premium_price'.tr,
-                    onPressed: (){
-                      Get.toNamed(AppRoutes.purchase);
-                    },
-                  ),
-                  SizedBox(height: 8.w),
-                  CustomAppButton (
-                    child: Center(
-                      child: Row(
-                        children: [
-                          const Spacer(),
-                          SizedBox(height: 24.w, width: 24.w, child: Image.asset(AppIcons.iconSA, fit: BoxFit.fill)),
-                          SizedBox(width: 8.w),
-                          Text('login_sa_account'.tr, style: AppStyles.primaryButtonTitle),
-                          const Spacer(),
-                        ],
-                      ),
+              padding: EdgeInsets.only(top: 16.w),
+              child: SizedBox(height: 524.w, child: const SliderPageView()),
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: Get.height,
+              child: Padding(
+                padding: EdgeInsets.all(24.w),
+                child: Column(
+                  children: [
+                    Spacer(),
+                    CustomTextButton(
+                      title: 'subscribe_premium'.tr,
+                      subtext: 'premium_price'.tr,
+                      onPressed: (){
+                        Get.toNamed(AppRoutes.purchase);
+                      },
                     ),
-                    onPressed: () async {
-                      await controller.authenticate();
-                    },
-                  ),
-                  SizedBox(height: 16.w),
-                  InkWell(
-                    onTap: () async {
-                      controller.showAd();
-                    },
-                    child: Text('watch_ads_recommend'.tr, style: AppStyles.subTexTitle),
-                  ),
-                  SizedBox(height: 16.w)
-                ],
+                    SizedBox(height: 8.w),
+                    CustomAppButton (
+                      child: Center(
+                        child: Row(
+                          children: [
+                            const Spacer(),
+                            SizedBox(height: 24.w, width: 24.w, child: Image.asset(AppIcons.iconSA, fit: BoxFit.fill)),
+                            SizedBox(width: 8.w),
+                            Text('login_sa_account'.tr, style: AppStyles.primaryButtonTitle),
+                            const Spacer(),
+                          ],
+                        ),
+                      ),
+                      onPressed: () async {
+                        await controller.authenticate();
+                      },
+                    ),
+                    SizedBox(height: 16.w),
+                    InkWell(
+                      onTap: () async {
+                        controller.showAd();
+                      },
+                      child: Text('watch_ads_recommend'.tr, style: AppStyles.subTexTitle),
+                    ),
+                    SizedBox(height: 16.w)
+                  ],
+                ),
               ),
             )
           ],
