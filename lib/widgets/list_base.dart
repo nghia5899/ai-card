@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 class ListBase extends StatelessWidget {
   final List? items;
-  final Function(Map item)? detailBuilder;
-  final Function(Map item)? detailBuilderLast;
+  final Function(dynamic item)? detailBuilder;
+  final Function(dynamic item)? detailBuilderLast;
   final bool shrinkWrap;
   final Map<DeviceSize, int> ? response;
   final EdgeInsets? padding;

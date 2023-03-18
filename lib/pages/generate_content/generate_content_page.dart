@@ -61,7 +61,7 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
-                               Radius.circular(8.w),
+                              Radius.circular(8.w),
                             ),
                             borderSide: const BorderSide(color: Colors.white24)),
                         labelStyle: const TextStyle(color: Colors.white),
@@ -86,33 +86,33 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                     children: [
                       const Spacer(),
                       Obx(() => Text(
-                            '${controller.generateContent.value.length}/1000',
-                            style: TextStyle(color: const Color(0xFF64748B), fontSize: 10.w, fontWeight: FontWeight.w500),
-                          ))
+                        '${controller.generateContent.value.length}/1000',
+                        style: TextStyle(color: const Color(0xFF64748B), fontSize: 10.w, fontWeight: FontWeight.w500),
+                      ))
                     ],
                   ),
                   SizedBox(height: 8.w),
                   Obx(() => CustomAppButton(
-                        height: 44.w,
-                        backgroundColor: controller.generateContent.value.isNotEmpty ? null : const Color(0xFF334155),
-                        enabled: controller.generateContent.value.isNotEmpty,
-                        child: Row(
-                          children: [
-                            const Spacer(),
-                            Text(
-                              'Generate',
-                              style: TextStyle(
-                                  color: controller.generateContent.value.isNotEmpty ? Colors.white : const Color(0xFF94A3B8),
-                                  fontSize: 16.w,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            const Spacer(),
-                          ],
+                    height: 44.w,
+                    backgroundColor: controller.generateContent.value.isNotEmpty ? null : const Color(0xFF334155),
+                    enabled: controller.generateContent.value.isNotEmpty,
+                    child: Row(
+                      children: [
+                        const Spacer(),
+                        Text(
+                          'Generate',
+                          style: TextStyle(
+                              color: controller.generateContent.value.isNotEmpty ? Colors.white : const Color(0xFF94A3B8),
+                              fontSize: 16.w,
+                              fontWeight: FontWeight.w600),
                         ),
-                        onPressed: () {
-                          controller.getPrompt();
-                        },
-                      )),
+                        const Spacer(),
+                      ],
+                    ),
+                    onPressed: () {
+                      controller.getPrompt();
+                    },
+                  )),
                 ],
               ),
             ),
@@ -141,8 +141,8 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                             padding: EdgeInsets.only(bottom: 32.w),
                             itemBuilder: (context, index) => generatedContent(context, index),
                             separatorBuilder: (_, __) => SizedBox(
-                                  height: 5.w,
-                                ),
+                              height: 5.w,
+                            ),
                             itemCount: controller.generateContentResult.length)))
                   ],
                 ),
@@ -163,7 +163,7 @@ class GenerateContentPage extends GetView<GenerateContentController> {
             Container(
                 padding: const EdgeInsets.all(10),
                 decoration:
-                    const BoxDecoration(color: Color(0xFFE0E3DE), borderRadius: BorderRadius.all(Radius.circular(10))),
+                const BoxDecoration(color: Color(0xFFE0E3DE), borderRadius: BorderRadius.all(Radius.circular(10))),
                 constraints: BoxConstraints(
                   minWidth: 0,
                   maxWidth: MediaQuery.of(context).size.width - 48.w,

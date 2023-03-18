@@ -14,8 +14,7 @@ class FileHelper {
     List<XFile> xFiles = [];
     String directory;
     if(Platform.isAndroid){
-      directory = (await getApplicationDocumentsDirectory()).path;
-    // const MethodChannel('game.onechain.ai_ecard.module/utility').invokeMethod('downloadDirectory');
+      directory =  await const MethodChannel('game.onechain.ai_ecard.module/utility').invokeMethod('downloadDirectory');
     } else {
       directory =  (await getApplicationDocumentsDirectory()).path;
     }
@@ -28,8 +27,7 @@ class FileHelper {
   static Future<void> saveFileToStorage(String fileName, Uint8List file) async {
     String directory;
     if(Platform.isAndroid){
-      directory = (await getApplicationDocumentsDirectory()).path;
-      //await const MethodChannel('game.onechain.ai_ecard.module/utility').invokeMethod('downloadDirectory');
+      directory = await const MethodChannel('game.onechain.ai_ecard.module/utility').invokeMethod('downloadDirectory');
     } else {
       directory =  (await getApplicationDocumentsDirectory()).path;
     }
@@ -42,8 +40,7 @@ class FileHelper {
     await saveFileToStorage(fileName, file);
     String directory;
     if(Platform.isAndroid){
-      directory = (await getApplicationDocumentsDirectory()).path;
-      //await const MethodChannel('game.onechain.ai_ecard.module/utility').invokeMethod('downloadDirectory');
+      directory = await const MethodChannel('game.onechain.ai_ecard.module/utility').invokeMethod('downloadDirectory');
     } else {
       directory =  (await getApplicationDocumentsDirectory()).path;
     }
@@ -60,14 +57,16 @@ class FileHelper {
     return file;
   }
 
-  static Future<Uint8List> createPDF(Widget image) async {
-    Uint8List file = await createImage(image);
+  static Future<Uint8List> createPDF(List<Widget> image) async {
     final pdf = pw.Document();
-    pdf.addPage(pw.Page(build: (pw.Context context) {
-      return pw.Center(
-        child: pw.Image(pw.MemoryImage(file), fit: pw.BoxFit.contain),
-      );
-    }));
+    for (int i = 0; i < image.length; i++) {
+      Uint8List file = await createImage(image[i]);
+      pdf.addPage(pw.Page(build: (pw.Context context) {
+        return pw.Center(
+          child: pw.Image(pw.MemoryImage(file), fit: pw.BoxFit.contain),
+        );
+      }));
+    }
     return await pdf.save();
   }
 }

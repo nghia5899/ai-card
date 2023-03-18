@@ -1,5 +1,6 @@
 import 'package:ai_ecard/helper/helper.dart';
 import 'package:ai_ecard/import.dart';
+import 'package:ai_ecard/models/models/template/template_model.dart';
 import 'package:ai_ecard/models/text_info.dart';
 import 'package:ai_ecard/service/template/template_service.dart';
 import 'package:flutter/material.dart';
@@ -18,49 +19,8 @@ class HomeDetailController extends GetxController{
     'Anime',
   ];
 
-  static final List<String> images = [
-    'assets/images/image1.png',
-    'assets/images/image2.png',
-    'assets/images/image3.png',
-  ];
+  String currentTab = 'For her';
 
-  List<Map> items = [
-    {
-      'index': 1,
-      'title': 'birthday',
-      'image': images
-    },{
-      'index': 2,
-      'title': 'wedding',
-      'image': images
-    },{
-      'index': 3,
-      'title': 'lunar year',
-      'image': images
-    },{
-      'index': 4,
-      'title': 'lunar year',
-      'image': images
-    },{
-      'index': 5,
-      'title': 'lunar year',
-      'image': images
-    },{
-      'index': 6,
-      'title': 'lunar year',
-      'image': images
-    },{
-      'index': 7,
-      'title': 'lunar year',
-      'image': images
-    },{
-      'index': 8,
-      'image': images
-    },{
-      'index': 9,
-      'image': images
-    },
-  ];
   List<String> _bookMark = [];
   List<TextInfo> listText = [
     TextInfo(
@@ -97,43 +57,88 @@ class HomeDetailController extends GetxController{
     super.onReady();
   }
 
+  Map<String,dynamic> filters = {};
 
-  List<Map<String, dynamic>> _listSelectAll = [];
+  late List<TemplateModel> _prepareSelect = [];
 
-  List<Map<String, dynamic>> get listSelectAll => _listSelectAll;
+  List<TemplateModel> _listSelectAll = [];
+
+  List<TemplateModel> get listSelectAll => _listSelectAll;
 
 
-   selectAll({String? type}) async{
+  _selectAll({String? type}) {
      Map params = (Get.arguments is Map)?Get.arguments:{};
      if(!empty(params['category'])){
        String category = params['category'].toString();
-       _listSelectAll = [...TemplateService.templates];
-       _listSelectAll.clear();
-       List<Map<String, dynamic>> temp = [...TemplateService.templates];
-         temp = temp.where((obj) => obj["category"].toString() == category).toList();
-         _listSelectAll = temp;
+       _prepareSelect.clear();
+       List<TemplateModel> temp = [...TemplateService.templates];
+         temp = temp.where((TemplateModel obj) => obj.category == category).toList();
          if(!empty(type)){
            if(type == 'For her'){
-             _listSelectAll = TemplateService.templates;
+             prepareList(temp);
            }else{
-             temp = temp.where((obj) => obj["type"].toString() == type).toList();
-             _listSelectAll = temp;
+             temp = temp.where((TemplateModel obj) => obj.type == type).toList();
+             prepareList(temp);
            }
          }
+         prepareList(temp);
      }else{
        if(!empty(params['filter'])){
          String filter = params['filter'].toString();
-         List<Map<String, dynamic>> temp = [...TemplateService.templates];
-         temp = temp.where((obj) => obj["title"].toString() == filter).toList();
-         _listSelectAll = temp;
+         List<TemplateModel> temp = [...TemplateService.templates];
+         temp = temp.where((TemplateModel obj) => obj.category == filter).toList();
+         prepareList(temp);
 
        }else{
-         _listSelectAll = [];
+         List<TemplateModel> temp = [...TemplateService.templates];
+         prepareList(temp);
        }
      }
 
      update();
 
+   }
+
+   selectAll({String? type}) async{
+    showLoading();
+    await _selectAll(type: type);
+    disableLoading();
+   }
+
+  prepareList(List<TemplateModel> items){
+     _listSelectAll = items;
+     _prepareSelect = items;
+  }
+
+   prefilter({Map? filters}){
+     if(!empty(filters)){
+       _listSelectAll = [..._prepareSelect];
+       filters!.forEach((key, value) {
+         if(!empty(value)){
+           _listSelectAll = _listSelectAll.where((TemplateModel obj) {
+             if(!empty(obj.toJson()[key])){
+               return obj.toJson()[key].toString() == value.toString();
+             }else if(value == '0'){
+               return true;
+             }
+             return false;
+           }).toList();
+         }
+       });
+     }else{
+       setFilter();
+     }
+
+     update();
+   }
+
+   setFilter() async{
+     _listSelectAll.clear();
+     _listSelectAll = [..._prepareSelect];
+   }
+
+   clearFilter(){
+     selectAll();
    }
 
    _getBookMark() async{
@@ -154,11 +159,14 @@ class HomeDetailController extends GetxController{
       temp = [...bookmarks];
       if(bookmarks.contains(template)){
         temp.remove(template);
+        showMessage('Remove archive success',type: 'SUCCESS');
       }else{
         temp.add(template);
+        showMessage('Archive success',type: 'SUCCESS');
       }
     }else{
       temp.add(template);
+      showMessage('Archive success',type: 'SUCCESS');
     }
     prefs.setStringList('bookmark',temp);
     if(reLoad){
@@ -170,6 +178,10 @@ class HomeDetailController extends GetxController{
 
   checkBookMark(String bookMark){
      return _bookMark.contains(bookMark);
+  }
+
+  checkTabCurrent(String tab){
+    return currentTab == tab;
   }
 
 }

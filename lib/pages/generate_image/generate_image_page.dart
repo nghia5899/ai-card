@@ -83,7 +83,7 @@ class GenerateImagePage extends GetView<GenerateImageController> {
                 style: TextStyle(color: Color(0xFF64748B), fontSize: 14.w, fontWeight: FontWeight.w500),
               ),
               Obx(
-                () => Wrap(
+                    () => Wrap(
                   direction: Axis.horizontal,
                   children: List.generate(11, (index) {
                     return Padding(
@@ -100,27 +100,27 @@ class GenerateImagePage extends GetView<GenerateImageController> {
               ),
               const Spacer(),
               Obx(() => CustomAppButton(
-                    height: 44.w,
-                    backgroundColor: controller.generateImageContent.value.isNotEmpty ? null : const Color(0xFF334155),
-                    enabled: controller.generateImageContent.value.isNotEmpty,
-                    child: Row(
-                      children: [
-                        const Spacer(),
-                        Text(
-                          'Generate',
-                          style: TextStyle(
-                              color:
-                                  controller.generateImageContent.value.isNotEmpty ? Colors.white : Color(0xFF94A3B8),
-                              fontSize: 16.w,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        const Spacer(),
-                      ],
+                height: 44.w,
+                backgroundColor: controller.generateImageContent.value.isNotEmpty ? null : const Color(0xFF334155),
+                enabled: controller.generateImageContent.value.isNotEmpty,
+                child: Row(
+                  children: [
+                    const Spacer(),
+                    Text(
+                      'Generate',
+                      style: TextStyle(
+                          color:
+                          controller.generateImageContent.value.isNotEmpty ? Colors.white : Color(0xFF94A3B8),
+                          fontSize: 16.w,
+                          fontWeight: FontWeight.w600),
                     ),
-                    onPressed: () {
-                      controller.getPrompt();
-                    },
-                  ))
+                    const Spacer(),
+                  ],
+                ),
+                onPressed: () {
+                  controller.getPrompt();
+                },
+              ))
             ],
           ),
         ),

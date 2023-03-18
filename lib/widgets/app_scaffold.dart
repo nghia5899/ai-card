@@ -7,7 +7,8 @@ class AppScaffold extends StatefulWidget {
   final String? title;
   final PreferredSizeWidget? appBar;
   final Color? backGroundColor;
-  const AppScaffold({Key? key, this.resizeToAvoidBottomInset, this.body, this.title, this.appBar, this.backGroundColor}) : super(key: key);
+  final Function()? onBinding;
+  const AppScaffold({Key? key, this.resizeToAvoidBottomInset, this.body, this.title, this.appBar, this.backGroundColor, this.onBinding}) : super(key: key);
 
   @override
   State<AppScaffold> createState() => _AppScaffoldState();
