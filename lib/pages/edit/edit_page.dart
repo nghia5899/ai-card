@@ -293,6 +293,7 @@ class EditPage extends GetView<EditController> {
                                                         controller.textSelectedEdit.value == i &&
                                                         controller.sliderIndex.value == 1) {
                                                       return Obx(() => DraggableText(
+                                                            maxWidth: imageWidth,
                                                             textInfo: controller.texts.value[i],
                                                             onDoubleTap: () {
                                                               controller.onDoubleTapText(i);
@@ -309,14 +310,19 @@ class EditPage extends GetView<EditController> {
                                                           onTap: () {
                                                             controller.onTapText(i);
                                                           },
-                                                          child: Text(
-                                                            controller.texts.value[i].text ?? '',
-                                                            textAlign: controller.texts.value[i].textAlign,
-                                                            style: TextStyle(
-                                                                color: controller.texts.value[i].color,
-                                                                fontSize: controller.texts.value[i].fontSize,
-                                                                fontFamily: controller.texts.value[i].fontFamily,
-                                                                overflow: TextOverflow.clip),
+                                                          child: Container(
+                                                            constraints: BoxConstraints(
+                                                              maxWidth: imageWidth - controller.texts.value[i].positionLeft,
+                                                            ),
+                                                            child: Text(
+                                                              controller.texts.value[i].text ?? '',
+                                                              textAlign: controller.texts.value[i].textAlign,
+                                                              style: TextStyle(
+                                                                  color: controller.texts.value[i].color,
+                                                                  fontSize: controller.texts.value[i].fontSize,
+                                                                  fontFamily: controller.texts.value[i].fontFamily,
+                                                                  overflow: TextOverflow.clip),
+                                                            ),
                                                           ),
                                                         ),
                                                       );
@@ -356,6 +362,7 @@ class EditPage extends GetView<EditController> {
                                                 controller.textSelectedEdit.value == i) {
                                               return Obx(
                                                 () => DraggableText(
+                                                  maxWidth: imageWidth,
                                                   textInfo: controller.texts.value[i],
                                                   onDoubleTap: () {
                                                     controller.onDoubleTapText(i);
@@ -373,13 +380,18 @@ class EditPage extends GetView<EditController> {
                                                   onTap: () {
                                                     controller.onTapText(i);
                                                   },
-                                                  child: Text(
-                                                    controller.texts.value[i].text ?? '',
-                                                    textAlign: controller.texts.value[i].textAlign,
-                                                    style: TextStyle(
-                                                      color: controller.texts.value[i].color,
-                                                      fontSize: controller.texts.value[i].fontSize,
-                                                      fontFamily: controller.texts.value[i].fontFamily,
+                                                  child: Container(
+                                                    constraints: BoxConstraints(
+                                                      maxWidth: imageWidth - controller.texts.value[i].positionLeft,
+                                                    ),
+                                                    child: Text(
+                                                      controller.texts.value[i].text ?? '',
+                                                      textAlign: controller.texts.value[i].textAlign,
+                                                      style: TextStyle(
+                                                        color: controller.texts.value[i].color,
+                                                        fontSize: controller.texts.value[i].fontSize,
+                                                        fontFamily: controller.texts.value[i].fontFamily,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),

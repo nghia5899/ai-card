@@ -3,11 +3,14 @@ import 'package:ai_ecard/pages/image_editor/page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class DraggableText extends StatefulWidget {
   TextInfo textInfo;
   Function()? onDoubleTap;
-  DraggableText({Key? key, required this.textInfo, this.onDoubleTap}) : super(key: key);
+  double maxWidth;
+  DraggableText({Key? key, required this.textInfo, required this.maxWidth, this.onDoubleTap}) : super(key: key);
 
   @override
   State<DraggableText> createState() => _ABCState();
@@ -39,6 +42,9 @@ class _ABCState extends State<DraggableText> {
           feedback: GestureDetector(
             onDoubleTap: widget.onDoubleTap,
             child: Container(
+              constraints: BoxConstraints(
+                maxWidth: widget.maxWidth - widget.textInfo.positionLeft,
+              ),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.blue, width: 2.w)
               ),
@@ -60,11 +66,16 @@ class _ABCState extends State<DraggableText> {
           },
           child: GestureDetector(
             onDoubleTap: widget.onDoubleTap,
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blue, width: 2.w)
+            child: SizedBox(
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: widget.maxWidth - widget.textInfo.positionLeft,
+                ),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blue, width: 2.w)
+                ),
+                child: ImageText(textInfo: widget.textInfo),
               ),
-              child: ImageText(textInfo: widget.textInfo),
             ),
           ),
         ),
