@@ -13,14 +13,12 @@ class GenerateImageController extends GetxController {
 
   RxList<String> keywordSuggest = <String>[].obs;
   Rx<int> selectedIndex = (-1).obs;
-  String size  = '1024x1024';
 
   @override
   void onInit() {
     super.onInit();
     textController = TextEditingController();
     keywordSuggest.value = greetings.sublist(0, min(10, greetings.length));
-    size = Get.arguments as String;
   }
 
   @override
@@ -33,7 +31,7 @@ class GenerateImageController extends GetxController {
     try {
       showLoading();
       GenerateService service = GenerateService();
-      final data = await service.passer(GenerateParameter(generateText(), 3, size));
+      final data = await service.passer(GenerateParameter(generateText(), 3, '1024x1024'));
       disableLoading();
       var images = data['data'];
       Get.toNamed(AppRoutes.imageViews, arguments: images);
@@ -44,9 +42,13 @@ class GenerateImageController extends GetxController {
   }
 
   void updateContent(String? value) {
-    generateImageContent.value = value ?? '';
-    keywordSuggest.value = greetings.where((element) => element.toLowerCase().contains(generateImageContent.value.toLowerCase())).toList();
-    selectedIndex.value = -1;
+    if((value?.trimLeft().trimRight().split(' ').length ?? 0) <= 8) {
+      generateImageContent.value = value ?? '';
+      keywordSuggest.value = greetings.where((e) => e.toLowerCase().contains(generateImageContent.value.toLowerCase())).toList();
+      selectedIndex.value = -1;
+    } else {
+      textController.text = generateImageContent.value;
+    }
   }
 
   void updateSelectedItem(int index) {
@@ -71,5 +73,7 @@ class GenerateImageController extends GetxController {
       return '';
     }
   }
+
+  Rx<int> get words => generateImageContent.value.isNotEmpty ? generateImageContent.value.trimLeft().trimRight().split(' ').length.obs : 0.obs;
 
 }

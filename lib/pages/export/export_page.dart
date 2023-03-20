@@ -94,51 +94,51 @@ class ExportPage extends GetView<ExportController> {
                               ],
                             ),
                             innerWidget: Obx(() => SizedBox(
-                              width: imageWidth * 2,
-                              height: imageHeight,
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  SizedBox(
-                                    width: imageWidth,
-                                    height: imageHeight,
-                                    child: Stack(
-                                      children: [
-                                        Container(width: imageWidth, height: imageHeight, color: Colors.white),
-                                        Image.memory(
-                                          (controller.inside.isNotEmpty)
-                                              ? controller.inside.value[0].image
-                                              : controller.front.value.image,
+                                  width: imageWidth * 2,
+                                  height: imageHeight,
+                                  child: ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    children: [
+                                      SizedBox(
+                                        width: imageWidth,
+                                        height: imageHeight,
+                                        child: Stack(
+                                          children: [
+                                            Container(width: imageWidth, height: imageHeight, color: Colors.white),
+                                            Image.memory(
+                                              (controller.inside.isNotEmpty)
+                                                  ? controller.inside.value[0].image
+                                                  : controller.front.value.image,
+                                              width: imageWidth,
+                                              height: imageHeight,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 2.w),
+                                        child: SizedBox(
                                           width: imageWidth,
                                           height: imageHeight,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 2.w),
-                                    child: SizedBox(
-                                      width: imageWidth,
-                                      height: imageHeight,
-                                      child: Stack(
-                                        children: [
-                                          Container(width: imageWidth, height: imageHeight, color: Colors.white),
-                                          Image.memory(
-                                            (controller.inside.isNotEmpty)
-                                                ? controller.inside.value[1].image
-                                                : controller.front.value.image,
-                                            width: imageWidth,
-                                            height: imageHeight,
-                                            fit: BoxFit.cover,
+                                          child: Stack(
+                                            children: [
+                                              Container(width: imageWidth, height: imageHeight, color: Colors.white),
+                                              Image.memory(
+                                                (controller.inside.isNotEmpty)
+                                                    ? controller.inside.value[1].image
+                                                    : controller.front.value.image,
+                                                width: imageWidth,
+                                                height: imageHeight,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            )),
+                                )),
                             cellSize: Size(imageWidth, imageHeight),
                             onOpen: () {
                               controller.isAnimationFoldRunning.value = false;
@@ -155,7 +155,7 @@ class ExportPage extends GetView<ExportController> {
                         } else if (controller.pageEnum.value == PageEnum.inside) {
                           // có thẻ tách nhỏ
                           return Obx(
-                                () => SliderPageView(
+                            () => SliderPageView(
                               autoPlay: false,
                               isEnabledCell: false,
                               currentPos: controller.sliderIndex.value,
@@ -174,39 +174,39 @@ class ExportPage extends GetView<ExportController> {
                                       children: [
                                         Container(width: imageWidth, height: imageHeight, color: Colors.white),
                                         Obx(() {
-                                            return Container(
+                                          return Container(
+                                            width: imageWidth,
+                                            alignment: Alignment.topCenter,
+                                            child: Image(
                                               width: imageWidth,
-                                              alignment: Alignment.topCenter,
-                                              child: Image(
+                                              height: imageHeight,
+                                              fit: BoxFit.cover,
+                                              image: Image.memory(
+                                                controller.inside.value[0].image,
                                                 width: imageWidth,
                                                 height: imageHeight,
                                                 fit: BoxFit.cover,
-                                                image: Image.memory(
-                                                  controller.inside.value[0].image,
-                                                  width: imageWidth,
-                                                  height: imageHeight,
-                                                  fit: BoxFit.cover,
-                                                ).image,
-                                              ),
-                                            );
+                                              ).image,
+                                            ),
+                                          );
                                         }),
                                         for (int i = 0; i < controller.texts.value.length; i++)
-                                        //có thể tách nhỏ
+                                          //có thể tách nhỏ
                                           Obx(() {
                                             return Positioned(
-                                                top: controller.texts.value[i].positionTop,
-                                                left: controller.texts.value[i].positionLeft,
-                                                child: Text(
-                                                  controller.texts.value[i].text ?? '',
-                                                  textAlign: controller.texts.value[i].textAlign,
-                                                  style: TextStyle(
-                                                    color: controller.texts.value[i].color,
-                                                    fontSize: controller.texts.value[i].fontSize,
-                                                    fontFamily: controller.texts.value[i].fontFamily,
-                                                    overflow: TextOverflow.clip,
-                                                  ),
+                                              top: controller.texts.value[i].positionTop,
+                                              left: controller.texts.value[i].positionLeft,
+                                              child: Text(
+                                                controller.texts.value[i].text ?? '',
+                                                textAlign: controller.texts.value[i].textAlign,
+                                                style: TextStyle(
+                                                  color: controller.texts.value[i].color,
+                                                  fontSize: controller.texts.value[i].fontSize,
+                                                  fontFamily: controller.texts.value[i].fontFamily,
+                                                  overflow: TextOverflow.clip,
                                                 ),
-                                              );
+                                              ),
+                                            );
                                           }),
                                       ],
                                     ),
@@ -222,39 +222,39 @@ class ExportPage extends GetView<ExportController> {
                                         Container(width: imageWidth, height: imageHeight, color: Colors.white),
                                         //có thể tach nhỏ
                                         Obx(() {
-                                            return Container(
+                                          return Container(
+                                            width: imageWidth,
+                                            height: imageHeight,
+                                            alignment: Alignment.topCenter,
+                                            child: Image(
                                               width: imageWidth,
                                               height: imageHeight,
-                                              alignment: Alignment.topCenter,
-                                              child: Image(
+                                              fit: BoxFit.cover,
+                                              image: Image.memory(
+                                                controller.inside.value[1].image,
                                                 width: imageWidth,
                                                 height: imageHeight,
                                                 fit: BoxFit.cover,
-                                                image: Image.memory(
-                                                  controller.inside.value[1].image,
-                                                  width: imageWidth,
-                                                  height: imageHeight,
-                                                  fit: BoxFit.cover,
-                                                ).image,
-                                              ),
-                                            );
+                                              ).image,
+                                            ),
+                                          );
                                         }),
                                         for (int i = 0; i < controller.texts.value.length; i++)
-                                        // có thể tách nhỏ
+                                          // có thể tách nhỏ
                                           Obx(() {
-                                              return Positioned(
-                                                top: controller.texts.value[i].positionTop,
-                                                left: controller.texts.value[i].positionLeft,
-                                                child: Text(
-                                                  controller.texts.value[i].text ?? '',
-                                                  textAlign: controller.texts.value[i].textAlign,
-                                                  style: TextStyle(
-                                                      color: controller.texts.value[i].color,
-                                                      fontSize: controller.texts.value[i].fontSize,
-                                                      fontFamily: controller.texts.value[i].fontFamily,
-                                                      overflow: TextOverflow.clip),
-                                                ),
-                                              );
+                                            return Positioned(
+                                              top: controller.texts.value[i].positionTop,
+                                              left: controller.texts.value[i].positionLeft,
+                                              child: Text(
+                                                controller.texts.value[i].text ?? '',
+                                                textAlign: controller.texts.value[i].textAlign,
+                                                style: TextStyle(
+                                                    color: controller.texts.value[i].color,
+                                                    fontSize: controller.texts.value[i].fontSize,
+                                                    fontFamily: controller.texts.value[i].fontFamily,
+                                                    overflow: TextOverflow.clip),
+                                              ),
+                                            );
                                           }),
                                       ],
                                     ),
@@ -279,21 +279,21 @@ class ExportPage extends GetView<ExportController> {
                                   ),
                                   Image.memory(controller.front.value.image, width: imageWidth, height: imageHeight),
                                   for (int i = 0; i < controller.texts.value.length; i++)
-                                  //có thể tách nhỏ
+                                    //có thể tách nhỏ
                                     Obx(() {
-                                        return Positioned(
-                                          top: controller.texts.value[i].positionTop,
-                                          left: controller.texts.value[i].positionLeft,
-                                          child: Text(
-                                            controller.texts.value[i].text ?? '',
-                                            textAlign: controller.texts.value[i].textAlign,
-                                            style: TextStyle(
-                                              color: controller.texts.value[i].color,
-                                              fontSize: controller.texts.value[i].fontSize,
-                                              fontFamily: controller.texts.value[i].fontFamily,
-                                            ),
+                                      return Positioned(
+                                        top: controller.texts.value[i].positionTop,
+                                        left: controller.texts.value[i].positionLeft,
+                                        child: Text(
+                                          controller.texts.value[i].text ?? '',
+                                          textAlign: controller.texts.value[i].textAlign,
+                                          style: TextStyle(
+                                            color: controller.texts.value[i].color,
+                                            fontSize: controller.texts.value[i].fontSize,
+                                            fontFamily: controller.texts.value[i].fontFamily,
                                           ),
-                                        );
+                                        ),
+                                      );
                                     })
                                 ],
                               ),
@@ -324,13 +324,12 @@ class ExportPage extends GetView<ExportController> {
           height: 66.w,
           width: double.infinity,
           child: Container(
-            decoration: BoxDecoration(
-                color: AppColors.primaryTextColor, borderRadius: BorderRadius.all(Radius.circular(16.w))),
+            decoration:
+                BoxDecoration(color: AppColors.primaryTextColor, borderRadius: BorderRadius.all(Radius.circular(16.w))),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Obx(() =>
-                    EditIcon(
+                Obx(() => EditIcon(
                       icon: SvgPicture.asset(
                         'assets/icons/ic_front.svg',
                         width: 24.w,
@@ -348,8 +347,7 @@ class ExportPage extends GetView<ExportController> {
                       selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
                     )),
                 SizedBox(width: 32.w),
-                Obx(() =>
-                    EditIcon(
+                Obx(() => EditIcon(
                       icon: SvgPicture.asset(
                         'assets/icons/ic_inside.svg',
                         width: 24.w,
@@ -393,29 +391,33 @@ class ExportPage extends GetView<ExportController> {
   }
 }
 
-  Widget imagePainter({required double width, required double height, required Uint8List image, required List<TextInfo> textInfo}) {
-    return Stack(children: [
-      Container(
+Widget imagePainter(
+    {required double width, required double height, required Uint8List image, required List<TextInfo> textInfo}) {
+  return Stack(children: [
+    Container(
+      width: width,
+      height: height,
+      alignment: Alignment.center,
+      child: Image(
+        image: Image.memory(image).image,
         width: width,
-        alignment: Alignment.topCenter,
-        child: Image(
-          image: Image
-              .memory(image)
-              .image,
-          width: width,
-          height: height,
-          fit: BoxFit.cover,
-        ),
+        height: height,
+        fit: BoxFit.cover,
       ),
-      for (int i = 0; i < textInfo.length; i++)
-        Positioned(
-          top: textInfo[i].positionTop,
-          left: textInfo[i].positionLeft,
-          child: Text(
-            textInfo[i].text ?? '',
-            style:
-            TextStyle(color: textInfo[i].color, fontSize: textInfo[i].fontSize, fontFamily: textInfo[i].fontFamily),
+    ),
+    for (int i = 0; i < textInfo.length; i++)
+      Positioned(
+        top: textInfo[i].positionTop,
+        left: textInfo[i].positionLeft,
+        child: Text(
+          textInfo[i].text ?? '',
+          textAlign: textInfo[i].textAlign,
+          style: TextStyle(
+            color: textInfo[i].color,
+            fontSize: textInfo[i].fontSize,
+            fontFamily: textInfo[i].fontFamily,
           ),
         ),
-    ]);
-  }
+      ),
+  ]);
+}

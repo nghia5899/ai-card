@@ -7,6 +7,7 @@ import 'package:ai_ecard/widgets/edit_icon.dart';
 import 'package:ai_ecard/widgets/list_align.dart';
 import 'package:ai_ecard/widgets/list_color.dart';
 import 'package:ai_ecard/widgets/list_font.dart';
+import 'package:ai_ecard/widgets/slider_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,7 +24,7 @@ class TabGroup extends GetView<EditController> {
     if (isEdit) {
       if (isEditText) {
         return SizedBox(
-          height: 158.w,
+          height: 160.w,
           width: double.infinity,
           child: Column(
             children: [
@@ -31,42 +32,49 @@ class TabGroup extends GetView<EditController> {
               Obx(
                 () {
                   switch (controller.editTextType.value) {
-                    case EditTextType.font:
-                      {
+                    case EditTextType.font:{
                         return SizedBox(
-                            height: 76.w,
-                            child: ListFont(
-                              fonts: controller.fonts,
-                              onTapFont: controller.fontSelectedIndex,
-                              selectedIndex: 0,
-                              onSizeChange: controller.changeFontSize,
-                              fontSize: 20,
-                            ));
+                          height: 36.w,
+                          child: ListFont(
+                            fonts: controller.fonts,
+                            onTapFont: controller.fontSelectedIndex,
+                            selectedIndex: 0,
+                          ),
+                        );
                       }
-                    case EditTextType.color:
-                      {
+                    case EditTextType.color:{
                         return SizedBox(
-                            height: 76.w,
-                            child: ListColor(
-                              colors: controller.colors,
-                              onTapColor: controller.colorSelectedIndex,
-                              selectedIndex: 0,
-                            ));
+                          height: 76.w,
+                          child: ListColor(
+                            colors: controller.colors,
+                            onTapColor: controller.colorSelectedIndex,
+                            selectedIndex: 0,
+                          ),
+                        );
                       }
-                    case EditTextType.align:
-                      {
+                    case EditTextType.align:{
                         return SizedBox(
                           height: 76.w,
                           child: ListAlign(
                             onTapAlign: (textAlign) {
                               controller.updateAlign(textAlign);
                             },
-                            selected: controller.textAlignValue() ?? TextAlign.center,
+                            selected: controller.textAlignValue() ?? TextAlign.left,
                           ),
                         );
                       }
-                    default:
-                      {
+                    case EditTextType.size:{
+                      return SizedBox(
+                        height: 76.w,
+                        child: SliderSize(
+                          fontSize: controller.texts[controller.textSelectedEdit.value].fontSize,
+                          onSizeChange: (size) {
+                            controller.changeFontSize(size);
+                          },
+                        ),
+                      );
+                      }
+                    default:{
                         return SizedBox();
                       }
                   }
@@ -138,6 +146,11 @@ class TabGroup extends GetView<EditController> {
                           width: 24.w,
                           height: 24.w,
                         ),
+                        selectedIcon: SvgPicture.asset(
+                          'assets/icons/ic_dot.svg',
+                          width: 4.w,
+                          height: 4.w,
+                        ),
                         isSelected: controller.editIconSelected.value == EditIconEnum.align,
                         title: 'Align',
                         onTap: () {
@@ -145,6 +158,22 @@ class TabGroup extends GetView<EditController> {
                         },
                         selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
                       ),
+                    ),
+                    SizedBox(width: 22.w),
+                    Obx(() => EditIcon(
+                            icon: Icon(Icons.text_decrease, size: 24.w, color: const Color(0xFF64748B)),
+                            selectedIcon: SvgPicture.asset(
+                              'assets/icons/ic_dot.svg',
+                              width: 4.w,
+                              height: 4.w,
+                            ),
+                            isSelected: controller.editIconSelected.value == EditIconEnum.size,
+                            title: 'Size',
+                            onTap: () {
+                              controller.onTapChangeSize();
+                            },
+                            selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
+                          ),
                     ),
                   ],
                 ),

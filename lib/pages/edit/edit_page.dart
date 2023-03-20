@@ -34,7 +34,7 @@ class EditPage extends GetView<EditController> {
             padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: Row(
               children: [
-                GestureDetector(
+                Obx(() => GestureDetector(
                   onTap: () {
                     if (controller.isEdit.value) {
                       controller.resetState();
@@ -42,8 +42,8 @@ class EditPage extends GetView<EditController> {
                       Get.back();
                     }
                   },
-                  child: SvgPicture.asset(AppIcons.iconClose, width: 28.w, height: 28.w),
-                ),
+                  child: (controller.isEdit.value)? Icon(Icons.undo, size: 28.w, color: Colors.black87) :SvgPicture.asset(AppIcons.iconClose, width: 28.w, height: 28.w),
+                ),),
                 SizedBox(width: 16.w),
                 Obx(
                   () => GestureDetector(
@@ -214,7 +214,6 @@ class EditPage extends GetView<EditController> {
                                       child: Stack(
                                         children: [
                                           Container(width: imageWidth, height: imageHeight, color: Colors.white),
-                                          //có thể tách nhỏ
                                           Obx(() {
                                             if (controller.isEdit.value &&
                                                 !controller.isEditText.value &&
@@ -257,7 +256,6 @@ class EditPage extends GetView<EditController> {
                                             }
                                           }),
                                           for (int i = 0; i < controller.texts.value.length; i++)
-                                            //có thể tách nhỏ
                                             Obx(() {
                                               if (controller.isEdit.value &&
                                                   controller.isEditText.value &&
@@ -267,7 +265,7 @@ class EditPage extends GetView<EditController> {
                                                 return Obx(() => DraggableText(
                                                       textInfo: controller.texts.value[i],
                                                     ));
-                                              } else {
+                                              } else if(controller.sliderIndex.value == 0) {
                                                 return Positioned(
                                                   top: controller.texts.value[i].positionTop,
                                                   left: controller.texts.value[i].positionLeft,
@@ -290,6 +288,8 @@ class EditPage extends GetView<EditController> {
                                                     ),
                                                   ),
                                                 );
+                                              } else {
+                                                return const SizedBox(width: 0, height: 0);
                                               }
                                             }),
                                         ],
@@ -349,7 +349,6 @@ class EditPage extends GetView<EditController> {
                                             }
                                           }),
                                           for (int i = 0; i < controller.texts.value.length; i++)
-                                            // có thể tách nhỏ
                                             Obx(() {
                                               if (controller.isEdit.value &&
                                                   controller.isEditText.value &&
@@ -359,7 +358,7 @@ class EditPage extends GetView<EditController> {
                                                 return Obx(() => DraggableText(
                                                       textInfo: controller.texts.value[i],
                                                     ));
-                                              } else {
+                                              } else if(controller.sliderIndex.value == 1) {
                                                 return Positioned(
                                                   top: controller.texts.value[i].positionTop,
                                                   left: controller.texts.value[i].positionLeft,
@@ -381,6 +380,8 @@ class EditPage extends GetView<EditController> {
                                                     ),
                                                   ),
                                                 );
+                                              } else {
+                                                return const SizedBox(width: 0, height: 0);
                                               }
                                             }),
                                         ],
