@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:ai_ecard/helper/helper.dart';
 import 'package:ai_ecard/import.dart';
 import 'package:ai_ecard/models/account/account_model.dart';
 import 'package:ai_ecard/models/models/chat/chat_model.dart';
@@ -22,6 +23,8 @@ class GenerateContentController extends GetxController{
   RxList<String> keywordSuggest = <String>[].obs;
   Rx<int> selectedIndex = (-1).obs;
 
+  Rx<String> message = ''.obs;
+
   @override
   void onInit() async {
     super.onInit();
@@ -40,12 +43,37 @@ class GenerateContentController extends GetxController{
   }
 
   void updateContent(String? value){
-    if((value?.trimLeft().trimRight().split(' ').length ?? 0) <= 8) {
+    if((value?.trimLeft().trimRight().split(' ').length ?? 0) <= 15) {
       generateContent.value = value ?? '';
-      keywordSuggest.value = greetings.where((e) => e.toLowerCase().contains(generateContent.value.toLowerCase())).toList();
     } else {
       textController.text = generateContent.value;
     }
+    searchKeyword();
+  }
+
+  searchKeyword(){
+    if(!empty(generateContent.value)){
+      Future.delayed(const Duration(seconds: 1)).then((value) {
+        keywordSuggest.value = greetings.where((e) => e.toLowerCase().contains(generateContent.value.toLowerCase())).toList();
+      });
+      update();
+    }
+  }
+
+  validation(){
+    if(empty(generateContent.value)){
+      message.value = 'Không được để trống';
+      update();
+      return false;
+    }
+    if(generateContent.value.length < 3){
+      message.value = 'Bạn phải nhập ít nhất 3 ký tự để tìm kiếm';
+      update();
+      return false;
+    }
+    message.value = '';
+    update();
+    return true;
   }
 
   void clearText() {
@@ -55,10 +83,16 @@ class GenerateContentController extends GetxController{
 
   void getPrompt() async {
     try {
+      print(textController.text);
       showLoading();
-      ChatModel receive = await _chatService.chat(ChatParameter(keywordSuggest.value[selectedIndex.value]));
-      generateContentResult.add(receive.message.replaceAll('\\n', '\n'));
-      generateContentResult.refresh();
+      ChatModel receive = await _chatService.chat(ChatParameter(textController.text));
+      if(!empty(receive.message)){
+        generateContentResult.add(receive.message.replaceAll('\\n', '\n'));
+        generateContentResult.refresh();
+      }else{
+        showMessage('Không tìm thấy nội dung gợi ý');
+      }
+
       disableLoading();
     } catch(e){
       disableLoading();
@@ -78,6 +112,11 @@ class GenerateContentController extends GetxController{
     }
     else {
       selectedIndex.value = index;
+    }
+    if(!empty(words)){
+      message.value = '';
+      textController.text = keywordSuggest.value[index];
+      generateContent.value = textController.text;
     }
     selectedIndex.refresh();
   }
