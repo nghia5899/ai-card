@@ -5,13 +5,21 @@ class TemplateService {
       TemplateModel().formListJson(_templates);
   static final List<Map<String, dynamic>> _templates = [
     {
+      "code": "0",
+      "title": "Monogram Terracota",
+      "type": "Fresh",
+      "image": "assets/images/template/img_birthday.png",
+      "category": "birthday",
+      "orientation": OrientationTemp.vertical,
+      "color": HashColor.c3,
+    },{
       "code": "1",
       "title": "Monogram Terracota",
       "type": "Fresh",
       "image": "assets/images/template/img_t1.png",
       "category": "birthday",
       "orientation": OrientationTemp.vertical,
-      "color": HashColor.c1,
+      "color": HashColor.c3,
     },
     {
       "code": "2",
@@ -20,7 +28,7 @@ class TemplateService {
       "image": "assets/images/template/img_t2.png",
       "category": "birthday",
       "orientation": OrientationTemp.vertical,
-      "color": HashColor.c1,
+      "color": HashColor.c3,
     },
     {
       "code": "3",
@@ -29,7 +37,7 @@ class TemplateService {
       "image": "assets/images/template/img_t3.png",
       "category": "birthday",
       "orientation": OrientationTemp.vertical,
-      "color": HashColor.c1,
+      "color": HashColor.c6,
     },
     {
       "code": "4",

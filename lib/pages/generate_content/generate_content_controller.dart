@@ -113,9 +113,10 @@ class GenerateContentController extends GetxController{
     else {
       selectedIndex.value = index;
     }
+    List<String> _keywordSuggest = [...keywordSuggest.value];
     if(!empty(words)){
       message.value = '';
-      textController.text = keywordSuggest.value[index];
+      textController.text = _keywordSuggest[index];
       generateContent.value = textController.text;
     }
     selectedIndex.refresh();

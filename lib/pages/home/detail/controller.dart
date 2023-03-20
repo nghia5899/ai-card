@@ -23,23 +23,27 @@ class HomeDetailController extends GetxController{
 
   List<String> _bookMark = [];
   List<TextInfo> listText = [
+    // TextInfo(
+    //   text: 'Chúc mừng',
+    //   positionTop: 150,
+    //   textStyle: const TextStyle(color: Colors.black,fontSize: 30,fontFamily: 'LemonJelly',),
+    //   positionLeft: Get.width/3,
+    //   fontSize: 54
+    // ),
     TextInfo(
-      text: 'Chúc mừng',
-      positionTop: 150,
-      textStyle: const TextStyle(color: Colors.black,fontSize: 30,fontFamily: 'LemonJelly',),
-      positionLeft: Get.width/2.5
+      text: 'Emily`s 5TH',
+      positionTop: 333,
+      positionLeft: 109,
+      textStyle: const TextStyle(color:Color(0xffFCA940),fontSize: 12,fontFamily: 'OpenSans',),
+      fontSize: 24
+
     ),
     TextInfo(
-      text: 'Thanks you',
-        positionTop: 200,
-        positionLeft: Get.width/2.5,
-      textStyle: const TextStyle(color: Colors.black,fontSize: 30,fontFamily: 'LemonJelly',),
-    ),
-    TextInfo(
-      text: 'for your order',
-        positionTop: 250,
-        positionLeft: Get.width/2.5,
-        textStyle: const TextStyle(color: Colors.black,fontSize: 30,fontFamily: 'LemonJelly',),
+      text: 'Birthday\nparty',
+      positionTop: 374,
+      positionLeft: 99,
+      textStyle: const TextStyle(color: Color(0xffFCA940),fontSize: 16,fontFamily: 'Oswald',height: 0.5),
+      fontSize: 44
     ),
   ];
 

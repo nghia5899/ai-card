@@ -67,10 +67,10 @@ class ColorTemplate {
 
   static final c1 = Color(int.parse('0xffE85F59'));
   static final c2 = Color(int.parse('0xffEFA543'));
-  static final c3 = Color(int.parse('0xffF5C3CB'));
+  static final c3 = Color(int.parse('0xffF4C9C3'));
   static final c4 = Color(int.parse('0xffF7DC8B'));
   static final c5 = Color(int.parse('0xff73CF9A'));
-  static final c6 = Color(int.parse('0xff9FCBF6'));
+  static final c6 = Color(int.parse('0xffA2D1EB'));
   static final c7 = Color(int.parse('0xff3571E3'));
   static final c8 = Color(int.parse('0xff8080EA'));
   static final c9 = Color(int.parse('0xff1F262C'));

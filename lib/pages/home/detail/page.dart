@@ -142,7 +142,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                             List<TextInfo> clone = [];
                             for (int i = 0; i < controller.listText.length; i++) {
                               TextInfo item = controller.listText[i];
-                              clone.add(controller.listText[i].copyWith(textStyle: null, color: item.textStyle?.color, fontSize: item.textStyle?.fontSize, fontFamily: item.textStyle?.fontFamily, fontWeight: item.textStyle?.fontWeight));
+                              clone.add(controller.listText[i].copyWith(textStyle: null, color: item.textStyle?.color, fontSize: item.fontSize, fontFamily: item.textStyle?.fontFamily, fontWeight: item.textStyle?.fontWeight));
                             }
                             disableLoading();
                             Get.toNamed(
@@ -154,59 +154,69 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                             );
                           },
                           child: IntrinsicWidth(
-                            child: Stack(
-                              alignment: Alignment.topLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: colors[item.color] ??const Color(0xffA2D1EB),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    // crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      if (!empty(item.image)) Image.asset(item.image??'', fit: BoxFit.cover),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
-                                        child: Text(
-                                          '${item.title}',
-                                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                Stack(
+                                  alignment: Alignment.bottomCenter,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: colors[item.color] ??const Color(0xffA2D1EB),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        // crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          if (!empty(item.image)) Image.asset(item.image??'', fit: BoxFit.cover),
+
+                                        ],
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 3,
+                                      left: 3,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          await controller.bookMark(item.code??'', reLoad: true);
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(6),
+                                            color: const Color.fromRGBO(0, 0, 0, 0.6),
+                                          ),
+                                          padding: const EdgeInsets.all(5),
+                                          margin: const EdgeInsets.all(6),
+                                          child: SvgViewer(
+                                            url: 'assets/icons/ic_star.svg',
+                                            color: controller.checkBookMark(item.code??'') ? null : Colors.white,
+                                          ),
                                         ),
                                       ),
-                                    ],
+                                    ),
+                                    Positioned(
+                                      bottom: 30,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: controller.listText
+                                            .map<Widget>(
+                                              (e) => ImageText(textInfo: e).paddingOnly(top: 10),
+                                            )
+                                            .toList(),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  child: Text(
+                                    '${item.title}',
+                                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                                   ),
                                 ),
-                                InkWell(
-                                  onTap: () async {
-                                    await controller.bookMark(item.code??'', reLoad: true);
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                      color: const Color.fromRGBO(0, 0, 0, 0.6),
-                                    ),
-                                    padding: const EdgeInsets.all(5),
-                                    margin: const EdgeInsets.all(6),
-                                    child: SvgViewer(
-                                      url: 'assets/icons/ic_star.svg',
-                                      color: controller.checkBookMark(item.code??'') ? null : Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 100,
-                                  left: 25,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: controller.listText
-                                        .map<Widget>(
-                                          (e) => ImageText(textInfo: e),
-                                        )
-                                        .toList(),
-                                  ),
-                                )
                               ],
                             ),
                           ));

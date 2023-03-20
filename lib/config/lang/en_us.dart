@@ -15,5 +15,8 @@ class English {
     'save': 'SAVE',
     'front': 'Front',
     'next': 'NEXT',
+    'Không tìm thấy nội dung gợi ý': 'No suggested content found',
+    'Không được để trống': 'Can\'t be left blank',
+    'Bạn phải nhập ít nhất 3 ký tự để tìm kiếm': 'You must enter at least 3 characters to search',
   };
 }
