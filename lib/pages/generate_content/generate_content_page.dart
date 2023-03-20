@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:ai_ecard/helper/device.dart';
+import 'package:ai_ecard/helper/helper.dart';
 import 'package:ai_ecard/import.dart';
 import 'package:ai_ecard/pages/generate_content/generate_content_controller.dart';
 import 'package:ai_ecard/styles/app_color.dart';
@@ -7,6 +9,7 @@ import 'package:ai_ecard/styles/app_icon.dart';
 import 'package:ai_ecard/widgets/app_scaffold.dart';
 import 'package:ai_ecard/widgets/custom_app_button.dart';
 import 'package:ai_ecard/widgets/custom_text_button.dart';
+import 'package:ai_ecard/widgets/list_base.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -56,7 +59,7 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                     style: TextStyle(color: const Color(0xFF0F172A), fontSize: 16.w, fontWeight: FontWeight.w400),
                   ),
                   SizedBox(height: 8.w),
-                  TextFormField(
+                  Obx(() => TextFormField(
                     controller: controller.textController,
                     onChanged: controller.updateContent,
                     decoration: InputDecoration(
@@ -67,14 +70,18 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                             borderSide: const BorderSide(color: Colors.white24)),
                         labelStyle: const TextStyle(color: Colors.white),
                         fillColor: Colors.white,
-                        filled: true),
-                  ),
+                        errorText: !empty(controller.message.value)?controller.message.value:null,
+                        filled: true
+                    ),
+                    onEditingComplete: controller.validation,
+                  ),),
+
                   SizedBox(height: 2.w),
                   Row(
                     children: [
                       const Spacer(),
                       Obx(() => Text(
-                            '${controller.words}/8 words',
+                            '${controller.words}/15 words',
                             style:
                                 TextStyle(color: const Color(0xFF64748B), fontSize: 10.w, fontWeight: FontWeight.w500),
                           ))
@@ -86,15 +93,24 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                     style: TextStyle(color: Color(0xFF64748B), fontSize: 14.w, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: 8.w),
-                  SizedBox(
-                    height: 40.w,
-                    width: Get.width,
-                    child: Obx(
-                      () =>ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: min(controller.keywordSuggest.value.length, 10),
-                          itemBuilder: (BuildContext context, int index) {
-                            return Obx(() => Padding(
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.25,
+                        maxWidth: MediaQuery.of(context).size.width * 3.0,
+                      ),
+                      child: Wrap(
+                        direction: Axis.horizontal,
+                        crossAxisAlignment: WrapCrossAlignment.end,
+                        alignment: WrapAlignment.start,
+                        spacing: 10,
+                        runSpacing: 2,
+                        children: List.generate(
+                          controller.keywordSuggest.value.length,
+                              (index) {
+                            final String name = controller.keywordSuggest.value[index];
+                            return Padding(
                               padding: EdgeInsets.only(right: 8.w, top: 8.w),
                               child: GestureDetector(
                                 onTap: () {
@@ -103,15 +119,18 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                                 child: suggestButton(
                                     controller.keywordSuggest.value[index], controller.selectedIndex.value == index),
                               ),
-                            ));
-                          }),
+                            );
+                          },
+                        ).toList(),
+                      ),
                     ),
                   ),
                   SizedBox(height: 24.w),
                   Obx(() => CustomAppButton(
                         height: 44.w,
-                        backgroundColor: controller.selectedIndex.value >= 0 ? null : const Color(0xFF334155),
-                        enabled: controller.selectedIndex.value >= 0,
+                        backgroundColor: controller.selectedIndex.value >= 0 || !empty(controller.generateContent.value)? null : const Color(0xFF334155),
+                        enabled: controller.selectedIndex.value >= 0 || !empty(controller.generateContent.value),
+                        // enabled: false,
                         child: Row(
                           children: [
                             const Spacer(),
@@ -127,8 +146,11 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                             const Spacer(),
                           ],
                         ),
-                        onPressed: () {
-                          controller.getPrompt();
+                        onPressed: () async{
+                          final res = await controller.validation();
+                          if(res){
+                            controller.getPrompt();
+                          }
                         },
                       )),
                 ],

@@ -112,7 +112,7 @@ class ExportController extends GetxController {
       //   ),
       // );
 
-      String fileName = "ai-ecard-${this.fileName}.jpg";
+      String fileName = "ai-ecard-${this.fileName}";
       String fileNameFront = "${fileName}-1.png";
       String fileNameInsideFront = "${fileName}-2.png";
       String fileNameInsideBack = "${fileName}-3.png";
