@@ -25,7 +25,6 @@ class ExportController extends GetxController {
   double frontCardWidth = 1;
   double frontCardHeight = 1;
 
-
   Rx<TextAlignEnum> textAlign = TextAlignEnum.center.obs;
   Rx<PageEnum> pageEnum = PageEnum.front.obs;
 
@@ -78,7 +77,7 @@ class ExportController extends GetxController {
   }
 
   Future<void> saveImage() async {
-    double width = Get.width - 10.w;
+    double width = Get.width - 24.w;
     double height = width * frontCardHeight / frontCardWidth;
 
     try {
@@ -89,28 +88,8 @@ class ExportController extends GetxController {
           imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[0].texts));
       Uint8List imageInsideBack = await FileHelper.createImage(
           imagePainter(width: width, height: height, image: inside.value[1].image, textInfo: inside.value[1].texts));
-      Uint8List imageBackSide = await FileHelper.createImage(imagePainter(
-          width: width, height: height, image: front.value.image, textInfo: front.value.texts));
-
-      // Widget widgetImage =  SingleChildScrollView(
-      //   child: RepaintBoundary(
-      //     key: GlobalObjectKey('paint'),
-      //     child: Container(
-      //       width: width * 4,
-      //       height: height,
-      //       color: Colors.blue
-      //       // child: ListView(
-      //       //   scrollDirection: Axis.horizontal,
-      //       //   children: [
-      //       //     imagePainter(width: width, height: height, image: front.value.image, textInfo: front.value.texts),
-      //       //     imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[0].texts),
-      //       //     imagePainter(width: width, height: height, image: inside.value[1].image, textInfo: inside.value[1].texts),
-      //       //     imagePainter(width: width, height: height, image: front.value.image, textInfo: front.value.texts)
-      //       //   ],
-      //       // ),
-      //     ),
-      //   ),
-      // );
+      Uint8List imageBackSide = await FileHelper.createImage(
+          imagePainter(width: width, height: height, image: front.value.image, textInfo: front.value.texts));
 
       String fileName = "ai-ecard-${this.fileName}";
       String fileNameFront = "${fileName}-1.png";
@@ -132,7 +111,7 @@ class ExportController extends GetxController {
   }
 
   Future<void> savePDF() async {
-    double width = Get.width - 10.w;
+    double width = Get.width - 24.w;
     double height = width * frontCardHeight / frontCardWidth;
 
     try {
@@ -155,7 +134,7 @@ class ExportController extends GetxController {
   }
 
   Future<void> shareImage() async {
-    double width = Get.width - 10.w;
+    double width = Get.width - 24.w;
     double height = width * frontCardHeight / frontCardWidth;
 
     try {
@@ -166,8 +145,8 @@ class ExportController extends GetxController {
           imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[0].texts));
       Uint8List imageInsideBack = await FileHelper.createImage(
           imagePainter(width: width, height: height, image: inside.value[1].image, textInfo: inside.value[1].texts));
-      Uint8List imageBackSide = await FileHelper.createImage(imagePainter(
-          width: width, height: height, image: front.value.image, textInfo: []));
+      Uint8List imageBackSide = await FileHelper.createImage(
+          imagePainter(width: width, height: height, image: front.value.image, textInfo: []));
 
       String fileName = "ai-ecard-${this.fileName}";
       String fileNameFront = "${fileName}-1.png";
@@ -177,13 +156,14 @@ class ExportController extends GetxController {
 
       await FileHelper.saveFileToGallery(fileNameFront, 'AI-Ecard', imageFront);
       await FileHelper.saveFileToGallery(fileNameInsideFront, 'AI-Ecard', imageInsideFront);
-      await FileHelper.saveFileToGallery(fileNameInsideFront, 'AI-Ecard', imageInsideBack);
+      await FileHelper.saveFileToGallery(fileNameInsideBack, 'AI-Ecard', imageInsideBack);
       await FileHelper.saveFileToGallery(fileNameBackside, 'AI-Ecard', imageBackSide);
 
-      await FileHelper.shareFile(
-          files: [fileNameFront, fileNameInsideFront, fileNameInsideBack, fileNameBackside], text: 'AI-Ecard', subject: 'AI-Ecard');
-
       disableLoading();
+      await FileHelper.shareFile(
+          files: [fileNameFront, fileNameInsideFront, fileNameInsideBack, fileNameBackside],
+          text: 'AI-Ecard',
+          subject: 'AI-Ecard');
       showMessage('Save successfully', type: 'SUCCESS');
     } catch (e) {
       disableLoading();
@@ -192,7 +172,7 @@ class ExportController extends GetxController {
   }
 
   Future<void> sharePDF() async {
-    double width = Get.width - 10.w;
+    double width = Get.width - 24.w;
     double height = width * frontCardHeight / frontCardWidth;
 
     try {
@@ -206,9 +186,9 @@ class ExportController extends GetxController {
 
       String fileName = "ai-ecard-${this.fileName}.pdf";
       await FileHelper.saveFileToStorage(fileName, data);
-      await FileHelper.shareFile(files: [fileName], text: 'AI-Ecard', subject: 'AI-Ecard');
 
       disableLoading();
+      await FileHelper.shareFile(files: [fileName], text: 'AI-Ecard', subject: 'AI-Ecard');
       showMessage('Save successfully', type: 'SUCCESS');
     } catch (e) {
       disableLoading();
@@ -266,11 +246,11 @@ class ExportController extends GetxController {
           : backside.value.redoEnabled.obs;
 
   String get fileName => DateTime.now().millisecondsSinceEpoch.toString();
-
 }
 
-class ExportModel{
+class ExportModel {
   EditState front;
   List<EditState> inside;
+
   ExportModel(this.front, this.inside);
 }
