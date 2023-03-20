@@ -85,6 +85,7 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/images/template/
+    - assets/images/template/inside/
     - assets/images/slider/
 
   uses-material-design: true

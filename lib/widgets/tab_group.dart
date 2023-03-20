@@ -32,7 +32,8 @@ class TabGroup extends GetView<EditController> {
               Obx(
                 () {
                   switch (controller.editTextType.value) {
-                    case EditTextType.font:{
+                    case EditTextType.font:
+                      {
                         return SizedBox(
                           height: 36.w,
                           child: ListFont(
@@ -42,7 +43,8 @@ class TabGroup extends GetView<EditController> {
                           ),
                         );
                       }
-                    case EditTextType.color:{
+                    case EditTextType.color:
+                      {
                         return SizedBox(
                           height: 76.w,
                           child: ListColor(
@@ -52,7 +54,8 @@ class TabGroup extends GetView<EditController> {
                           ),
                         );
                       }
-                    case EditTextType.align:{
+                    case EditTextType.align:
+                      {
                         return SizedBox(
                           height: 76.w,
                           child: ListAlign(
@@ -63,18 +66,20 @@ class TabGroup extends GetView<EditController> {
                           ),
                         );
                       }
-                    case EditTextType.size:{
-                      return SizedBox(
-                        height: 76.w,
-                        child: SliderSize(
-                          fontSize: controller.texts[controller.textSelectedEdit.value].fontSize,
-                          onSizeChange: (size) {
-                            controller.changeFontSize(size);
-                          },
-                        ),
-                      );
+                    case EditTextType.size:
+                      {
+                        return SizedBox(
+                          height: 76.w,
+                          child: SliderSize(
+                            fontSize: controller.texts[controller.textSelectedEdit.value].fontSize,
+                            onSizeChange: (size) {
+                              controller.changeFontSize(size);
+                            },
+                          ),
+                        );
                       }
-                    default:{
+                    default:
+                      {
                         return SizedBox();
                       }
                   }
@@ -86,20 +91,36 @@ class TabGroup extends GetView<EditController> {
                 height: 66.w,
                 decoration: BoxDecoration(
                     color: AppColors.primaryTextColor, borderRadius: BorderRadius.all(Radius.circular(16.w))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
                   children: [
-                    Obx(() => EditIcon(
-                          icon: SvgPicture.asset(
-                            'assets/icons/ic_generate.svg',
-                            width: 24.w,
-                            height: 24.w,
-                          ),
-                          isSelected: controller.editIconSelected.value == EditIconEnum.generateText,
-                          title: 'generate'.tr,
-                          onTap: controller.onTapGenerateText,
-                          selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
-                        )),
+                    SizedBox(width: 22.w),
+                    Obx(
+                      () => EditIcon(
+                        icon: SvgPicture.asset(
+                          'assets/icons/ic_generate.svg',
+                          width: 24.w,
+                          height: 24.w,
+                        ),
+                        isSelected: controller.editIconSelected.value == EditIconEnum.generateText,
+                        title: 'generate'.tr,
+                        onTap: controller.onTapGenerateText,
+                        selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
+                      ),
+                    ),
+                    SizedBox(width: 22.w),
+                    EditIcon(
+                      icon: Icon(
+                        Icons.edit_note,
+                        size: 28.w,
+                      ),
+                      isSelected: false,
+                      title: 'Edit',
+                      onTap: () {
+                        controller.onDoubleTapText(controller.textSelectedEdit.value);
+                      },
+                      selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
+                    ),
                     SizedBox(width: 22.w),
                     Obx(
                       () => EditIcon(
@@ -160,21 +181,23 @@ class TabGroup extends GetView<EditController> {
                       ),
                     ),
                     SizedBox(width: 22.w),
-                    Obx(() => EditIcon(
-                            icon: Icon(Icons.text_decrease, size: 24.w, color: const Color(0xFF64748B)),
-                            selectedIcon: SvgPicture.asset(
-                              'assets/icons/ic_dot.svg',
-                              width: 4.w,
-                              height: 4.w,
-                            ),
-                            isSelected: controller.editIconSelected.value == EditIconEnum.size,
-                            title: 'Size',
-                            onTap: () {
-                              controller.onTapChangeSize();
-                            },
-                            selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
-                          ),
+                    Obx(
+                      () => EditIcon(
+                        icon: Icon(Icons.text_decrease, size: 24.w, color: const Color(0xFF64748B)),
+                        selectedIcon: SvgPicture.asset(
+                          'assets/icons/ic_dot.svg',
+                          width: 4.w,
+                          height: 4.w,
+                        ),
+                        isSelected: controller.editIconSelected.value == EditIconEnum.size,
+                        title: 'Size',
+                        onTap: () {
+                          controller.onTapChangeSize();
+                        },
+                        selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
+                      ),
                     ),
+                    SizedBox(width: 22.w),
                   ],
                 ),
               ),
@@ -228,24 +251,24 @@ class TabGroup extends GetView<EditController> {
                       ),
                     ),
                     SizedBox(width: 32.w),
-                    Container(
-                      alignment: Alignment.centerRight,
-                      padding: EdgeInsets.only(right: 24.w),
-                      child: Obx(() => EditIcon(
-                            icon: Icon(Icons.text_fields, size: 24.w, color: const Color(0xFF64748B)),
-                            selectedIcon: SvgPicture.asset(
-                              'assets/icons/ic_dot.svg',
-                              width: 4.w,
-                              height: 4.w,
-                            ),
-                            isSelected: controller.pageEnum.value == PageEnum.back,
-                            title: 'Text',
-                            onTap: () {
-                              controller.onTapText(max(controller.textSelectedEdit.value, 0));
-                            },
-                            selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
-                          )),
-                    )
+                    // Container(
+                    //   alignment: Alignment.centerRight,
+                    //   padding: EdgeInsets.only(right: 24.w),
+                    //   child: Obx(() => EditIcon(
+                    //         icon: Icon(Icons.text_fields, size: 24.w, color: const Color(0xFF64748B)),
+                    //         selectedIcon: SvgPicture.asset(
+                    //           'assets/icons/ic_dot.svg',
+                    //           width: 4.w,
+                    //           height: 4.w,
+                    //         ),
+                    //         isSelected: controller.pageEnum.value == PageEnum.back,
+                    //         title: 'Text',
+                    //         onTap: () {
+                    //           controller.onTapText(max(controller.textSelectedEdit.value, 0));
+                    //         },
+                    //         selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
+                    //       )),
+                    // )
                   ],
                 ),
               ],
@@ -283,61 +306,27 @@ class TabGroup extends GetView<EditController> {
                         selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
                       )),
                   SizedBox(width: 32.w),
-                  Obx(() => EditIcon(
-                        icon: SvgPicture.asset(
-                          'assets/icons/ic_inside.svg',
-                          width: 24.w,
-                          height: 24.w,
-                          color: const Color(0xFF64748B),
-                        ),
-                        selectedIcon: SvgPicture.asset(
-                          'assets/icons/ic_dot.svg',
-                          width: 4.w,
-                          height: 4.w,
-                        ),
-                        isSelected: controller.pageEnum.value == PageEnum.inside,
-                        title: 'Inside',
-                        onTap: controller.onTapInside,
-                        selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
-                      )),
-                  // SizedBox(width: 32.w),
-                  // Obx(() => EditIcon(
-                  //       icon: SvgPicture.asset(
-                  //         'assets/icons/ic_back.svg',
-                  //         width: 24.w,
-                  //         height: 24.w,
-                  //         color: const Color(0xFF64748B),
-                  //       ),
-                  //       selectedIcon: SvgPicture.asset(
-                  //         'assets/icons/ic_dot.svg',
-                  //         width: 4.w,
-                  //         height: 4.w,
-                  //       ),
-                  //       isSelected: controller.pageEnum.value == PageEnum.back,
-                  //       title: 'Back',
-                  //       onTap: controller.onTapBack,
-                  //       selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
-                  //     )),
+                  Obx(
+                    () => EditIcon(
+                      icon: SvgPicture.asset(
+                        'assets/icons/ic_inside.svg',
+                        width: 24.w,
+                        height: 24.w,
+                        color: const Color(0xFF64748B),
+                      ),
+                      selectedIcon: SvgPicture.asset(
+                        'assets/icons/ic_dot.svg',
+                        width: 4.w,
+                        height: 4.w,
+                      ),
+                      isSelected: controller.pageEnum.value == PageEnum.inside,
+                      title: 'Inside',
+                      onTap: controller.onTapInside,
+                      selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
+                    ),
+                  ),
                 ],
               ),
-              // Container(
-              //   alignment: Alignment.centerRight,
-              //   padding: EdgeInsets.only(right: 24.w),
-              //   child: Obx(() => EditIcon(
-              //         icon: Icon(Icons.text_fields, size: 24.w, color: const Color(0xFF64748B)),
-              //         selectedIcon: SvgPicture.asset(
-              //           'assets/icons/ic_dot.svg',
-              //           width: 4.w,
-              //           height: 4.w,
-              //         ),
-              //         isSelected: controller.pageEnum.value == PageEnum.back,
-              //         title: 'Text',
-              //         onTap: () {
-              //           controller.onTapText(max(controller.textSelectedEdit.value, 0));
-              //         },
-              //         selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
-              //       )),
-              // )
             ],
           ),
         ),

@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
       //   AppStorage.accessToken = token.accessToken;
       //   Get.offAndToNamed(AppRoutes.start);
       // }
-      Get.offAndToNamed(AppRoutes.start);
+      Get.offAndToNamed(AppRoutes.homeDefault);
     });
   }
 

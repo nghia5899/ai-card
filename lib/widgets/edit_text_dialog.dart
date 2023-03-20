@@ -40,22 +40,18 @@ class _EditTextDialogState extends State<EditTextDialog> {
       },
       child: AppScaffold(
         backGroundColor: Colors.transparent,
+        resizeToAvoidBottomInset: true,
         body: Center(
-          child: Padding(
-            padding: EdgeInsets.all(24.w),
+          child: Container(
+            alignment: Alignment.bottomCenter,
             child: TextFormField(
               controller: _textEditingController,
               onChanged: widget.onChanged,
               minLines: 1,
               maxLines: 5,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8.w),
-                        ),
-                        borderSide: BorderSide(color: Colors.white24)),
-                    labelStyle: TextStyle(color: Colors.white),
-                    fillColor: Colors.white24,
+                autofocus: true,
+                decoration: const InputDecoration(
+                    fillColor: Colors.white,
                     filled: true),
             ),
           ),

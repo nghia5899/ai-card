@@ -137,20 +137,14 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                     children: controller.listSelectAll.map<Widget>((item) {
                       return GestureDetector(
                           onTap: () async {
-                            showLoading();
-                            Uint8List image = await FileHelper.createImage(Image.asset(item.image??''));
                             List<TextInfo> clone = [];
                             for (int i = 0; i < controller.listText.length; i++) {
                               TextInfo item = controller.listText[i];
                               clone.add(controller.listText[i].copyWith(textStyle: null, color: item.textStyle?.color, fontSize: item.fontSize, fontFamily: item.textStyle?.fontFamily, fontWeight: item.textStyle?.fontWeight));
                             }
-                            disableLoading();
                             Get.toNamed(
                               AppRoutes.edit,
-                              arguments: EditState(
-                                image,
-                                clone,
-                              ),
+                              arguments: CardObject(templateModel: item, textInfo: clone),
                             );
                           },
                           child: IntrinsicWidth(
@@ -242,9 +236,10 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
   }
 }
 
-class EditObject {
-  Uint8List image;
+class CardObject {
+  TemplateModel templateModel;
   List<TextInfo> textInfo;
 
-  EditObject(this.image, this.textInfo);
+  CardObject({required this.templateModel, required this.textInfo});
+
 }

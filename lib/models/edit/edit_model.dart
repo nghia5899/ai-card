@@ -11,7 +11,9 @@ class EditModel {
   int stackIndex = -1;
 
   EditModel({required this.image, required this.texts}) {
-    addToStack();
+    if(image.isNotEmpty) {
+      addToStack();
+    }
   }
 
   void addToStack() {
