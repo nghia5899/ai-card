@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:ai_ecard/import.dart';
 import 'package:ai_ecard/pages/generate_content/generate_content_controller.dart';
 import 'package:ai_ecard/styles/app_color.dart';
@@ -47,6 +49,7 @@ class GenerateContentPage extends GetView<GenerateContentController> {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 22.w, horizontal: 24.w),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Describe what kind of content you want to create. For better results, add detailed phrases.',
@@ -54,8 +57,6 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                   ),
                   SizedBox(height: 8.w),
                   TextFormField(
-                    minLines: 5,
-                    maxLines: 5,
                     controller: controller.textController,
                     onChanged: controller.updateContent,
                     decoration: InputDecoration(
@@ -65,19 +66,6 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                             ),
                             borderSide: const BorderSide(color: Colors.white24)),
                         labelStyle: const TextStyle(color: Colors.white),
-                        suffixIcon: Padding(
-                          padding: EdgeInsets.only(top: 90.w),
-                          child: GestureDetector(
-                            onTap: () {
-                              controller.clearText();
-                            },
-                            child: SvgPicture.asset(
-                              'assets/icons/ic_clear.svg',
-                              width: 24.w,
-                              height: 24.w,
-                            ),
-                          ),
-                        ),
                         fillColor: Colors.white,
                         filled: true),
                   ),
@@ -86,33 +74,63 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                     children: [
                       const Spacer(),
                       Obx(() => Text(
-                        '${controller.generateContent.value.length}/1000',
-                        style: TextStyle(color: const Color(0xFF64748B), fontSize: 10.w, fontWeight: FontWeight.w500),
-                      ))
+                            '${controller.words}/8 words',
+                            style:
+                                TextStyle(color: const Color(0xFF64748B), fontSize: 10.w, fontWeight: FontWeight.w500),
+                          ))
                     ],
                   ),
                   SizedBox(height: 8.w),
-                  Obx(() => CustomAppButton(
-                    height: 44.w,
-                    backgroundColor: controller.generateContent.value.isNotEmpty ? null : const Color(0xFF334155),
-                    enabled: controller.generateContent.value.isNotEmpty,
-                    child: Row(
-                      children: [
-                        const Spacer(),
-                        Text(
-                          'Generate',
-                          style: TextStyle(
-                              color: controller.generateContent.value.isNotEmpty ? Colors.white : const Color(0xFF94A3B8),
-                              fontSize: 16.w,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        const Spacer(),
-                      ],
+                  Text(
+                    'Keyword suggestion',
+                    style: TextStyle(color: Color(0xFF64748B), fontSize: 14.w, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(height: 8.w),
+                  SizedBox(
+                    height: 40.w,
+                    width: Get.width,
+                    child: Obx(
+                      () =>ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: min(controller.keywordSuggest.value.length, 10),
+                          itemBuilder: (BuildContext context, int index) {
+                            return Obx(() => Padding(
+                              padding: EdgeInsets.only(right: 8.w, top: 8.w),
+                              child: GestureDetector(
+                                onTap: () {
+                                  controller.updateSelectedItem(index);
+                                },
+                                child: suggestButton(
+                                    controller.keywordSuggest.value[index], controller.selectedIndex.value == index),
+                              ),
+                            ));
+                          }),
                     ),
-                    onPressed: () {
-                      controller.getPrompt();
-                    },
-                  )),
+                  ),
+                  SizedBox(height: 24.w),
+                  Obx(() => CustomAppButton(
+                        height: 44.w,
+                        backgroundColor: controller.selectedIndex.value >= 0 ? null : const Color(0xFF334155),
+                        enabled: controller.selectedIndex.value >= 0,
+                        child: Row(
+                          children: [
+                            const Spacer(),
+                            Text(
+                              'Generate',
+                              style: TextStyle(
+                                  color: controller.generateContent.value.isNotEmpty
+                                      ? Colors.white
+                                      : const Color(0xFF94A3B8),
+                                  fontSize: 16.w,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            const Spacer(),
+                          ],
+                        ),
+                        onPressed: () {
+                          controller.getPrompt();
+                        },
+                      )),
                 ],
               ),
             ),
@@ -141,8 +159,8 @@ class GenerateContentPage extends GetView<GenerateContentController> {
                             padding: EdgeInsets.only(bottom: 32.w),
                             itemBuilder: (context, index) => generatedContent(context, index),
                             separatorBuilder: (_, __) => SizedBox(
-                              height: 5.w,
-                            ),
+                                  height: 5.w,
+                                ),
                             itemCount: controller.generateContentResult.length)))
                   ],
                 ),
@@ -163,7 +181,7 @@ class GenerateContentPage extends GetView<GenerateContentController> {
             Container(
                 padding: const EdgeInsets.all(10),
                 decoration:
-                const BoxDecoration(color: Color(0xFFE0E3DE), borderRadius: BorderRadius.all(Radius.circular(10))),
+                    const BoxDecoration(color: Color(0xFFE0E3DE), borderRadius: BorderRadius.all(Radius.circular(10))),
                 constraints: BoxConstraints(
                   minWidth: 0,
                   maxWidth: MediaQuery.of(context).size.width - 48.w,
@@ -187,7 +205,7 @@ class GenerateContentPage extends GetView<GenerateContentController> {
               height: 44.w,
               borderColor: const Color(0xFF1B514A),
               backgroundColor: Colors.transparent,
-              onPressed: (){
+              onPressed: () {
                 Get.back(result: controller.generateContentResult[index]);
               },
             ),
@@ -196,4 +214,21 @@ class GenerateContentPage extends GetView<GenerateContentController> {
       ],
     );
   }
+}
+
+Widget suggestButton(String text, bool isSelected) {
+  return Container(
+    padding: EdgeInsets.symmetric(vertical: 6.w, horizontal: 8.w),
+    decoration: BoxDecoration(
+        color: const Color(0xFFE0E3DE),
+        border: isSelected ? Border.all(color: Color(0xFF1B514A)) : Border.all(color: Colors.transparent),
+        borderRadius: BorderRadius.circular(8.w)),
+    child: Text(
+      text,
+      style: TextStyle(
+          color: isSelected ? const Color(0xFF1B514A) : const Color(0xFF0F172A),
+          fontSize: 14.w,
+          fontWeight: FontWeight.w400),
+    ),
+  );
 }

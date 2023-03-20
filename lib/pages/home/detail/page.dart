@@ -3,6 +3,7 @@ import 'package:ai_ecard/helper/helper.dart';
 import 'package:ai_ecard/import.dart';
 import 'package:ai_ecard/models/edit/edit_state.dart';
 import 'package:ai_ecard/models/models/template/template_model.dart';
+import 'package:ai_ecard/models/edit/edit_state.dart';
 import 'package:ai_ecard/models/text_info.dart';
 import 'package:ai_ecard/pages/home/detail/controller.dart';
 import 'package:ai_ecard/pages/image_editor/page.dart';
@@ -141,7 +142,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                             List<TextInfo> clone = [];
                             for (int i = 0; i < controller.listText.length; i++) {
                               TextInfo item = controller.listText[i];
-                              clone.add(controller.listText[i].copyWith(textStyle: null, color: item.color, fontSize: item.fontSize, fontFamily: item.fontFamily, fontWeight: item.fontWeight));
+                              clone.add(controller.listText[i].copyWith(textStyle: null, color: item.textStyle?.color, fontSize: item.textStyle?.fontSize, fontFamily: item.textStyle?.fontFamily, fontWeight: item.textStyle?.fontWeight));
                             }
                             disableLoading();
                             Get.toNamed(

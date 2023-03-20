@@ -21,11 +21,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      TokenObj token = await UserService().getToken(AccountModel('test', '123456'));
-      if(token.accessToken != null){
-        AppStorage.accessToken = token.accessToken;
-        Get.offAndToNamed(AppRoutes.start);
-      }
+      // TokenObj token = await UserService().getToken(AccountModel('test', '123456'));
+      // if(token.accessToken != null){
+      //   AppStorage.accessToken = token.accessToken;
+      //   Get.offAndToNamed(AppRoutes.start);
+      // }
+      Get.offAndToNamed(AppRoutes.start);
     });
   }
 

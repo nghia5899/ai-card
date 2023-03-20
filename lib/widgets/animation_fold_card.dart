@@ -1,22 +1,23 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Folding Cell Widget
 class FoldingCard extends StatefulWidget {
   const FoldingCard(
       {Key? key,
-        required this.frontWidget,
-        required this.innerWidget,
-        this.cellSize = const Size(100.0, 100.0),
-        this.unfoldCell = false,
-        this.skipAnimation = false,
-        this.padding =
-        const EdgeInsets.only(left: 0, right: 0, bottom: 0, top: 0),
-        this.animationDuration = const Duration(milliseconds: 500),
-        this.borderRadius = 0.0,
-        this.onOpen,
-        this.onClose})
+      required this.frontWidget,
+      required this.innerWidget,
+      this.cellSize = const Size(100.0, 100.0),
+      this.unfoldCell = false,
+      this.skipAnimation = false,
+      this.padding = const EdgeInsets.only(left: 0, right: 0, bottom: 0, top: 0),
+      this.animationDuration = const Duration(milliseconds: 500),
+      this.borderRadius = 0.0,
+      this.onBinding,
+      this.onOpen,
+      this.onClose})
       : assert(frontWidget != null),
         assert(cellSize != null),
         assert(unfoldCell != null),
@@ -29,17 +30,17 @@ class FoldingCard extends StatefulWidget {
 
   const FoldingCard.create(
       {Key? key,
-        required this.frontWidget,
-        required this.innerWidget,
-        this.cellSize = const Size(100.0, 100.0),
-        this.unfoldCell = false,
-        this.skipAnimation = false,
-        this.padding =
-        const EdgeInsets.only(left: 0, right: 0, bottom: 0, top: 0),
-        this.animationDuration = const Duration(milliseconds: 500),
-        this.borderRadius = 0.0,
-        this.onOpen,
-        this.onClose})
+      required this.frontWidget,
+      required this.innerWidget,
+      this.cellSize = const Size(100.0, 100.0),
+      this.unfoldCell = false,
+      this.skipAnimation = false,
+      this.padding = const EdgeInsets.only(left: 0, right: 0, bottom: 0, top: 0),
+      this.animationDuration = const Duration(milliseconds: 500),
+      this.borderRadius = 0.0,
+      this.onBinding,
+      this.onOpen,
+      this.onClose})
       : assert(frontWidget != null),
         assert(innerWidget != null),
         assert(cellSize != null),
@@ -53,6 +54,7 @@ class FoldingCard extends StatefulWidget {
   // Front widget in folded cell
   final Widget? frontWidget;
 
+  final Function()? onBinding;
 
   /// Inner widget in unfolded cell
   final Widget? innerWidget;
@@ -85,17 +87,17 @@ class FoldingCard extends StatefulWidget {
   FoldingCardState createState() => FoldingCardState();
 }
 
-class FoldingCardState extends State<FoldingCard>
-    with SingleTickerProviderStateMixin {
-  bool _isExpanded = false;
+class FoldingCardState extends State<FoldingCard> with SingleTickerProviderStateMixin {
+  late bool _isExpanded = false;
   late AnimationController _animationController;
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((duration) {
+      widget.onBinding?.call();
+    });
     super.initState();
-
-    _animationController =
-        AnimationController(vsync: this, duration: widget.animationDuration);
+    _animationController = AnimationController(vsync: this, duration: widget.animationDuration);
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         if (widget.onOpen != null) widget.onOpen!();
@@ -135,76 +137,95 @@ class FoldingCardState extends State<FoldingCard>
               height: cellHeight,
               child: Stack(
                 children: <Widget>[
-                  Row(
-                    children: [
-                      Spacer(),
-                      ClipRect(
-                        child: Container(
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(widget.borderRadius),
+                        topRight: Radius.circular(widget.borderRadius)),
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        Container(
                           width: cellWidth,
                           height: cellHeight,
                           child: widget.innerWidget != null
                               ? OverflowBox(
+                            minWidth: cellWidth,
                             maxWidth: cellWidth * 2,
                             alignment: Alignment.centerRight,
                             child: ClipRect(
                               child: Align(
-                                alignment: Alignment.center,
+                                widthFactor: 0.5,
+                                alignment: Alignment.centerRight,
                                 child: widget.innerWidget,
                               ),
                             ),
                           )
-                              : const SizedBox(),
+                              : widget.innerWidget,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Spacer(),
+                      Transform(
+                        alignment: Alignment.centerLeft,
+                        transform: Matrix4.identity()
+                          ..setEntry(3, 2, 0.001)
+                          ..rotateY(angle),
+                        child: Transform(
+                          alignment: Alignment.center,
+                          transform: Matrix4.rotationY(pi),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(widget.borderRadius),
+                                bottomRight: Radius.circular(widget.borderRadius)),
+                            child: Container(
+                              width: cellWidth,
+                              height: cellHeight,
+                              child: widget.innerWidget != null
+                                  ? OverflowBox(
+                                minWidth: cellWidth,
+                                maxWidth: cellWidth * 2,
+                                alignment: Alignment.centerLeft,
+                                child: ClipRect(
+                                  child: Align(
+                                    widthFactor: 0.5,
+                                    alignment: Alignment.centerLeft,
+                                    child: widget.innerWidget,
+                                  ),
+                                ),
+                              )
+                                  : widget.innerWidget,
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.identity()
-                      ..setEntry(3, 2, 0.001)
-                      ..rotateY(angle),
-                    child: Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.rotationY(pi),
-                      child: Opacity(
-                        opacity: angle >= 1.5708 ? 1.0 : angle >= 1.25 ? 0.8 :0.0,
-                        child: ClipRRect(
-                          child: Container(
-                            width: cellWidth * 2,
-                            height: cellHeight,
-                            child: widget.innerWidget != null
-                                ? OverflowBox(
-                              minWidth: cellWidth,
-                              maxWidth: cellWidth * 2,
-                              alignment: Alignment.topCenter,
-                              child: ClipRect(
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: widget.innerWidget,
-                                ),
-                              ),
-                            )
-                                : const SizedBox(),
+                  Row(
+                    children: [
+                      Spacer(),
+                      Transform(
+                        alignment: Alignment.centerLeft,
+                        transform: Matrix4.identity()
+                          ..setEntry(3, 2, 0.001)
+                          ..rotateY(angle),
+                        child: Opacity(
+                          opacity: angle >= 1.5708 ? 0.0 : 1.0,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(widget.borderRadius),
+                                topRight: Radius.circular(widget.borderRadius)),
+                            child: Container(
+                              width: angle >= 1.5708 ? 0.0 : cellWidth,
+                              height: angle >= 1.5708 ? 0.0 : cellHeight,
+                              child: widget.frontWidget,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                  Transform(
-                    alignment: Alignment.topCenter,
-                    transform: Matrix4.identity()
-                      ..setEntry(2, 2, 0.001)
-                      ..rotateY(angle),
-                    child: Opacity(
-                      opacity: angle >= 1.5708 ? 0.0:  angle > 0.8 ? 0.9: 1.0,
-                      child: ClipRRect(
-                        child: SizedBox(
-                          width: angle >= 1.5708 ? 0.0 : cellWidth,
-                          height: angle >= 1.5708 ? 0.0 : cellHeight,
-                          child: widget.frontWidget,
-                        ),
-                      ),
-                    ),
+                    ],
                   ),
                 ],
               ),

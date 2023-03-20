@@ -3,19 +3,17 @@ import 'package:ai_ecard/models/parameters/base_params.dart';
 class GenerateParameter extends BaseParameter {
 
   String prompt;
-  int width;
-  int height;
-  String category;
+  int imageNumber;
+  String size;
 
-  GenerateParameter(this.prompt, this.width, this.height, this.category);
+  GenerateParameter(this.prompt, this.imageNumber, this.size);
 
 
   factory GenerateParameter.fromJson(Map<String, dynamic> json){
     return GenerateParameter(
         json['prompt'],
-        json['width'],
-        json['height'],
-        json['category'],
+        json['n'],
+        json['size'],
     );
   }
 
@@ -24,9 +22,8 @@ class GenerateParameter extends BaseParameter {
   Map<String, dynamic> build() {
     params['prompt'] = prompt;
 
-    params['img_width'] = width;
-    params['img_height'] = height;
-    params['category'] = category;
+    params['n'] = imageNumber;
+    params['size'] = size;
     return super.build();
   }
 }

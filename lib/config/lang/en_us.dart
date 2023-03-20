@@ -13,6 +13,7 @@ class English {
     'generate': 'Generate',
     'crop': 'Crop',
     'save': 'SAVE',
-    'front': 'Front'
+    'front': 'Front',
+    'next': 'NEXT',
   };
 }

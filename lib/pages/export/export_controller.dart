@@ -1,247 +1,258 @@
 import 'dart:typed_data';
+import 'package:ai_ecard/global.dart';
 import 'package:ai_ecard/helper/file_helper.dart';
+import 'package:ai_ecard/models/edit/edit_model.dart';
+import 'package:ai_ecard/models/edit/edit_state.dart';
 import 'package:ai_ecard/models/text_info.dart';
-import 'package:ai_ecard/pages/home/detail/page.dart';
-import 'package:ai_ecard/routers.dart';
-import 'package:ai_ecard/widgets/edit_text_dialog.dart';
-import 'package:extended_image/extended_image.dart';
+import 'package:ai_ecard/pages/edit/edit_controller.dart';
+import 'package:ai_ecard/pages/export/export_page.dart';
+import 'package:ai_ecard/widgets/animation_fold_card.dart';
+import 'package:ai_ecard/widgets/export_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:image_editor/image_editor.dart';
-
-enum EditTextType {
-  none,
-  font,
-  color,
-}
-
-enum TextAlignEnum { left, center, right }
-
-enum PageEnum { front, inside, back }
-
-enum EditIconEnum { none, generateImage, crop, generateText, font, color, align }
 
 class ExportController extends GetxController {
-  RxList<EditObject> stack = <EditObject>[].obs;
+  final foldingCardKey = const GlobalObjectKey<FoldingCardState>('exportFoldingCard');
+  late Rx<EditModel> front;
+  late RxList<EditModel> inside = <EditModel>[].obs;
+  late Rx<EditModel> backside;
 
-  late Rx<Uint8List> image;
+  RxInt sliderIndex = 0.obs;
 
-  late RxList<TextInfo> texts;
+  double frontCardWidth = 1;
+  double frontCardHeight = 1;
 
-  // RxList<Uint8List> stackImage = <Uint8List>[].obs;
-  final GlobalKey<ExtendedImageEditorState> editorKey = GlobalKey<ExtendedImageEditorState>();
-
-  // RxList<TextInfo> text = [TextInfo(text: 'hello', positionLeft: 0, positionTop: 0)].obs;
-
-  RxBool isEdit = false.obs;
-  RxBool isEditText = false.obs;
-  RxBool isMoveText = false.obs;
-  RxBool fontIconSelected = false.obs;
-  RxBool colorIconSelected = false.obs;
-
-  RxInt stackIndex = 0.obs;
-  Rx<EditTextType> editTextType = EditTextType.none.obs;
-
-  List<String> fonts = const [
-    'OpenSans',
-    'Billabong',
-    'GrandHotel',
-    'Oswald',
-    'Quicksand',
-    'BeautifulPeople',
-    'BeautyMountains',
-    'BiteChocolate',
-    'BlackberryJam',
-    'BunchBlossoms',
-    'CinderelaRegular',
-    'Countryside',
-    'Halimun',
-    'LemonJelly',
-    'QuiteMagicalRegular',
-    'Tomatoes',
-    'TropicalAsianDemoRegular',
-    'VeganStyle',
-  ];
-
-  List<Color> colors = const [Colors.red, Colors.blue, Colors.green];
 
   Rx<TextAlignEnum> textAlign = TextAlignEnum.center.obs;
   Rx<PageEnum> pageEnum = PageEnum.front.obs;
-  Rx<EditIconEnum> editIconSelected = EditIconEnum.none.obs;
-  int textSelectedEdit = -1;
+
+  Rx<bool> isAnimationFoldRunning = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    stack.add(Get.arguments as EditObject);
-    image = stack[0].image.obs;
-    texts = stack[0].textInfo.obs;
+    ExportModel firstState = Get.arguments as ExportModel;
+    frontCardWidth = firstState.front.imageWidth;
+    frontCardHeight = firstState.front.imageHeight;
+    front = EditModel(image: firstState.front.image, texts: firstState.front.textInfo).obs;
+    front.refresh();
+    inside.add(EditModel(image: firstState.inside[0].image, texts: firstState.inside[0].textInfo));
+    inside.add(EditModel(image: firstState.inside[1].image, texts: firstState.inside[1].textInfo));
   }
 
   Future<void> showToast(String text) async {
     Fluttertoast.showToast(msg: text, toastLength: Toast.LENGTH_SHORT);
   }
 
-  Future<void> saveImage(Widget image) async {
-    Uint8List data = await FileHelper.createImage(image);
-    await FileHelper.saveFileToGallery('test.png', 'AI-Ecard', data);
-    showToast('Save successfully');
-  }
-
-  Future<void> shareImage(Widget image) async {
-    Uint8List data = await FileHelper.createImage(image);
-    await FileHelper.saveFileToGallery('test.png', 'AI-Ecard', data);
-    await FileHelper.shareFile(files: ['test.png'], text: 'AI-Ecard', subject: 'AI-Ecard');
-    showToast('Share successfully');
-  }
-
-  void onTapImage() {
-    isEdit.value = !isEdit.value;
-    isEditText.value = false;
-  }
-
-  void onTapText(int index) {
-    textSelectedEdit = index;
-    isEdit.value = !isEdit.value;
-    isEditText.value = true;
-    isMoveText.value = true;
-  }
-
-  void onDoubleTapText(int index) async {
-    textSelectedEdit = index;
-    isEdit.value = !isEdit.value;
-    isEditText.value = true;
-    isMoveText.value = false;
-
-    Get.dialog(
-      EditTextDialog(
-        textInfo: texts.value[index],
-        onChanged: (value) {
-          updateText(value);
+  Future<void> saveFile() async {
+    Get.bottomSheet(
+      ExportBottomSheet(
+        title: 'Save',
+        onTapImage: () {
+          saveImage();
+          Get.back();
         },
-        done: (value) {
-          List<TextInfo> textInfo = [...stack[stackIndex.value].textInfo];
-          EditObject editObject = EditObject(stack[stackIndex.value].image, textInfo);
-          stack.add(editObject);
-          stackIndex.value += 1;
-          image.value = stack[stackIndex.value].image;
-          texts.value = stack[stackIndex.value].textInfo;
+        onTapPdf: () {
+          savePDF();
+          Get.back();
         },
       ),
-      barrierDismissible: false,
     );
   }
 
-  void updateEditText(bool value) {
-    isEditText.value = value;
+  Future<void> shareFile() async {
+    Get.bottomSheet(ExportBottomSheet(
+      title: 'Share',
+      onTapImage: () {
+        shareImage();
+        Get.back();
+      },
+      onTapPdf: () {
+        sharePDF();
+        Get.back();
+      },
+    ));
   }
 
-  void updateText(String value) {
-    texts[textSelectedEdit].text = value;
-    texts.refresh();
-  }
+  Future<void> saveImage() async {
+    double width = Get.width - 10.w;
+    double height = width * frontCardHeight / frontCardWidth;
 
-  Future<void> crop() async {
-    if (editorKey.currentState != null) {
-      final Rect? cropRect = editorKey.currentState!.getCropRect();
-      if (cropRect != null) {
-        var data = editorKey.currentState!.rawImageData;
-        ImageEditorOption option = ImageEditorOption();
-        if (editorKey.currentState!.editAction != null) {
-          if (editorKey.currentState!.editAction!.needCrop) {
-            option.addOption(ClipOption.fromRect(cropRect));
-            Uint8List? image = (await ImageEditor.editImage(
-              image: data,
-              imageEditorOption: option,
-            ));
-            if (image != null) {
-              stack.add(EditObject(image, texts));
-              stackIndex.value = stackIndex.value + 1;
-              this.image.value = stack[stackIndex.value].image;
-              onTapImage();
-            }
-          }
-        }
-      }
+    try {
+      showLoading();
+      Uint8List imageFront = await FileHelper.createImage(
+          imagePainter(width: width, height: height, image: front.value.image, textInfo: front.value.texts));
+      Uint8List imageInsideFront = await FileHelper.createImage(
+          imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[0].texts));
+      Uint8List imageInsideBack = await FileHelper.createImage(
+          imagePainter(width: width, height: height, image: inside.value[1].image, textInfo: inside.value[1].texts));
+      // Uint8List imageBackSide = await FileHelper.createImage(imagePainter(
+      //     width: fontCardWidth, height: fontCardHeight, image: backside.value.image, textInfo: front.value.texts));
+
+      String fileName = "ai-ecard-${this.fileName}";
+      String fileNameFront = "${fileName}-1.png";
+      String fileNameInsideFront = "${fileName}-2.png";
+      String fileNameInsideBack = "${fileName}-3.png";
+      // String fileNameBackside = "${fileName}-4.png";
+
+      await FileHelper.saveFileToGallery(fileNameFront, 'AI-Ecard', imageFront);
+      await FileHelper.saveFileToGallery(fileNameInsideFront, 'AI-Ecard', imageInsideFront);
+      await FileHelper.saveFileToGallery(fileNameInsideBack, 'AI-Ecard', imageInsideBack);
+      // await FileHelper.saveFileToGallery(fileNameBackside, 'AI-Ecard', imageBackSide);
+
+      disableLoading();
+      showMessage('Save successfully', type: 'SUCCESS');
+    } catch (e) {
+      disableLoading();
+      showMessage('Save file failed', type: 'ERROR');
     }
   }
 
-  void updatePosition(double y, double x) {
-    texts.value[textSelectedEdit].positionTop = y;
-    texts.value[textSelectedEdit].positionLeft = x;
-    texts.refresh();
-  }
+  Future<void> savePDF() async {
+    double width = Get.width - 10.w;
+    double height = width * frontCardHeight / frontCardWidth;
 
-  void undo() {
-    if (stackIndex.value > 0) {
-      stackIndex.value = stackIndex.value - 1;
-      image.value = stack[stackIndex.value].image;
+    try {
+      showLoading();
+      Uint8List data = await FileHelper.createPDF([
+        imagePainter(width: width, height: height, image: front.value.image, textInfo: front.value.texts),
+        imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[0].texts),
+        imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[1].texts),
+        // imagePainter(
+        //     width: fontCardWidth, height: fontCardHeight, image: backside.value.image, textInfo: backside.value.texts),
+      ]);
+
+      String fileName = "ai-ecard-${this.fileName}.pdf";
+      await FileHelper.saveFileToStorage(fileName, data);
+      disableLoading();
+      showMessage('Save successfully', type: 'SUCCESS');
+    } catch (e) {
+      disableLoading();
+      showMessage('Save file failed', type: 'ERROR');
     }
   }
 
-  void redo() {
-    if (stackIndex.value <= stack.length - 1) {
-      stackIndex.value = stackIndex.value + 1;
-      image.value = stack[stackIndex.value].image;
+  Future<void> shareImage() async {
+    double width = Get.width - 10.w;
+    double height = width * frontCardHeight / frontCardWidth;
+
+    try {
+      showLoading();
+      Uint8List imageFront = await FileHelper.createImage(
+          imagePainter(width: width, height: height, image: front.value.image, textInfo: front.value.texts));
+      Uint8List imageInsideFront = await FileHelper.createImage(
+          imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[0].texts));
+      Uint8List imageInsideBack = await FileHelper.createImage(
+          imagePainter(width: width, height: height, image: inside.value[1].image, textInfo: inside.value[1].texts));
+      // Uint8List imageBackSide = await FileHelper.createImage(imagePainter(
+      //     width: fontCardWidth, height: fontCardHeight, image: backside.value.image, textInfo: front.value.texts));
+
+      String fileName = "ai-ecard-${this.fileName}";
+      String fileNameFront = "${fileName}-1.png";
+      String fileNameInsideFront = "${fileName}-2.png";
+      String fileNameInsideBack = "${fileName}-3.png";
+      // String fileNameBackside = "${fileName}-4.png";
+
+      await FileHelper.saveFileToGallery(fileNameFront, 'AI-Ecard', imageFront);
+      await FileHelper.saveFileToGallery(fileNameInsideFront, 'AI-Ecard', imageInsideFront);
+      await FileHelper.saveFileToGallery(fileNameInsideFront, 'AI-Ecard', imageInsideBack);
+      // await FileHelper.saveFileToGallery(fileNameBackside, 'AI-Ecard', imageBackSide);
+
+      await FileHelper.shareFile(
+          files: [fileNameFront, fileNameInsideFront, fileNameInsideBack], text: 'AI-Ecard', subject: 'AI-Ecard');
+
+      disableLoading();
+      showMessage('Save successfully', type: 'SUCCESS');
+    } catch (e) {
+      disableLoading();
+      showMessage('Save file failed', type: 'ERROR');
     }
   }
 
-  void colorSelectedIndex(int index) {
-    texts.value[textSelectedEdit].color = colors[index];
-    texts.refresh();
-  }
+  Future<void> sharePDF() async {
+    double width = Get.width - 10.w;
+    double height = width * frontCardHeight / frontCardWidth;
 
-  void fontSelectedIndex(int index) {
-    texts.value[textSelectedEdit].fontFamily = fonts[index];
-    texts.refresh();
-  }
+    try {
+      showLoading();
+      Uint8List data = await FileHelper.createPDF([
+        imagePainter(width: width, height: height, image: front.value.image, textInfo: front.value.texts),
+        imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[0].texts),
+        imagePainter(width: width, height: height, image: inside.value[1].image, textInfo: inside.value[1].texts),
+        // imagePainter(
+        //     width: fontCardWidth, height: fontCardHeight, image: backside.value.image, textInfo: backside.value.texts),
+      ]);
 
-  void onTapGenerateImage() async {
-    final a = await Get.toNamed(AppRoutes.generateImage);
-    // editIconSelected.value = EditIconEnum.generateImage;
-  }
+      String fileName = "ai-ecard-${this.fileName}.pdf";
+      await FileHelper.saveFileToStorage(fileName, data);
+      await FileHelper.shareFile(files: [fileName], text: 'AI-Ecard', subject: 'AI-Ecard');
 
-  void onTapCropImage() {
-    crop();
-    // editIconSelected.value = EditIconEnum.crop;
-  }
-
-  void onTapGenerateText() async {
-    String result = await Get.toNamed(AppRoutes.generateContent) as String;
-    editIconSelected.value = EditIconEnum.generateText;
-    updateText(result);
-  }
-
-  void onTapChangeFont() {
-    editTextType.value = EditTextType.font;
-    editIconSelected.value = EditIconEnum.font;
-  }
-
-  void onTapChangeColor() {
-    editTextType.value = EditTextType.color;
-    editIconSelected.value = EditIconEnum.color;
-  }
-
-  void onTapChangeAlign() {
-    editIconSelected.value = EditIconEnum.align;
+      disableLoading();
+      showMessage('Save successfully', type: 'SUCCESS');
+    } catch (e) {
+      disableLoading();
+      showMessage('Save file failed', type: 'ERROR');
+    }
   }
 
   void onTapFront() async {
-    pageEnum.value = PageEnum.front;
+    if (pageEnum.value != PageEnum.front) {
+      pageEnum.value = PageEnum.front;
+      isAnimationFoldRunning.value = true;
+      Future.delayed(const Duration(milliseconds: 50)).then((value) {
+        foldingCardKey.currentState?.toggleFold();
+      });
+    }
   }
 
   void onTapInside() async {
-    pageEnum.value = PageEnum.inside;
+    if (pageEnum.value != PageEnum.inside) {
+      sliderIndex.value = 1;
+      pageEnum.value = PageEnum.inside;
+      isAnimationFoldRunning.value = true;
+      Future.delayed(const Duration(milliseconds: 50)).then((value) {
+        foldingCardKey.currentState?.toggleFold();
+      });
+    }
   }
 
   void onTapBack() async {
     pageEnum.value = PageEnum.back;
   }
 
-  void changeFontSize(double fontSize) {
-    texts.value[textSelectedEdit] = texts.value[textSelectedEdit].copyWith(fontSize: fontSize);
-    texts.refresh();
-  }
+  RxList<TextInfo> get texts => (pageEnum.value == PageEnum.front)
+      ? front.value.texts.obs
+      : (pageEnum.value == PageEnum.inside)
+          ? inside.value[sliderIndex.value].texts.obs
+          : backside.value.texts.obs;
+
+  Rx<Uint8List> get image => (pageEnum.value == PageEnum.front)
+      ? front.value.image.obs
+      : (pageEnum.value == PageEnum.inside)
+          ? inside.value[sliderIndex.value].image.obs
+          : backside.value.image.obs;
+
+  Rx<bool> get undoEnabled => (pageEnum.value == PageEnum.front)
+      ? front.value.undoEnabled.obs
+      : (pageEnum.value == PageEnum.inside)
+          ? inside.value[sliderIndex.value].undoEnabled.obs
+          : backside.value.undoEnabled.obs;
+
+  Rx<bool> get redoEnabled => (pageEnum.value == PageEnum.front)
+      ? front.value.redoEnabled.obs
+      : (pageEnum.value == PageEnum.inside)
+          ? inside.value[sliderIndex.value].redoEnabled.obs
+          : backside.value.redoEnabled.obs;
+
+  String get fileName => DateTime.now().millisecondsSinceEpoch.toString();
+
+}
+
+class ExportModel{
+  EditState front;
+  List<EditState> inside;
+  ExportModel(this.front, this.inside);
 }

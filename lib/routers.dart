@@ -1,5 +1,5 @@
-import 'package:ai_ecard/pages/chat/chat_controller.dart';
-import 'package:ai_ecard/pages/chat/chat_page.dart';
+import 'package:ai_ecard/pages/edit/edit_controller.dart';
+import 'package:ai_ecard/pages/edit/edit_page.dart';
 import 'package:ai_ecard/pages/export/export_controller.dart';
 import 'package:ai_ecard/pages/export/export_page.dart';
 import 'package:ai_ecard/pages/generate_content/generate_content_controller.dart';
@@ -14,20 +14,15 @@ import 'package:ai_ecard/pages/image_editor/page.dart';
 import 'package:ai_ecard/pages/image_views/page.dart';
 import 'package:ai_ecard/pages/login/login_controller.dart';
 import 'package:ai_ecard/pages/login/login_page.dart';
-import 'package:ai_ecard/pages/start/page.dart';
 import 'package:ai_ecard/pages/purchase/purchase_controller.dart';
 import 'package:ai_ecard/pages/purchase/purchase_page.dart';
 import 'package:ai_ecard/pages/start/start_controller.dart';
 import 'package:ai_ecard/pages/start/start_page.dart';
-import 'package:ai_ecard/pages/test/test.dart';
 import 'package:ai_ecard/service/chat/chat_service.dart';
 import 'package:ai_ecard/splash_screen.dart';
 import 'package:get/get.dart';
 
-import 'pages/generate/controller.dart';
-import 'pages/generate/page.dart';
 import 'pages/home/detail/controller.dart';
-import 'service/generate/generate_service.dart';
 import 'widgets/scaffold_default.dart';
 
 class AppRoutes{
@@ -45,34 +40,28 @@ class AppRoutes{
   static String edit = '/edit';
   static String generateImage = '/generate_image';
   static String generateContent = '/generate_content';
+  static String export = '/export';
   static List<GetPage> createRoutes = [
     GetPage(
-      name: initRouter,
-      binding: BindingsBuilder(() {}),
-      page: () => const SplashScreen(),
+        name: initRouter,
+        binding: BindingsBuilder(() {
+        }),
+        page: () => const SplashScreen()
     ),
     GetPage(
-      name: login,
-      binding: BindingsBuilder(() {
-        Get.lazyPut(() => LoginController());
-      }),
-      page: () => const LoginPage(),
+        name: login,
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => LoginController());
+        }),
+        page: () => const LoginPage(),
     ),
     GetPage(
-      name: home,
-      binding: BindingsBuilder(() {
-        Get.lazyPut(() => HomeController());
-      }),
-      page: () => const HomePage(),
+        name: home,
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => HomeController());
+        }),
+        page: () => const HomePage()
     ),
-    // GetPage(
-    //     name: chat,
-    //     binding: BindingsBuilder(() {
-    //       Get.lazyPut(()=>ChatService());
-    //       Get.lazyPut(() => ChatController(Get.find()));
-    //     }),
-    //     page: () => const ChatPage()
-    // ),
     GetPage(
         name: imageEditor,
         binding: BindingsBuilder(() {
@@ -80,14 +69,6 @@ class AppRoutes{
         }),
         page: () =>  const ImageEditorPage()
     ),
-    // GetPage(
-    //     name: generateImage,
-    //     binding: BindingsBuilder(() {
-    //       Get.lazyPut(()=>GenerateService());
-    //       Get.lazyPut(()=>GenerateController(Get.find()));
-    //     }),
-    //     page: () =>  const GenerateEdit()
-    // ),
     GetPage(
       name: start,
       binding: BindingsBuilder(() {
@@ -117,46 +98,53 @@ class AppRoutes{
     GetPage(
       name: edit,
       binding: BindingsBuilder(() {
+        Get.lazyPut(() => EditController());
+      }),
+      page: () => const EditPage()
+    ),
+    GetPage(
+      name: imageViews,
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => EditController());
+      }),
+      page: () => const ImageViewsPage()
+    ),
+    GetPage(
+      name: generateImage,
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => GenerateImageController());
+      }),
+      page: () => const GenerateImagePage()
+    ),
+    GetPage(
+      name: generateContent,
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => ChatService());
+        Get.lazyPut(() => GenerateContentController(Get.find()));
+      }),
+      page: () => const GenerateContentPage()
+    ),
+    GetPage(
+      name: generateImage,
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => GenerateImageController());
+      }),
+      page: () => const GenerateImagePage()
+    ),
+    GetPage(
+      name: generateContent,
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => ChatService());
+        Get.lazyPut(() => GenerateContentController(Get.find()));
+      }),
+      page: () => const GenerateContentPage()
+    ),
+    GetPage(
+      name: export,
+      binding: BindingsBuilder(() {
         Get.lazyPut(() => ExportController());
       }),
-      page: () => const ExportPage(),
+      page: () => const ExportPage()
     ),
-    GetPage(
-        name: imageViews,
-        binding: BindingsBuilder(() {
-          Get.lazyPut(() => ExportController());
-        }),
-        page: () => const ImageViewsPage()
-    ),
-    GetPage(
-        name: generateImage,
-        binding: BindingsBuilder(() {
-          Get.lazyPut(() => GenerateImageController());
-        }),
-        page: () => const GenerateImagePage()
-    ),
-    GetPage(
-        name: generateContent,
-        binding: BindingsBuilder(() {
-          Get.lazyPut(() => ChatService());
-          Get.lazyPut(() => GenerateContentController(Get.find()));
-        }),
-        page: () => const GenerateContentPage()
-    ),
-    GetPage(
-        name: generateImage,
-        binding: BindingsBuilder(() {
-          Get.lazyPut(() => GenerateImageController());
-        }),
-        page: () => const GenerateImagePage()
-    ),
-    GetPage(
-        name: generateContent,
-        binding: BindingsBuilder(() {
-          Get.lazyPut(() => ChatService());
-          Get.lazyPut(() => GenerateContentController(Get.find()));
-        }),
-        page: () => const GenerateContentPage()
-    )
   ];
 }
