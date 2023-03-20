@@ -1,6 +1,7 @@
 import 'package:ai_ecard/models/text_info.dart';
 import 'package:ai_ecard/pages/image_editor/page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DraggableText extends StatefulWidget {
   TextInfo textInfo;
@@ -35,7 +36,7 @@ class _ABCState extends State<DraggableText> {
         child: Draggable(
           feedback: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.blue)
+              border: Border.all(color: Colors.blue, width: 2.w)
             ),
               child: ImageText(textInfo: widget.textInfo),
           ),
@@ -44,13 +45,13 @@ class _ABCState extends State<DraggableText> {
             final renderBox = context.findRenderObject() as RenderBox;
             Offset off = renderBox.globalToLocal(drag.offset);
             setState(() {
-              widget.textInfo.positionLeft = (widget.textInfo.positionLeft ?? 0) + off.dx;
-              widget.textInfo.positionTop = (widget.textInfo.positionTop ?? 0) + off.dy;
+              widget.textInfo.positionLeft = (widget.textInfo.positionLeft) + off.dx;
+              widget.textInfo.positionTop = (widget.textInfo.positionTop) + off.dy;
             });
           },
           child: Container(
             decoration: BoxDecoration(
-                border: Border.all(color: Colors.blue)
+                border: Border.all(color: Colors.blue, width: 2.w)
             ),
             child: ImageText(textInfo: widget.textInfo),
           ),

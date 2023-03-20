@@ -89,19 +89,39 @@ class ExportController extends GetxController {
           imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[0].texts));
       Uint8List imageInsideBack = await FileHelper.createImage(
           imagePainter(width: width, height: height, image: inside.value[1].image, textInfo: inside.value[1].texts));
-      // Uint8List imageBackSide = await FileHelper.createImage(imagePainter(
-      //     width: fontCardWidth, height: fontCardHeight, image: backside.value.image, textInfo: front.value.texts));
+      Uint8List imageBackSide = await FileHelper.createImage(imagePainter(
+          width: width, height: height, image: front.value.image, textInfo: front.value.texts));
 
-      String fileName = "ai-ecard-${this.fileName}";
+      // Widget widgetImage =  SingleChildScrollView(
+      //   child: RepaintBoundary(
+      //     key: GlobalObjectKey('paint'),
+      //     child: Container(
+      //       width: width * 4,
+      //       height: height,
+      //       color: Colors.blue
+      //       // child: ListView(
+      //       //   scrollDirection: Axis.horizontal,
+      //       //   children: [
+      //       //     imagePainter(width: width, height: height, image: front.value.image, textInfo: front.value.texts),
+      //       //     imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[0].texts),
+      //       //     imagePainter(width: width, height: height, image: inside.value[1].image, textInfo: inside.value[1].texts),
+      //       //     imagePainter(width: width, height: height, image: front.value.image, textInfo: front.value.texts)
+      //       //   ],
+      //       // ),
+      //     ),
+      //   ),
+      // );
+
+      String fileName = "ai-ecard-${this.fileName}.jpg";
       String fileNameFront = "${fileName}-1.png";
       String fileNameInsideFront = "${fileName}-2.png";
       String fileNameInsideBack = "${fileName}-3.png";
-      // String fileNameBackside = "${fileName}-4.png";
+      String fileNameBackside = "${fileName}-4.png";
 
       await FileHelper.saveFileToGallery(fileNameFront, 'AI-Ecard', imageFront);
       await FileHelper.saveFileToGallery(fileNameInsideFront, 'AI-Ecard', imageInsideFront);
       await FileHelper.saveFileToGallery(fileNameInsideBack, 'AI-Ecard', imageInsideBack);
-      // await FileHelper.saveFileToGallery(fileNameBackside, 'AI-Ecard', imageBackSide);
+      await FileHelper.saveFileToGallery(fileNameBackside, 'AI-Ecard', imageBackSide);
 
       disableLoading();
       showMessage('Save successfully', type: 'SUCCESS');
@@ -121,8 +141,7 @@ class ExportController extends GetxController {
         imagePainter(width: width, height: height, image: front.value.image, textInfo: front.value.texts),
         imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[0].texts),
         imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[1].texts),
-        // imagePainter(
-        //     width: fontCardWidth, height: fontCardHeight, image: backside.value.image, textInfo: backside.value.texts),
+        imagePainter(width: width, height: height, image: front.value.image, textInfo: []),
       ]);
 
       String fileName = "ai-ecard-${this.fileName}.pdf";
@@ -147,22 +166,22 @@ class ExportController extends GetxController {
           imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[0].texts));
       Uint8List imageInsideBack = await FileHelper.createImage(
           imagePainter(width: width, height: height, image: inside.value[1].image, textInfo: inside.value[1].texts));
-      // Uint8List imageBackSide = await FileHelper.createImage(imagePainter(
-      //     width: fontCardWidth, height: fontCardHeight, image: backside.value.image, textInfo: front.value.texts));
+      Uint8List imageBackSide = await FileHelper.createImage(imagePainter(
+          width: width, height: height, image: front.value.image, textInfo: []));
 
       String fileName = "ai-ecard-${this.fileName}";
       String fileNameFront = "${fileName}-1.png";
       String fileNameInsideFront = "${fileName}-2.png";
       String fileNameInsideBack = "${fileName}-3.png";
-      // String fileNameBackside = "${fileName}-4.png";
+      String fileNameBackside = "${fileName}-4.png";
 
       await FileHelper.saveFileToGallery(fileNameFront, 'AI-Ecard', imageFront);
       await FileHelper.saveFileToGallery(fileNameInsideFront, 'AI-Ecard', imageInsideFront);
       await FileHelper.saveFileToGallery(fileNameInsideFront, 'AI-Ecard', imageInsideBack);
-      // await FileHelper.saveFileToGallery(fileNameBackside, 'AI-Ecard', imageBackSide);
+      await FileHelper.saveFileToGallery(fileNameBackside, 'AI-Ecard', imageBackSide);
 
       await FileHelper.shareFile(
-          files: [fileNameFront, fileNameInsideFront, fileNameInsideBack], text: 'AI-Ecard', subject: 'AI-Ecard');
+          files: [fileNameFront, fileNameInsideFront, fileNameInsideBack, fileNameBackside], text: 'AI-Ecard', subject: 'AI-Ecard');
 
       disableLoading();
       showMessage('Save successfully', type: 'SUCCESS');
@@ -182,8 +201,7 @@ class ExportController extends GetxController {
         imagePainter(width: width, height: height, image: front.value.image, textInfo: front.value.texts),
         imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[0].texts),
         imagePainter(width: width, height: height, image: inside.value[1].image, textInfo: inside.value[1].texts),
-        // imagePainter(
-        //     width: fontCardWidth, height: fontCardHeight, image: backside.value.image, textInfo: backside.value.texts),
+        imagePainter(width: width, height: height, image: front.value.image, textInfo: []),
       ]);
 
       String fileName = "ai-ecard-${this.fileName}.pdf";

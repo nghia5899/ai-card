@@ -14,18 +14,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_editor/image_editor.dart';
 
-enum EditTextType {
-  none,
-  font,
-  color,
-  align
-}
+enum EditTextType { none, font, color, align, size }
 
 enum TextAlignEnum { left, center, right }
 
 enum PageEnum { front, inside, back }
 
-enum EditIconEnum { none, generateImage, crop, generateText, font, color, align }
+enum EditIconEnum { none, generateImage, crop, generateText, font, color, align, size }
 
 class EditController extends GetxController {
   final GlobalKey<ExtendedImageEditorState> editorKey = const GlobalObjectKey<ExtendedImageEditorState>('edit');
@@ -68,7 +63,19 @@ class EditController extends GetxController {
     'VeganStyle',
   ];
 
-  List<Color> colors = const [Colors.red, Colors.blue, Colors.green];
+  List<Color> colors = const [
+    Color(0xFFE85F59),
+    Color(0xFFEFA543),
+    Color(0xFFF5C3CB),
+    Color(0xFFF7DC8B),
+    Color(0xFF73CF9A),
+    Color(0xFF9FCBF6),
+    Color(0xFF3571E3),
+    Color(0xFF8080EA),
+    Color(0xFF1F262C),
+    Color(0xFFBDC8D2),
+    Color(0xFFFFFFFF)
+  ];
 
   Rx<TextAlignEnum> textAlign = TextAlignEnum.center.obs;
   Rx<PageEnum> pageEnum = PageEnum.front.obs;
@@ -105,6 +112,7 @@ class EditController extends GetxController {
 
   void onTapText(int index) {
     isEdit.value = true;
+    onTapChangeFont();
     textSelectedEdit.value = index;
     isEditText.value = true;
     isMoveText.value = true;
@@ -336,7 +344,7 @@ class EditController extends GetxController {
   }
 
   void onTapGenerateImage() async {
-    Get.toNamed(AppRoutes.generateImage, arguments: '1024x${(1024 * frontCardHeight / frontCardWidth).ceil()}');
+    Get.toNamed(AppRoutes.generateImage);
   }
 
   void onTapCropImage() {
@@ -346,7 +354,7 @@ class EditController extends GetxController {
   void onTapGenerateText() async {
     editIconSelected.value = EditIconEnum.generateText;
     String? result = await Get.toNamed(AppRoutes.generateContent) as String?;
-    if(result != null && result.isNotEmpty) {
+    if (result != null && result.isNotEmpty) {
       updateText(result);
     }
   }
@@ -364,6 +372,11 @@ class EditController extends GetxController {
   void onTapChangeAlign() {
     editIconSelected.value = EditIconEnum.align;
     editTextType.value = EditTextType.align;
+  }
+
+  void onTapChangeSize() {
+    editIconSelected.value = EditIconEnum.size;
+    editTextType.value = EditTextType.size;
   }
 
   void onTapFront() async {
@@ -505,7 +518,7 @@ class EditController extends GetxController {
     switch (pageEnum.value) {
       case PageEnum.front:
         {
-          if(front.value.isNewState()) {
+          if (front.value.isNewState()) {
             front.value.resetState();
             front.refresh();
           }
@@ -513,7 +526,7 @@ class EditController extends GetxController {
         }
       case PageEnum.inside:
         {
-          if(inside.value[sliderIndex.value].isNewState()) {
+          if (inside.value[sliderIndex.value].isNewState()) {
             inside.value[sliderIndex.value].resetState();
             inside.refresh();
           }
@@ -521,7 +534,7 @@ class EditController extends GetxController {
         }
       case PageEnum.back:
         {
-          if(backside.value.isNewState()) {
+          if (backside.value.isNewState()) {
             backside.value.resetState();
             backside.refresh();
           }

@@ -40,7 +40,7 @@ class GenerateContentController extends GetxController{
   }
 
   void updateContent(String? value){
-    if((value?.trimLeft().trimRight().split('').length ?? 0) <= 8) {
+    if((value?.trimLeft().trimRight().split(' ').length ?? 0) <= 8) {
       generateContent.value = value ?? '';
       keywordSuggest.value = greetings.where((e) => e.toLowerCase().contains(generateContent.value.toLowerCase())).toList();
     } else {

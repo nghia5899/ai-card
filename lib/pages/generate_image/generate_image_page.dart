@@ -62,21 +62,19 @@ class GenerateImagePage extends GetView<GenerateImageController> {
                           new Radius.circular(8.w),
                         ),
                         borderSide: BorderSide(color: Colors.white24)),
-                    // suffixIcon: GestureDetector(
-                    //   onTap: () {
-                    //     controller.clearText();
-                    //   },
-                    //   child: Row(
-                    //     children: [
-                    //       Spacer(),SvgPicture.asset(
-                    //       'assets/icons/ic_clear.svg',
-                    //       width: 24.w,
-                    //       height: 24.w,
-                    //     )],
-                    //   ),
-                    // ),
                     fillColor: Colors.white,
                     filled: true),
+              ),
+              SizedBox(height: 2.w),
+              Row(
+                children: [
+                  const Spacer(),
+                  Obx(() => Text(
+                    '${controller.words}/8 words',
+                    style:
+                    TextStyle(color: const Color(0xFF64748B), fontSize: 10.w, fontWeight: FontWeight.w500),
+                  ))
+                ],
               ),
               SizedBox(height: 22.w),
               Text(
