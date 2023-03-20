@@ -48,10 +48,13 @@ class _SliderPageViewState extends State<SliderPageView> {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           CarouselSlider.builder(
             itemCount: _children.length,
+            disableGesture: true,
+            carouselController: CarouselController(),
             options: CarouselOptions(
                 autoPlay: widget.autoPlay,
                 viewportFraction: widget.viewportFraction ?? 0.8,
                 initialPage: _currentPos,
+                pauseAutoPlayInFiniteScroll: true,
                 onPageChanged: (index, reason) {
                   setState(() {
                     _currentPos = index;
