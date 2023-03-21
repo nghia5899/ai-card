@@ -6,6 +6,7 @@ import 'package:ai_ecard/models/text_info.dart';
 import 'package:ai_ecard/pages/export/export_controller.dart';
 import 'package:ai_ecard/pages/home/detail/page.dart';
 import 'package:ai_ecard/routers.dart';
+import 'package:ai_ecard/styles/app_style.dart';
 import 'package:ai_ecard/widgets/animation_fold_card.dart';
 import 'package:ai_ecard/widgets/edit_image.dart';
 import 'package:ai_ecard/widgets/edit_text_dialog.dart';
@@ -464,7 +465,7 @@ class EditController extends GetxController {
     inside.add(EditModel(image: imageValue, texts: []));
 
     List<TextInfo> clone = [];
-    TextInfo textInfo = TextInfo(text: 'Tap text to generate text', fontSize: 20, positionLeft: 63.w, positionTop: 216.w);
+    TextInfo textInfo = TextInfo(text: 'Tap text to generate text', fontSize: AppStyles.mediumSize, positionLeft: 90.w, positionTop: 222.w);
     clone.add(textInfo);
     inside.add(EditModel(image: Uint8List.fromList([...imageValue.toList()]), texts: clone));
   }
