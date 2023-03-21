@@ -6,10 +6,12 @@ import 'package:ai_ecard/models/text_info.dart';
 import 'package:ai_ecard/pages/export/export_controller.dart';
 import 'package:ai_ecard/routers.dart';
 import 'package:ai_ecard/widgets/animation_fold_card.dart';
+import 'package:ai_ecard/widgets/edit_image.dart';
 import 'package:ai_ecard/widgets/edit_text_dialog.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_editor/image_editor.dart';
@@ -23,7 +25,6 @@ enum PageEnum { front, inside, back }
 enum EditIconEnum { none, generateImage, crop, generateText, font, color, align, size }
 
 class EditController extends GetxController {
-  final GlobalKey<ExtendedImageEditorState> editorKey = const GlobalObjectKey<ExtendedImageEditorState>('edit');
   final foldingCardKey = const GlobalObjectKey<FoldingCardState>('editFolding');
   late Rx<EditModel> front;
   late RxList<EditModel> inside = <EditModel>[].obs;
@@ -176,29 +177,6 @@ class EditController extends GetxController {
     inside.refresh();
   }
 
-  Future<void> crop() async {
-    if (editorKey.currentState != null) {
-      final Rect? cropRect = editorKey.currentState!.getCropRect();
-      if (cropRect != null) {
-        var data = editorKey.currentState!.rawImageData;
-        ImageEditorOption option = ImageEditorOption();
-        if (editorKey.currentState!.editAction != null) {
-          if (editorKey.currentState!.editAction!.needCrop) {
-            option.addOption(ClipOption.fromRect(cropRect));
-            Uint8List? image = (await ImageEditor.editImage(
-              image: data,
-              imageEditorOption: option,
-            ));
-            if (image != null) {
-              updateImage(image);
-              onTapImage();
-            }
-          }
-        }
-      }
-    }
-  }
-
   void updatePosition(double y, double x) {
     switch (pageEnum.value) {
       case PageEnum.front:
@@ -348,7 +326,15 @@ class EditController extends GetxController {
   }
 
   void onTapCropImage() {
-    crop();
+    // crop();
+    Get.dialog(
+        EditImage(
+          image: inside.value[sliderIndex.value].image,
+          cropAspectRatio: frontCardWidth / frontCardHeight,
+          onCrop: (image) {
+            updateImage(image);
+          }),
+    );
   }
 
   void onTapGenerateText() async {
@@ -459,11 +445,13 @@ class EditController extends GetxController {
     List<TextInfo> clone1 = [];
     clone1.add(front.value.texts[0].copyWith());
     clone1[0].text = 'Tap image to generate image';
+    clone1[0].positionLeft = 67.w;
     inside.add(EditModel(image: imageValue, texts: clone1));
 
     List<TextInfo> clone2 = [];
     clone2.add(front.value.texts[1].copyWith());
     clone2[0].text = 'Tap text to generate text';
+    clone2[0].positionLeft = 67.w;
     inside.add(EditModel(image: Uint8List.fromList([...imageValue.toList()]), texts: clone2));
   }
 
@@ -513,6 +501,10 @@ class EditController extends GetxController {
       : (pageEnum.value == PageEnum.inside)
           ? inside.value[sliderIndex.value].redoEnabled.obs
           : backside.value.redoEnabled.obs;
+
+  bool isEditImage(int index){
+    return isEdit.value && !isEditText.value && pageEnum.value == PageEnum.inside && sliderIndex.value == index;
+  }
 
   void resetState() {
     switch (pageEnum.value) {

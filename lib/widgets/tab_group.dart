@@ -205,6 +205,7 @@ class TabGroup extends GetView<EditController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    SizedBox(width: 32.w),
                     Obx(() => EditIcon(
                           icon: SvgPicture.asset(
                             'assets/icons/ic_generate.svg',
@@ -226,6 +227,25 @@ class TabGroup extends GetView<EditController> {
                         selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
                       ),
                     ),
+                    SizedBox(width: 32.w),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 24.w),
+                      child: Obx(() => EditIcon(
+                            icon: Icon(Icons.text_fields, size: 24.w, color: const Color(0xFF64748B)),
+                            selectedIcon: SvgPicture.asset(
+                              'assets/icons/ic_dot.svg',
+                              width: 4.w,
+                              height: 4.w,
+                            ),
+                            isSelected: controller.pageEnum.value == PageEnum.back,
+                            title: 'Text',
+                            onTap: () {
+                              controller.onTapText(max(controller.textSelectedEdit.value, 0));
+                            },
+                            selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
+                          )),
+                    )
                   ],
                 ),
               ],
@@ -300,24 +320,24 @@ class TabGroup extends GetView<EditController> {
                   //     )),
                 ],
               ),
-              Container(
-                alignment: Alignment.centerRight,
-                padding: EdgeInsets.only(right: 24.w),
-                child: Obx(() => EditIcon(
-                      icon: Icon(Icons.text_fields, size: 24.w, color: const Color(0xFF64748B)),
-                      selectedIcon: SvgPicture.asset(
-                        'assets/icons/ic_dot.svg',
-                        width: 4.w,
-                        height: 4.w,
-                      ),
-                      isSelected: controller.pageEnum.value == PageEnum.back,
-                      title: 'Text',
-                      onTap: () {
-                        controller.onTapText(max(controller.textSelectedEdit.value, 0));
-                      },
-                      selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
-                    )),
-              )
+              // Container(
+              //   alignment: Alignment.centerRight,
+              //   padding: EdgeInsets.only(right: 24.w),
+              //   child: Obx(() => EditIcon(
+              //         icon: Icon(Icons.text_fields, size: 24.w, color: const Color(0xFF64748B)),
+              //         selectedIcon: SvgPicture.asset(
+              //           'assets/icons/ic_dot.svg',
+              //           width: 4.w,
+              //           height: 4.w,
+              //         ),
+              //         isSelected: controller.pageEnum.value == PageEnum.back,
+              //         title: 'Text',
+              //         onTap: () {
+              //           controller.onTapText(max(controller.textSelectedEdit.value, 0));
+              //         },
+              //         selectTitleStyle: AppStyles.subTexTitle.copyWith(color: const Color(0xFF1B514A)),
+              //       )),
+              // )
             ],
           ),
         ),

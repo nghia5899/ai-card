@@ -5,7 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DraggableText extends StatefulWidget {
   TextInfo textInfo;
-  DraggableText({Key? key, required this.textInfo}) : super(key: key);
+  Function()? onDoubleTap;
+  DraggableText({Key? key, required this.textInfo, this.onDoubleTap}) : super(key: key);
 
   @override
   State<DraggableText> createState() => _ABCState();
@@ -34,11 +35,14 @@ class _ABCState extends State<DraggableText> {
 
         },
         child: Draggable(
-          feedback: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.blue, width: 2.w)
+          feedback: GestureDetector(
+            onDoubleTap: widget.onDoubleTap,
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.blue, width: 2.w)
+              ),
+                child: ImageText(textInfo: widget.textInfo),
             ),
-              child: ImageText(textInfo: widget.textInfo),
           ),
           childWhenDragging: const SizedBox(),
           onDragEnd: (drag) {
@@ -49,11 +53,14 @@ class _ABCState extends State<DraggableText> {
               widget.textInfo.positionTop = (widget.textInfo.positionTop) + off.dy;
             });
           },
-          child: Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.blue, width: 2.w)
+          child: GestureDetector(
+            onDoubleTap: widget.onDoubleTap,
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.blue, width: 2.w)
+              ),
+              child: ImageText(textInfo: widget.textInfo),
             ),
-            child: ImageText(textInfo: widget.textInfo),
           ),
         ),
       ),
