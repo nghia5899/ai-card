@@ -12,7 +12,7 @@ class CategoryService{
       'image': 'assets/images/img_birthday.png',
       'category': 'birthday',
       'color': const Color.fromRGBO(158, 51, 51, 0.5),
-      'greetings': 'Happy birthday, HPBD, Have a great birthday party and lots of champagne!, Wishing you an amazing birthday, Congratulations on your birthday!, Have a perfect birthday, filled with love and cheer!, Have the most happy and unforgettable birthday!'
+      'greetings': 'Happy birthday, HPBD, Birthday flower, Today birthday, Cocomelon cake, Birthday decor, Birthday balloons, birthday ideas, birthday queen, 	birthday candles'
     },{
       'title': 'Wedding',
       'category': 'wedding',

@@ -43,7 +43,7 @@ class GenerateContentController extends GetxController{
   }
 
   void updateContent(String? value){
-    if((value?.trimLeft().trimRight().split(' ').length ?? 0) <= 15) {
+    if((value?.trimLeft().trimRight().split(' ').length ?? 0) <= 3) {
       generateContent.value = value ?? '';
     } else {
       textController.text = generateContent.value;
@@ -62,12 +62,12 @@ class GenerateContentController extends GetxController{
 
   validation(){
     if(empty(generateContent.value)){
-      message.value = 'Không được để trống';
+      message.value = 'Không được để trống'.tr;
       update();
       return false;
     }
     if(generateContent.value.length < 3){
-      message.value = 'Bạn phải nhập ít nhất 3 ký tự để tìm kiếm';
+      message.value = 'Bạn phải nhập ít nhất 3 ký tự để tìm kiếm'.tr;
       update();
       return false;
     }
@@ -90,7 +90,7 @@ class GenerateContentController extends GetxController{
         generateContentResult.add(receive.message.replaceAll('\\n', '\n'));
         generateContentResult.refresh();
       }else{
-        showMessage('Không tìm thấy nội dung gợi ý');
+        showMessage('Không tìm thấy nội dung gợi ý'.tr,type: 'ERROR');
       }
 
       disableLoading();

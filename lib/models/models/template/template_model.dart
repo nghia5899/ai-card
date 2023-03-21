@@ -5,6 +5,8 @@ class TemplateModel {
   String? title;
   String? type;
   String? image;
+  String? imageInside;
+  String? imageBackSide;
   String? category;
   HashColor? color;
   OrientationTemp? orientation;
@@ -18,7 +20,9 @@ class TemplateModel {
       this.code,
       this.color,
       this.orientation,
-      this.premium
+      this.premium,
+      this.imageBackSide,
+      this.imageInside
       });
 
   factory TemplateModel.formJson(Map json) {
@@ -31,6 +35,8 @@ class TemplateModel {
       orientation: json['orientation'],
       code: json['code'],
       premium: json['premium'],
+      imageInside: json['imageInside'],
+      imageBackSide: json['imageBackSide'],
     );
   }
 
@@ -54,6 +60,8 @@ class TemplateModel {
       'type': instance.type,
       'orientation': instance.orientation,
       'premium': instance.premium,
+      'imageInside': instance.imageInside,
+      'imageBackSide': instance.imageBackSide,
     };
   }
 }

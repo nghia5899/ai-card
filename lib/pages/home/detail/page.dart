@@ -13,6 +13,7 @@ import 'package:ai_ecard/styles/app_style.dart';
 import 'package:ai_ecard/widgets/svg_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'filter/filter.dart';
 
 class HomeDetailPage extends StatefulWidget {
@@ -125,109 +126,122 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
               const SizedBox(
                 height: 15,
               ),
-              if (!empty(controller.listSelectAll))
-                Expanded(
-                  child: StaggeredGridView.count(
-                    crossAxisCount: 4,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.all(20).copyWith(top: 0),
-                    staggeredTiles: controller.listSelectAll.map<StaggeredTile>((_) => const StaggeredTile.fit(2)).toList(),
-                    mainAxisSpacing: 15.0,
-                    crossAxisSpacing: 15.0,
-                    children: controller.listSelectAll.map<Widget>((item) {
-                      return GestureDetector(
-                          onTap: () async {
-                            List<TextInfo> clone = [];
-                            for (int i = 0; i < controller.listText.length; i++) {
-                              TextInfo item = controller.listText[i];
-                              clone.add(controller.listText[i].copyWith(textStyle: null, color: item.textStyle?.color, fontSize: item.fontSize, fontFamily: item.textStyle?.fontFamily, fontWeight: item.textStyle?.fontWeight));
-                            }
-                            Get.toNamed(
-                              AppRoutes.edit,
-                              arguments: CardObject(templateModel: item, textInfo: clone),
-                            );
-                          },
-                          child: IntrinsicWidth(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Stack(
-                                  alignment: Alignment.bottomCenter,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: colors[item.color] ??const Color(0xffA2D1EB),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        // crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          if (!empty(item.image)) Image.asset(item.image??'', fit: BoxFit.cover),
+              Builder(
+                  builder: (context) {
+                    if (!empty(controller.listSelectAll)){
+                      if(controller.listSelectAll.isNotEmpty){
+                        return Expanded(
+                          child: StaggeredGridView.count(
+                            crossAxisCount: 4,
+                            physics: const BouncingScrollPhysics(),
+                            padding: const EdgeInsets.all(20).copyWith(top: 0),
+                            staggeredTiles: controller.listSelectAll.map<StaggeredTile>((_) => const StaggeredTile.fit(2)).toList(),
+                            mainAxisSpacing: 15.0,
+                            crossAxisSpacing: 15.0,
+                            children: controller.listSelectAll.map<Widget>((item) {
+                              return GestureDetector(
+                                  onTap: () async {
+                                    List<TextInfo> clone = [];
+                                    for (int i = 0; i < controller.listText.length; i++) {
+                                      TextInfo item = controller.listText[i];
+                                      clone.add(controller.listText[i].copyWith(textStyle: null, color: item.textStyle?.color, fontSize: item.fontSize, fontFamily: item.textStyle?.fontFamily, fontWeight: item.textStyle?.fontWeight));
+                                    }
+                                    Get.toNamed(
+                                      AppRoutes.edit,
+                                      arguments: CardObject(templateModel: item, textInfo: clone),
+                                    );
+                                  },
+                                  child: IntrinsicWidth(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Stack(
+                                          alignment: Alignment.bottomCenter,
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(8),
+                                                color: colors[item.color] ??const Color(0xffA2D1EB),
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  if (!empty(item.image)) Image.asset(item.image??'', fit: BoxFit.cover),
 
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 3,
-                                      left: 3,
-                                      child: InkWell(
-                                        onTap: () async {
-                                          await controller.bookMark(item.code??'', reLoad: true);
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(6),
-                                            color: const Color.fromRGBO(0, 0, 0, 0.6),
-                                          ),
-                                          padding: const EdgeInsets.all(5),
-                                          margin: const EdgeInsets.all(6),
-                                          child: SvgViewer(
-                                            url: 'assets/icons/ic_star.svg',
-                                            color: controller.checkBookMark(item.code??'') ? null : Colors.white,
+                                                ],
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 3,
+                                              left: 3,
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  await controller.bookMark(item.code??'', reLoad: true);
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(6),
+                                                    color: const Color.fromRGBO(0, 0, 0, 0.6),
+                                                  ),
+                                                  padding: const EdgeInsets.all(5),
+                                                  margin: const EdgeInsets.all(6),
+                                                  child: SvgViewer(
+                                                    url: 'assets/icons/ic_star.svg',
+                                                    color: controller.checkBookMark(item.code??'') ? null : Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              bottom: 30,
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: controller.listText
+                                                    .map<Widget>(
+                                                      (e) => ImageText(textInfo: e).paddingOnly(top: 10),
+                                                )
+                                                    .toList(),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 12),
+                                          child: Text(
+                                            '${item.title}',
+                                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                                           ),
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                    Positioned(
-                                      bottom: 30,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: controller.listText
-                                            .map<Widget>(
-                                              (e) => ImageText(textInfo: e).paddingOnly(top: 10),
-                                            )
-                                            .toList(),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
-                                  child: Text(
-                                    '${item.title}',
-                                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ));
-                    }).toList(), // add some space
-                  ),
-                )
-              else
-                 Expanded(
-                    child: Center(child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.not_interested, size: 30,color: AppColors.descriptionIconColor,),
-                        const SizedBox(height: 10,),
-                        Text('No data !!!',style: AppStyles.descriptionIconText),
-                      ],
-                    ),))
+                                  ));
+                            }).toList(), // add some space
+                          ),
+                        );
+                      }
+                      return Expanded(
+                          child: Center(child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.not_interested, size: 30,color: AppColors.descriptionIconColor,),
+                              const SizedBox(height: 10,),
+                              Text('No data !!!',style: AppStyles.descriptionIconText),
+                            ],
+                          ),));
+                    }
+                    return Expanded(
+                        child: LoadingAnimationWidget.threeRotatingDots(
+                            color:const Color(0xff94A3B8),
+                            size: 35
+                        )
+                    );
+
+                  },
+              ),
             ],
           ),
         );

@@ -12,6 +12,8 @@ class TemplateService {
       "category": "birthday",
       "orientation": OrientationTemp.vertical,
       "color": HashColor.c3,
+      "imageInside": 'assets/images/template/inside/img_t0.png',
+      "imageBackSide": 'assets/images/template/back_side/img_b1.png',
     },{
       "code": "1",
       "title": "Monogram Terracota",
