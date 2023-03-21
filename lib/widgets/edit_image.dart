@@ -13,20 +13,14 @@ class EditImage extends StatefulWidget {
   double cropAspectRatio;
   Function(Uint8List) onCrop;
 
-  EditImage(
-      {Key? key,
-      required this.image,
-      required this.cropAspectRatio,
-      required this.onCrop})
-      : super(key: key);
+  EditImage({Key? key, required this.image, required this.cropAspectRatio, required this.onCrop}) : super(key: key);
 
   @override
   State<EditImage> createState() => _EditImageState();
 }
 
 class _EditImageState extends State<EditImage> {
-  final GlobalKey<ExtendedImageEditorState> editorKey =
-      GlobalKey<ExtendedImageEditorState>();
+  final GlobalKey<ExtendedImageEditorState> editorKey = GlobalKey<ExtendedImageEditorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -65,22 +59,25 @@ class _EditImageState extends State<EditImage> {
                     onTap: () {
                       Get.back();
                     },
-                    child: SvgPicture.asset(AppIcons.iconClose,
-                        width: 32.w, height: 32.w, color: Colors.white),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.black87,
+                          border: Border.all(color: Colors.white, width: 2.w),
+                          borderRadius: BorderRadius.all(Radius.circular(32.w))),
+                      child: SvgPicture.asset(AppIcons.iconClose, width: 32.w, height: 32.w, color: Colors.white),
+                    ),
                   ),
                   const Spacer(),
                   GestureDetector(
                     onTap: () async {
                       try {
                         if (editorKey.currentState != null) {
-                          final Rect? cropRect =
-                              editorKey.currentState!.getCropRect();
+                          final Rect? cropRect = editorKey.currentState!.getCropRect();
                           if (cropRect != null) {
                             var data = editorKey.currentState!.rawImageData;
                             ImageEditorOption option = ImageEditorOption();
                             if (editorKey.currentState!.editAction != null) {
-                              if (editorKey
-                                  .currentState!.editAction!.needCrop) {
+                              if (editorKey.currentState!.editAction!.needCrop) {
                                 option.addOption(ClipOption.fromRect(cropRect));
                                 Uint8List? image = (await ImageEditor.editImage(
                                   image: data,
@@ -98,7 +95,13 @@ class _EditImageState extends State<EditImage> {
                         Get.back();
                       }
                     },
-                    child: Icon(Icons.check, size: 32.w, color: Colors.white),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.black87,
+                          border: Border.all(color: Colors.white, width: 2.w),
+                          borderRadius: BorderRadius.all(Radius.circular(32.w))),
+                      child: Icon(Icons.check, size: 32.w, color: Colors.white),
+                    ),
                   ),
                   SizedBox(width: 24.w),
                 ],

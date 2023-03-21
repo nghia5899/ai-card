@@ -221,16 +221,26 @@ class ExportController extends GetxController {
     pageEnum.value = PageEnum.back;
   }
 
+  void updateSliderImage(int index){
+    sliderIndex.value = index;
+  }
+
+  Future<void> initBacksideCard() async {
+    final ByteData bytes = await rootBundle.load("assets/images/template/img_t1.png");
+    final Uint8List imageValue = bytes.buffer.asUint8List();
+    backside = EditModel(image: imageValue, texts: []).obs;
+  }
+
   RxList<TextInfo> get texts => (pageEnum.value == PageEnum.front)
       ? front.value.texts.obs
       : (pageEnum.value == PageEnum.inside)
-          ? inside.value[sliderIndex.value].texts.obs
+          ? inside.value[1].texts.obs
           : backside.value.texts.obs;
 
   Rx<Uint8List> get image => (pageEnum.value == PageEnum.front)
       ? front.value.image.obs
       : (pageEnum.value == PageEnum.inside)
-          ? inside.value[sliderIndex.value].image.obs
+          ? inside.value[0].image.obs
           : backside.value.image.obs;
 
   Rx<bool> get undoEnabled => (pageEnum.value == PageEnum.front)

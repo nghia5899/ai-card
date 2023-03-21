@@ -1,5 +1,6 @@
 import 'package:ai_ecard/models/text_info.dart';
 import 'package:ai_ecard/pages/image_editor/page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -51,6 +52,10 @@ class _ABCState extends State<DraggableText> {
             setState(() {
               widget.textInfo.positionLeft = (widget.textInfo.positionLeft) + off.dx;
               widget.textInfo.positionTop = (widget.textInfo.positionTop) + off.dy;
+              if(kDebugMode){
+                print('y: ${widget.textInfo.positionTop}');
+                print('x: ${widget.textInfo.positionLeft}');
+              }
             });
           },
           child: GestureDetector(

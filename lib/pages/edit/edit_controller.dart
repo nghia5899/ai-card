@@ -4,6 +4,7 @@ import 'package:ai_ecard/models/edit/edit_model.dart';
 import 'package:ai_ecard/models/edit/edit_state.dart';
 import 'package:ai_ecard/models/text_info.dart';
 import 'package:ai_ecard/pages/export/export_controller.dart';
+import 'package:ai_ecard/pages/home/detail/page.dart';
 import 'package:ai_ecard/routers.dart';
 import 'package:ai_ecard/widgets/animation_fold_card.dart';
 import 'package:ai_ecard/widgets/edit_image.dart';
@@ -32,6 +33,7 @@ class EditController extends GetxController {
 
   RxInt sliderIndex = 0.obs;
 
+  RxBool isInit = true.obs;
   RxBool isEdit = false.obs;
   RxBool isEditText = false.obs;
   RxBool isMoveText = false.obs;
@@ -42,6 +44,7 @@ class EditController extends GetxController {
   double frontCardHeight = 1;
 
   Rx<EditTextType> editTextType = EditTextType.none.obs;
+  late CardObject firstState;
 
   List<String> fonts = const [
     'OpenSans',
@@ -88,12 +91,10 @@ class EditController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    EditState firstState = Get.arguments as EditState;
-    frontCardWidth = firstState.imageWidth;
-    frontCardHeight = firstState.imageHeight;
-    front = EditModel(image: firstState.image, texts: firstState.textInfo).obs;
+    firstState = Get.arguments as CardObject;
+    front = EditModel(image: Uint8List(0), texts: firstState.textInfo).obs;
     showMessage('Tap on Text to edit text');
-    initInsideCard();
+    initFrontCard(firstState.templateModel.image ?? '', firstState.textInfo);
     front.refresh();
   }
 
@@ -123,7 +124,7 @@ class EditController extends GetxController {
     textSelectedEdit.value = index;
     isEdit.value = true;
     isEditText.value = true;
-    isMoveText.value = false;
+    isMoveText.value = true;
 
     Get.dialog(
       EditTextDialog(
@@ -158,7 +159,7 @@ class EditController extends GetxController {
         }
       case PageEnum.inside:
         {
-          inside.value[sliderIndex.value].updateText(value, textSelectedEdit.value);
+          inside.value[1].updateText(value, textSelectedEdit.value);
           inside.refresh();
           break;
         }
@@ -172,8 +173,8 @@ class EditController extends GetxController {
   }
 
   void updateImage(Uint8List image) {
-    inside.value[sliderIndex.value].updateImage(image);
-    inside.value[sliderIndex.value].addToStack();
+    inside.value[0].updateImage(image);
+    inside.value[0].addToStack();
     inside.refresh();
   }
 
@@ -187,7 +188,7 @@ class EditController extends GetxController {
         }
       case PageEnum.inside:
         {
-          inside.value[sliderIndex.value].updatePosition(y, x, textSelectedEdit.value);
+          inside.value[1].updatePosition(y, x, textSelectedEdit.value);
           inside.refresh();
           break;
         }
@@ -198,6 +199,11 @@ class EditController extends GetxController {
           break;
         }
     }
+  }
+
+  void updateSliderImage(int index){
+    sliderIndex.value = index;
+    isEdit.value = false;
   }
 
   void undo() {
@@ -258,8 +264,8 @@ class EditController extends GetxController {
         }
       case PageEnum.inside:
         {
-          if (inside.value[sliderIndex.value].isNewState()) {
-            inside.value[sliderIndex.value].addToStack();
+          if (inside.value[1].isNewState()) {
+            inside.value[1].addToStack();
             inside.refresh();
           }
           break;
@@ -285,7 +291,7 @@ class EditController extends GetxController {
         }
       case PageEnum.inside:
         {
-          inside.value[sliderIndex.value].updateColor(colors[index], textSelectedEdit.value);
+          inside.value[1].updateColor(colors[index], textSelectedEdit.value);
           inside.refresh();
           break;
         }
@@ -308,7 +314,7 @@ class EditController extends GetxController {
         }
       case PageEnum.inside:
         {
-          inside.value[sliderIndex.value].updateFontFamily(fonts[index], textSelectedEdit.value);
+          inside.value[1].updateFontFamily(fonts[index], textSelectedEdit.value);
           inside.refresh();
           break;
         }
@@ -329,7 +335,7 @@ class EditController extends GetxController {
     // crop();
     Get.dialog(
         EditImage(
-          image: inside.value[sliderIndex.value].image,
+          image: inside.value[0].image,
           cropAspectRatio: frontCardWidth / frontCardHeight,
           onCrop: (image) {
             updateImage(image);
@@ -403,7 +409,7 @@ class EditController extends GetxController {
         }
       case PageEnum.inside:
         {
-          inside.value[sliderIndex.value].updateFontSize(fontSize, textSelectedEdit.value);
+          inside.value[1].updateFontSize(fontSize, textSelectedEdit.value);
           inside.refresh();
           break;
         }
@@ -426,7 +432,7 @@ class EditController extends GetxController {
         }
       case PageEnum.inside:
         {
-          inside.value[sliderIndex.value].updateAlign(textAlign, textSelectedEdit.value);
+          inside.value[1].updateAlign(textAlign, textSelectedEdit.value);
           inside.refresh();
           break;
         }
@@ -439,49 +445,40 @@ class EditController extends GetxController {
     }
   }
 
-  Future<void> initInsideCard() async {
-    final ByteData bytes1 = await rootBundle.load("assets/images/template/img_t5.png");
+  Future<void> initFrontCard(String assets, List<TextInfo> textInfo) async {
+    final ByteData bytes1 = await rootBundle.load(assets);
     final Uint8List imageValue = bytes1.buffer.asUint8List();
-    List<TextInfo> clone1 = [];
-    clone1.add(front.value.texts[0].copyWith());
-    clone1[0].text = 'Tap image to generate image';
-    clone1[0].positionLeft = 67.w;
-    inside.add(EditModel(image: imageValue, texts: clone1));
-
-    List<TextInfo> clone2 = [];
-    clone2.add(front.value.texts[1].copyWith());
-    clone2[0].text = 'Tap text to generate text';
-    clone2[0].positionLeft = 67.w;
-    inside.add(EditModel(image: Uint8List.fromList([...imageValue.toList()]), texts: clone2));
+    EditState editState = EditState(imageValue, textInfo);
+    frontCardWidth = editState.imageWidth;
+    frontCardHeight = editState.imageHeight;
+    front.value.updateImage(imageValue);
+    front.value.addToStack();
+    front.refresh();
+    isInit.value = false;
+    initInsideCard();
   }
 
-  Future<void> initBacksideCard() async {
-    // final ByteData bytes = await rootBundle.load("assets/images/template/img_t1.png");
-    // final Uint8List imageValue = bytes.buffer.asUint8List();
-    // List<TextInfo> clone = [];
-    // for (int i = 0; i < front.value.texts.length; i++) {
-    //   TextInfo item = front.value.texts[i];
-    //   clone.add(item.copyWith(
-    //       textStyle: null,
-    //       color: item.textStyle?.color,
-    //       fontSize: item.textStyle?.fontSize,
-    //       fontFamily: item.textStyle?.fontFamily,
-    //       fontWeight: item.textStyle?.fontWeight));
-    // }
-    // clone[clone.length - 1].text = 'BackSide';
-    // backside = EditModel(image: imageValue, texts: clone).obs;
+  Future<void> initInsideCard() async {
+    final ByteData bytes1 = await rootBundle.load("assets/images/template/inside/img_t0.png");
+    final Uint8List imageValue = bytes1.buffer.asUint8List();
+    inside.add(EditModel(image: imageValue, texts: []));
+
+    List<TextInfo> clone = [];
+    TextInfo textInfo = TextInfo(text: 'Tap text to generate text', fontSize: 20, positionLeft: 63.w, positionTop: 216.w);
+    clone.add(textInfo);
+    inside.add(EditModel(image: Uint8List.fromList([...imageValue.toList()]), texts: clone));
   }
 
   RxList<TextInfo> get texts => (pageEnum.value == PageEnum.front)
       ? front.value.texts.obs
       : (pageEnum.value == PageEnum.inside)
-          ? inside.value[sliderIndex.value].texts.obs
+          ? inside.value[1].texts.obs
           : backside.value.texts.obs;
 
   Rx<Uint8List> get image => (pageEnum.value == PageEnum.front)
       ? front.value.image.obs
       : (pageEnum.value == PageEnum.inside)
-          ? inside.value[sliderIndex.value].image.obs
+          ? inside.value[0].image.obs
           : backside.value.image.obs;
 
   Rx<bool> get undoEnabled => (pageEnum.value == PageEnum.front)
@@ -493,7 +490,7 @@ class EditController extends GetxController {
   Rx<TextAlign?> get textAlignIndex => (pageEnum.value == PageEnum.front)
       ? front.value.textAlign(textSelectedEdit.value).obs
       : (pageEnum.value == PageEnum.inside)
-          ? inside.value[sliderIndex.value].textAlign(textSelectedEdit.value).obs
+          ? inside.value[1].textAlign(textSelectedEdit.value).obs
           : backside.value.textAlign(textSelectedEdit.value).obs;
 
   Rx<bool> get redoEnabled => (pageEnum.value == PageEnum.front)
@@ -502,9 +499,7 @@ class EditController extends GetxController {
           ? inside.value[sliderIndex.value].redoEnabled.obs
           : backside.value.redoEnabled.obs;
 
-  bool isEditImage(int index){
-    return isEdit.value && !isEditText.value && pageEnum.value == PageEnum.inside && sliderIndex.value == index;
-  }
+  Rx<bool> get isEditImage => (isEdit.value && !isEditText.value && pageEnum.value == PageEnum.inside && sliderIndex.value == 0).obs;
 
   void resetState() {
     switch (pageEnum.value) {
