@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:ai_ecard/global.dart';
 import 'package:ai_ecard/models/edit/edit_model.dart';
 import 'package:ai_ecard/models/edit/edit_state.dart';
+import 'package:ai_ecard/models/models/template/template_model.dart';
 import 'package:ai_ecard/models/text_info.dart';
 import 'package:ai_ecard/pages/export/export_controller.dart';
 import 'package:ai_ecard/pages/home/detail/page.dart';
@@ -95,7 +96,7 @@ class EditController extends GetxController {
     firstState = Get.arguments as CardObject;
     front = EditModel(image: Uint8List(0), texts: firstState.textInfo).obs;
     showMessage('Tap on Text to edit text');
-    initFrontCard(firstState.templateModel.image ?? '', firstState.textInfo);
+    initFrontCard(firstState.templateModel, firstState.textInfo);
     front.refresh();
   }
 
@@ -446,8 +447,8 @@ class EditController extends GetxController {
     }
   }
 
-  Future<void> initFrontCard(String assets, List<TextInfo> textInfo) async {
-    final ByteData bytes1 = await rootBundle.load(assets);
+  Future<void> initFrontCard(TemplateModel model, List<TextInfo> textInfo) async {
+    final ByteData bytes1 = await rootBundle.load(model.image ?? 'assets/images/template/img_t0.png');
     final Uint8List imageValue = bytes1.buffer.asUint8List();
     EditState editState = EditState(imageValue, textInfo);
     frontCardWidth = editState.imageWidth;
@@ -456,11 +457,11 @@ class EditController extends GetxController {
     front.value.addToStack();
     front.refresh();
     isInit.value = false;
-    initInsideCard();
+    initInsideCard(model);
   }
 
-  Future<void> initInsideCard() async {
-    final ByteData bytes1 = await rootBundle.load("assets/images/template/inside/img_t0.png");
+  Future<void> initInsideCard(TemplateModel model) async {
+    final ByteData bytes1 = await rootBundle.load(model.imageInside ?? 'assets/images/template/inside/img_t0.png');
     final Uint8List imageValue = bytes1.buffer.asUint8List();
     inside.add(EditModel(image: imageValue, texts: []));
 
@@ -554,6 +555,6 @@ class EditController extends GetxController {
   void toExportPage() {
     Get.toNamed(AppRoutes.export,
         arguments: ExportModel(front.value.stack[front.value.stackIndex],
-            [inside.value[0].stack[inside.value[0].stackIndex], inside.value[1].stack[inside.value[1].stackIndex]]));
+            [inside.value[0].stack[inside.value[0].stackIndex], inside.value[1].stack[inside.value[1].stackIndex]], firstState.templateModel.imageBackSide ?? 'assets/images/template/back_side/img_t0.png'));
   }
 }

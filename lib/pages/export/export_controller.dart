@@ -34,6 +34,7 @@ class ExportController extends GetxController {
   void onInit() {
     super.onInit();
     ExportModel firstState = Get.arguments as ExportModel;
+    initBacksideCard(firstState.backside);
     frontCardWidth = firstState.front.imageWidth;
     frontCardHeight = firstState.front.imageHeight;
     front = EditModel(image: firstState.front.image, texts: firstState.front.textInfo).obs;
@@ -89,7 +90,7 @@ class ExportController extends GetxController {
       Uint8List imageInsideBack = await FileHelper.createImage(
           imagePainter(width: width, height: height, image: inside.value[1].image, textInfo: inside.value[1].texts));
       Uint8List imageBackSide = await FileHelper.createImage(
-          imagePainter(width: width, height: height, image: front.value.image, textInfo: front.value.texts));
+          imagePainter(width: width, height: height, image: backside.value.image, textInfo: []));
 
       String fileName = "ai-ecard-${this.fileName}";
       String fileNameFront = "${fileName}-1.png";
@@ -120,7 +121,7 @@ class ExportController extends GetxController {
         imagePainter(width: width, height: height, image: front.value.image, textInfo: front.value.texts),
         imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[0].texts),
         imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[1].texts),
-        imagePainter(width: width, height: height, image: front.value.image, textInfo: []),
+        imagePainter(width: width, height: height, image: backside.value.image, textInfo: []),
       ]);
 
       String fileName = "ai-ecard-${this.fileName}.pdf";
@@ -146,7 +147,7 @@ class ExportController extends GetxController {
       Uint8List imageInsideBack = await FileHelper.createImage(
           imagePainter(width: width, height: height, image: inside.value[1].image, textInfo: inside.value[1].texts));
       Uint8List imageBackSide = await FileHelper.createImage(
-          imagePainter(width: width, height: height, image: front.value.image, textInfo: []));
+          imagePainter(width: width, height: height, image: backside.value.image, textInfo: []));
 
       String fileName = "ai-ecard-${this.fileName}";
       String fileNameFront = "${fileName}-1.png";
@@ -181,7 +182,7 @@ class ExportController extends GetxController {
         imagePainter(width: width, height: height, image: front.value.image, textInfo: front.value.texts),
         imagePainter(width: width, height: height, image: inside.value[0].image, textInfo: inside.value[0].texts),
         imagePainter(width: width, height: height, image: inside.value[1].image, textInfo: inside.value[1].texts),
-        imagePainter(width: width, height: height, image: front.value.image, textInfo: []),
+        imagePainter(width: width, height: height, image: backside.value.image, textInfo: []),
       ]);
 
       String fileName = "ai-ecard-${this.fileName}.pdf";
@@ -225,8 +226,8 @@ class ExportController extends GetxController {
     sliderIndex.value = index;
   }
 
-  Future<void> initBacksideCard() async {
-    final ByteData bytes = await rootBundle.load("assets/images/template/img_t1.png");
+  Future<void> initBacksideCard(String path) async {
+    final ByteData bytes = await rootBundle.load(path);
     final Uint8List imageValue = bytes.buffer.asUint8List();
     backside = EditModel(image: imageValue, texts: []).obs;
   }
@@ -261,6 +262,7 @@ class ExportController extends GetxController {
 class ExportModel {
   EditState front;
   List<EditState> inside;
+  String backside;
 
-  ExportModel(this.front, this.inside);
+  ExportModel(this.front, this.inside, this.backside);
 }
